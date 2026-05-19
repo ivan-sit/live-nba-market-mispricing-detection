@@ -77,6 +77,28 @@ H1/H4 market-side comparison.**
 
 ---
 
+## 2026-05-18 — V2 + V5 with proper season split (TRAIN 2023-24, TEST 2024-25)
+
+**The cleanest model-side result we can produce.** True out-of-sample.
+
+V2 (XGB + isotonic, trained on 1,230 2023-24 games):
+  Test (2024-25, 1,230 games)  Brier 0.1494   ECE 0.0082
+
+V5 pre-registered tests on 2024-25 events:
+
+  H1 (trailing 10-15, made FG)
+    n = 4,596 events / 947 games
+    structural shift for scorer: **+0.0075**  95% CI [+0.005, +0.010]  p < 0.0001
+
+  H4 (trailing >=10, made 3-pointer)
+    n = 2,162 events / 780 games
+    structural shift for scorer: **+0.0138**  95% CI [+0.011, +0.017]  p < 0.0001
+
+Effect sizes are consistent across the in-sample (2023-24 random split) and
+out-of-sample (2024-25 season hold-out) runs within bootstrap noise. The
+behavioral hypothesis is now well-positioned on a real held-out test season
+and a large event count (k_thousand events).
+
 ## Notes on what's NOT in this log yet
 
 - H2 (V1 cross-venue): blocked on multi-venue odds.
