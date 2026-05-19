@@ -23,8 +23,28 @@ not house-set), and its prices reflect retail prediction-market participants
 rather than sportsbook risk desks. For V1 (cross-venue consensus) and V3
 (Halawi-style aggregate), including Kalshi gives a genuinely independent
 probability signal. Free public API for market data; live WebSocket for active
-markets. The open question is whether NBA in-game contracts have enough volume
-for our purposes — that's the D3 smoke test.
+markets.
+
+**Smoke test verdict (2026-05-18): GREEN — Kalshi is committed.**
+
+Headline numbers from Task #11:
+- 219 NBA-related series total in the catalog.
+- `KXNBA1HWINNER` (1st-half winner) has **978 settled markets** in the
+  archive (~325 unique games), with marquee playoff games trading $148k–$268k
+  per outcome in 24 hours.
+- 1-minute resolution price candles confirmed via
+  `/series/{s}/markets/{m}/candlesticks` — full OHLC of price, bid, ask, plus
+  per-minute volume and open interest.
+- Median spread ~$0.04 on $1 contracts = 4% — comparable to sportsbook vig.
+
+Constraint: Kalshi has no per-game moneyline market for NBA — only per-half
+and (potentially) per-quarter winners. Our V1/V3 cross-venue comparisons are
+therefore framed at the **first-half-winner horizon**. The per-half framing
+also matches sportsbook 1H markets directly, so the comparison is
+apples-to-apples.
+
+See `DECISIONS.md` (2026-05-18 entry: Kalshi smoke test result) for the full
+evidence table and the impact on H1/H2/H3/H4 pre-registered tests.
 
 References to flesh out during D3:
 - the-odds-api historical docs: https://the-odds-api.com/historical-odds-data/

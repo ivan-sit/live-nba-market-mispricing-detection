@@ -84,3 +84,34 @@ class KalshiClient:
 
     def get_market(self, market_ticker: str) -> dict[str, Any]:
         return self._get(f"/markets/{market_ticker}")
+
+    def get_candlesticks(
+        self,
+        series_ticker: str,
+        market_ticker: str,
+        start_ts: int,
+        end_ts: int,
+        period_interval: int = 1,
+    ) -> dict[str, Any]:
+        """Get OHLC candles for a market. period_interval in minutes (1, 60, 1440).
+
+        Recent/live markets only. For settled-past-cutoff markets, use
+        get_historical_candlesticks below.
+        """
+        return self._get(
+            f"/series/{series_ticker}/markets/{market_ticker}/candlesticks",
+            params={"start_ts": start_ts, "end_ts": end_ts, "period_interval": period_interval},
+        )
+
+    def get_historical_candlesticks(
+        self,
+        market_ticker: str,
+        start_ts: int,
+        end_ts: int,
+        period_interval: int = 1,
+    ) -> dict[str, Any]:
+        """Historical candlesticks for markets settled before the historical cutoff."""
+        return self._get(
+            f"/historical/markets/{market_ticker}/candlesticks",
+            params={"start_ts": start_ts, "end_ts": end_ts, "period_interval": period_interval},
+        )
