@@ -30,8 +30,31 @@ for one game. The exact granularity (per-possession vs per-N-second tick) is
 - PBP → game-state ticks: roll up PBP events to chosen granularity; track
   running score, possession, timeouts, fouls.
 - Pregame odds → game-state: one-to-many join on `game_id`.
-- Live odds → game-state: match nearest 5-min snapshot ≤ tick time. **Only used
+- Live odds → game-state: match nearest snapshot ≤ tick time per venue. **Only used
   for evaluation**, never as a feature.
+
+## Multi-venue live-odds table (long format)
+
+For the variant bake-off we keep prices in long format — one row per
+(game_id × snapshot_ts × venue). This makes the cross-venue analyses (V1, V3,
+V6) natural without forcing a wide-table reshape.
+
+| column | dtype | notes |
+|---|---|---|
+| game_id | str | join key |
+| snapshot_ts | datetime (UTC) | exact snapshot time |
+| venue | str | `pinnacle`, `draftkings`, `fanduel`, `kalshi`, etc. |
+| market | str | `moneyline`, `spread`, `total` |
+| home_price | float | American odds (sportsbooks) or YES contract price 0–1 (Kalshi) |
+| away_price | float | "" |
+| home_implied_prob_raw | float | computed |
+| home_implied_prob_devig | float | computed; for Kalshi, raw ≈ devig (no vig, just spread) |
+| overround | float | per-snapshot |
+| market_status | str | `open`/`suspended`/`closed` |
+| volume_hint | float \| null | Kalshi: 24h volume; sportsbooks: usually null |
+
+**Consensus** is computed downstream as the median (or volume-weighted median)
+of `home_implied_prob_devig` across venues per `(game_id, snapshot_ts)`.
 
 ## Leakage checks (run before every model fit)
 

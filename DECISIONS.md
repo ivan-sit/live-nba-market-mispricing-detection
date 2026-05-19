@@ -112,10 +112,67 @@ compare to it directly for NBA.
 
 ---
 
+## 2026-05-18 — Methodology broadened to a multi-variant bake-off
+
+**Decision:** Replace single-method analysis with a shared evaluation harness
+that supports K mispricing-detection variants. Variants share splits, metrics,
+backtest engine, and pre-registered tests. See plan at
+`~/.claude/plans/indexed-bubbling-owl.md` for full design.
+
+**Six variants (priority order if time-bounded):**
+V2 (calibrated structural WP) → V5 (event-conditioned overreaction) → V1
+(cross-venue consensus deviation) → V3 (Halawi-style aggregate) → V4
+(time-series mean reversion) → V6 (cross-book hard arbitrage descriptive).
+
+**Why this is methodologically stronger:** maps to Halawi's "no single source
+dominates" framing. Lets us report which behavioral mechanism (overreaction
+to salience events / cross-venue disagreement / fundamental mispricing) carries
+the result, not just whether mispricing exists.
+
+---
+
+## 2026-05-18 — Secondary pre-registrations (LOCKED before test-set data is pulled)
+
+**Status:** Locked 2026-05-18, before any live-odds data has been pulled.
+
+**Pre-registered secondary tests (Holm-Bonferroni across all four including H1):**
+
+**H2 (V1 — cross-venue consensus deviation):**
+For any tick where median spread across venues exceeds 1.5 × pooled vig, the
+expected return on the side cheaper than consensus, sized at fixed ¼-Kelly,
+is positive over the next K=60s window. Test statistic: mean of game-level
+mean returns. Inference: block-bootstrap by game, one-sided.
+
+**H3 (V3 — Halawi-style aggregate):**
+The Brier score of the weight-tuned aggregate `w1·p_model + w2·p_consensus`
+on the test set is strictly less than min(structural Brier, market Brier).
+Weights selected by Brier-minimization on the validation fold only; weights
+are not re-tuned on test. Inference: paired block-bootstrap by game on
+Brier differences.
+
+**H4 (V5 — generalized event overreaction):**
+For trailing-team made 3-pointers in score-differential bucket ≥10, the
+60-second-forward market shift exceeds the 60-second-forward calibrated
+structural model shift on average. Test statistic: mean of game-level
+mean differences. Inference: block-bootstrap by game, one-sided.
+
+**Multiple-comparisons plan:** Holm-Bonferroni across {H1, H2, H3, H4}.
+H1 remains the primary; H2–H4 are secondary pre-registered. All other
+results in the bake-off (V4, V6, additional buckets) are exploratory and
+clearly labeled as such in the report.
+
+**No post-hoc modification:** if a hypothesis is reformulated after looking
+at any test-set odds, it is moved to the exploratory section with a dated
+note here. Validation-set fits and Brier weight selection (for H3) are
+permitted; test-set fits are not.
+
+---
+
 ## Open decisions (to resolve in Week 1)
 
 - **Tick granularity** of the game-state table: per-possession vs per-N-second.
   Leaning per-possession for the model, resampled to 5-min snapshots for the
   odds join. Lock by end of D4.
-- **Final live-odds source.** Lock by end of D3 after Odds API audit + vendor survey.
+- **Final live-odds source.** Lock by end of D3 after Odds API audit + vendor survey + Kalshi smoke test.
+- **Kalshi inclusion in V1/V3:** depends on in-game NBA liquidity. Smoke-test D3.
 - **Feature inclusion list.** Initial set in `CLAUDE.md`. Confirm or adjust by D4.
