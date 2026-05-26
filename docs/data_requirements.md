@@ -101,8 +101,11 @@ to its own parquet yet (could be added if rebuilds become slow).
   beyond what game state encodes).
 - A pregame anchor for de-vigging the in-play moneyline.
 
-**Source plan:** the-odds-api historical pre-game endpoint (free tier may
-suffice; if not, a Kaggle closing-line dataset works as a fallback).
+**Source plan:** the-odds-api. **Current** pregame lines come free via
+`/v4/sports/basketball_nba/odds/` (same endpoint as §5, captured before tip).
+**Historical** pregame/closing lines for past seasons are **paid-only** on
+the-odds-api (`/v4/historical/...` returns 401/422 on the free key) — fall back
+to a Kaggle closing-line dataset if we don't buy the historical plan.
 
 **Schema:**
 
@@ -171,39 +174,57 @@ Endpoints used:
 
 ---
 
-## 5. Sportsbook 1H-winner in-play odds  ⏸ blocked on signup
+## 5. Sportsbook in-play moneyline odds  🟢 live capture working
 
-**Why:** Cross-venue companion to Kalshi for V1/V3, full input for V4
-(time-series), and the **market side** of the pre-registered H1/H4 tests
-in V5.
+**Why:** Cross-venue input for V1/V3/V6, full input for V4 (time-series),
+and the **market side** of the pre-registered H1/H4 tests in V5.
 
-**Source plan:** the-odds-api historical event endpoint.
+**Source (CONFIRMED):** the-odds-api v4 `GET /v4/sports/basketball_nba/odds/`
+(`markets=h2h`, `regions=us`). Free key validated 2026-05-26 — 500 req/mo,
+**9 books per game** (FanDuel, DraftKings, BetMGM, BetRivers, Bovada, BetUS,
+LowVig.ag, BetOnline.ag, MyBookie.ag). The same endpoint returns *in-play*
+games while they are live, so this is our live-capture source. Client:
+`src/data/pull_odds.py`; capture loop: `scripts/capture_odds_live.py`.
 
-**Outstanding questions for the-odds-api support (drafted in
-`docs/odds_api_support_email.md`):**
-1. Does the NBA historical endpoint return **in-play** snapshots, or only
-   pregame?
-2. Snapshot cadence in practice (5-min claim).
-3. Suspension states — flagged or silently omitted?
-4. Coverage % for 2023-24 and 2024-25 NBA regular seasons.
-5. Multi-book snapshots — multiple books per request, or per-book queries?
+**Resolved questions (from the smoke test, replacing the support-email asks):**
+1. In-play? **Yes** — live games appear in `/odds` with `commence_time` in the
+   past until they finish.
+2. Market type: full-game `h2h` (moneyline). Note: this is **full-game ML, not
+   per-half** — V5's structural side is 1H, so for the head-to-head test we
+   either capture 1H markets if a book lists them, or re-frame V5 at the
+   full-game horizon for the sportsbook side. (Kalshi is the 1H-winner venue.)
+3. Cost model: 1 request returns **all** current games across all books, so one
+   poll covers every live game at once.
+4. Quota economics: ~1 req per poll → ~150 polls/game at 60s cadence. Free
+   500/mo ≈ **3 games at 60s or ~6–7 at 120s**. Full historical season is
+   paid-only (~$30–100). See §3.
+5. Suspension states: the endpoint simply omits a book/market when not offered;
+   no explicit "suspended" flag.
 
-**Schema (long format, one row per game × snapshot × book):**
+**Schema as captured (long format, one row per capture × game × book × team)
+— matches `flatten_h2h` output:**
 
 | column | dtype | example | notes |
 |---|---|---|---|
-| `game_id` | str | `0022300001` | join key |
-| `snapshot_ts` | datetime (UTC) | | exact snapshot time |
-| `book` | str | `"draftkings"` | venue id |
-| `market` | str | `"1H_moneyline"` | also `1H_spread`, `1H_total` |
-| `home_ml` | float | +165 | American |
-| `away_ml` | float | -185 | American |
-| `home_implied_prob_raw` | float | 0.377 | computed |
-| `home_implied_prob_devig` | float | 0.368 | computed |
-| `overround` | float | 0.026 | per-snapshot |
-| `market_status` | str | `"open"` | open / suspended / closed |
-| `score_home_at_snapshot` | int | for sanity check vs PBP join |
-| `score_away_at_snapshot` | int | |
+| `capture_ts` | datetime (UTC, ISO) | `2026-05-26T07:41:10Z` | our poll time |
+| `game_id` | str | `197dd95ba7880a2cd6...` | the-odds-api event id (stable per event; needs mapping to nba_api id) |
+| `commence_time` | datetime (UTC) | `2026-05-27T00:40:00Z` | scheduled tip; `<= now` ⇒ live |
+| `home_team` | str | `"Oklahoma City Thunder"` | full name |
+| `away_team` | str | `"San Antonio Spurs"` | full name |
+| `book` | str | `"DraftKings"` | venue |
+| `book_last_update` | datetime (UTC) | | book's own price timestamp |
+| `team` | str | `"Oklahoma City Thunder"` | outcome side |
+| `price_american` | int | `-198` | moneyline |
+| `implied_prob` | float | 0.664 | computed (still includes vig) |
+
+De-vig and the wide two-sided form are computed downstream by pivoting on
+`(capture_ts, game_id, book)` — observed median overround ≈ **4%** at pregame.
+
+**On-disk layout:** `data/interim/odds/capture_{YYYYMMDD}.csv` (crash-safe
+append, one file per capture day) + a `.parquet` mirror written on clean exit.
+
+**Status / coverage:** key live; first pregame snapshots of SAS @ OKC captured
+2026-05-26. Live in-play capture begins with that game (tip 2026-05-27 00:40Z).
 
 ---
 
@@ -274,11 +295,65 @@ alone. Filtered to ~4,596 H1 events and ~2,162 H4 events.
 | Per-minute snapshots | ✅ derived | — |
 | Events table | ✅ derived | — |
 | Kalshi 1H candles | 🟡 partial | archival coverage outside our control; live capture works |
-| Pregame closing odds | ⏸ | the-odds-api signup or Kaggle fallback |
-| Sportsbook in-play odds | ⏸ | the-odds-api signup |
-| Joined live-odds long table | ⏸ | #4 + #5 |
+| Sportsbook in-play odds (current/live) | 🟢 live capture working | — (free key validated 2026-05-26) |
+| Pregame current lines | 🟢 free via §5 endpoint | — |
+| Pregame **historical** closing odds | ⏸ | paid the-odds-api plan **or** Kaggle fallback |
+| Sportsbook **historical** in-play (full season) | ⏸ | paid the-odds-api plan (~$30–100) |
+| Joined live-odds long table | ⏸ | accumulate live captures (#4 + #5) |
 
-**One-line summary of what unblocks the rest:** the-odds-api free-tier
-signup. That unblocks the pregame anchor (#3), the sportsbook in-play side
-(#5), and by composition the joined table (#6) plus the *market side* of
-every pre-registered test.
+**Where we stand (2026-05-26):** the-odds-api free key is live and richer
+than expected (9 books, in-play supported). The remaining fork is **coverage,
+not access**:
+- **Free path:** live-capture playoff games starting tonight → small but *real*
+  in-play test set across 9 books. Enough to validate the full V1/V2/V5/V6
+  pipeline end-to-end on real prices.
+- **Paid path (~$30–119/mo, cancelable):** unlocks the full *historical* in-play
+  season → the proper held-out backtest for all six variants.
+
+Decision deferred until we see live data flow through the backtest engine.
+
+---
+
+## 9. Survey: historical in-play odds options (researched 2026-05-26)
+
+We need the **market price at each past moment** (in-play), not one
+pregame/closing line per game. That distinction eliminates almost every free
+source. Full survey:
+
+| Source | In-play? | Cadence | Cost | Verdict |
+|---|---|---|---|---|
+| **the-odds-api historical** | ✅ confirmed | 5-min (10-min pre-Sep 2022) | $30–119/mo, **cancelable**; historical bundled; NBA from Jun 2020; Pinnacle + 50 books | **Cleanest paid path — client already built** |
+| **Betfair Exchange historical** | ✅ | **1-min** (free BASIC tier) | **FREE** since 2016 | Best free option *if* viable — see caveats |
+| SportsDataIO | ✅ since 2019 | varies | enterprise/paid | No advantage over odds-api |
+| Kaggle NBA odds sets | ❌ pregame/closing, static | — | free | Can't backtest in-play |
+| Odds Warehouse 2006–25 | ❌ open/close only | — | one-time $ | Pregame anchor only |
+| sportsbookreviewsonline / OddsBase / RotoWire | ❌ closing only | — | free | Pregame anchor only |
+| Moskowitz / Ötting academic data | — | — | proprietary | Unavailable |
+| GitHub scrapers | ❌ closing only | — | free | Pregame only |
+
+**Two real contenders for historical in-play:**
+
+1. **the-odds-api historical** — in-play confirmed (a snapshot taken during a
+   live game captures that game's in-play odds; completed events drop off but
+   the during-game snapshots persist by timestamp). 100K plan ($59) covers a
+   season's 5-min snapshots; pull then cancel. Limitation: **5-min cadence** is
+   fine for V2 calibration / slow mispricings, too coarse for V5's ~60s event
+   overreaction window.
+
+2. **Betfair Exchange free BASIC tier** — 1-min in-play last-traded-price since
+   2016 (covers all our PBP seasons), **free**. Caveats: (a) Betfair exchange is
+   **geo-restricted in the US** — account/historic-site access from CA may be
+   blocked; (b) "Match Odds" settles **full-game incl. OT** → retrain V2 to a
+   full-game target; (c) data ships as `.bz2` stream files needing parsing
+   (`betfairlightweight` exists).
+
+**Non-obvious insight:** our **live capture (60–90s cadence) beats the paid
+historical (5-min) for the V5 event test** — 5-min can't resolve a 1-minute
+overreaction. So they're complementary: paid historical → large-sample V2
+backtest; live capture → high-resolution V5 events. No single source dominates
+(fittingly, the Halawi point).
+
+**Conclusion:** no free, clean, US-accessible source for NBA historical *in-play*
+odds exists. Cheapest reliable path = the-odds-api historical at **$59 for one
+month**. Betfair is the only free in-play option but carries US-access + parsing
++ horizon caveats.
