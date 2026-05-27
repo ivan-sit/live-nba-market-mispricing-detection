@@ -105,3 +105,37 @@ and a large event count (k_thousand events).
 - H3 (V3 Halawi aggregate): blocked on V1 component plus odds.
 - Full Brier on multi-season split (2019-22 train, 2023-24 val, 2024-25 test):
   2024-25 PBP pull in progress; will rerun V2 on the proper split once done.
+
+---
+
+## 2026-05-26 — FIRST REAL BACKTESTS on live market data (n tiny → directional)
+
+Backtest engine (src/eval) verified 5/5 honesty gates on synthetic data, then
+run on real market prices for the first time. Two games, opposite results —
+which is exactly the n=1 lesson.
+
+**(A) Live game-winner backtest — SAS @ OKC, 2026-05-26 (FINAL OKC 127-114).**
+Full-game model (models/v2_fullgame.joblib, Brier 0.207 in-sample) vs live
+sportsbook consensus (6 books, de-vigged), 1st-half window, 73 joined ticks,
+settled on the real outcome.
+  model @4% edge: 34 bets, staked $1.10, P&L -$0.44, **ROI -40%**
+  always-favorite: +34% (only because the favorite won this one game)
+Model faded SA (underdog) early when the game was close; OKC pulled away.
+n=1 -> pure noise. Kalshi 1H market was DEAD all night (no-quote) -> sportsbook
+was the only tradeable venue.
+
+**(B) Archived Kalshi 1H backtest — 4 playoff games.**
+Fix: the original candle pull saved PRE-GAME quotes; re-pulling with the correct
+in-play window (from PBP period anchors) yields ~60-70 in-play candles/market.
+V2 (1H model) vs de-vigged Kalshi 1H, 250 ticks / 4 games:
+  V2 @3%: ROI +103%, Sharpe 1.25, CI [+42%,+193%]  (@8%: +135%)
+  favorite: +59% (CI incl 0); random: +8%
+**DO NOT TRUST THIS NUMBER.** Almost certainly an artifact: Kalshi 1H is thin
+and the mid prices are stale/laggy, so a score-reactive model "beats" a price
+that isn't updating -- on mid quotes, no slippage, with n=4. The block-bootstrap
+p=0.000 is meaningless over 4 games. Contrast with (A): against a LIQUID
+sportsbook the same family of model LOST. Liquidity + n are everything.
+
+Takeaway: the pipeline works end-to-end on real data. Neither number is a
+result. The real answer needs many liquid-market games (paid historical season
+or accumulated live captures).
