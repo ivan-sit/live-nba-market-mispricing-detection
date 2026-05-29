@@ -59,3 +59,7 @@ secrets/
 
 # OS
 Thumbs.db
+
+# node
+node_modules/
+
