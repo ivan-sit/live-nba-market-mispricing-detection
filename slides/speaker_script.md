@@ -1,6 +1,6 @@
 # Presentation Companion · Speaker Script, Workflow, Results, "Can I Make Money?"
 
-Pair this with `slides/final_deck.pptx` (15 slides, ~10 min). Sections:
+Pair this with `slides/final_deck.pptx` (14 slides, ~10 min). Sections:
 
 1. [Speaker script — slide by slide](#1-speaker-script)
 2. [Workflow at a glance](#2-workflow-at-a-glance)
@@ -16,19 +16,15 @@ Pair this with `slides/final_deck.pptx` (15 slides, ~10 min). Sections:
 ### Slide 1 — Title  (5 sec)
 > "Live NBA Market Mispricing Detection — a behavioral asset-pricing test of crowd miscalibration. I'm Ivan, with my partner Vishnu."
 
-### Slide 2 — From Halawi to live markets  (30 sec) · **transition 1/2**
+### Slide 2 — From Halawi to live markets  (30 sec) · **transition**
 > "Our midterm was Halawi's NeurIPS paper. The headline: LMs *approach* the crowd on forecasting Brier — 0.179 vs 0.149. The *buried* result is more interesting: a 4-to-1 LM-plus-crowd aggregate beats either alone."
 > "Why? **Both are miscalibrated, in opposite directions.** LMs hedge because of RLHF; crowds overreact, documented by Moskowitz and Ötting."
 > *(pause — point at the question box)*
-> "So we asked: *where can we cleanly test 'calibrated model beats crowd' with fast resolution, real money, and a documented bias?*"
+> "So we asked: *where can we cleanly test 'calibrated model beats crowd' with fast resolution, real money, and a documented bias?* **NBA in-play.**"
 
-### Slide 3 — Why NBA, not crypto  (30 sec) · **transition 2/2**
-> "We considered two natural laboratories: crypto 5-minute lead-lag, and NBA in-play markets."
-> *(walk the row labels)*
-> "NBA gives clean labels — every game state has an outcome, so it's a **calibration problem** instead of a stat-arb on noisy proxies."
-> "The literature for NBA is *positive* — Moskowitz 2021 in the Journal of Finance documents the exact bias. Crypto's nearest analog is a *negative* result."
-> "And practically: Kalshi NBA event contracts are CFTC-regulated and legal in California."
-> "Trade *with* the literature, on the venue we can use. **End of transition. The rest is NBA.**"
+### Slide 3 — Research question  (30 sec)
+> "Our question, pre-registered before any test data was touched: can a calibrated NBA win-probability model identify mispricings driven by **trailing-team overreaction**."
+> "Two tests: **H1** — trailing team in a 10-to-15-point deficit hits a field goal. **H4** — trailing team in a 10-plus-point deficit hits a three. Both pre-registered, Holm-Bonferroni corrected, block-bootstrap by *game* — that distinction matters and I'll come back to it."
 
 ### Slide 4 — What we planned · 6 ways to detect mispricing  (30 sec)
 > "Within NBA, we mapped out six methodological approaches to detecting mispricing — from cross-venue consensus to time-series mean reversion to event-conditioned overreaction."
@@ -36,56 +32,52 @@ Pair this with `slides/final_deck.pptx` (15 slides, ~10 min). Sections:
 > "**Data constraints forced us down to two.** The two highlighted are the only ones that work from play-by-play alone — a calibrated win-probability model, and an event-conditioned overreaction test. The other four are blocked on multi-venue in-play odds history we don't have."
 > "So the rest of the talk is those two."
 
-### Slide 5 — Research question  (30 sec)
-> "Our question, pre-registered before any test data was touched: can a calibrated NBA win-probability model identify mispricings driven by **trailing-team overreaction**."
-> "Two tests: **H1** — trailing team in a 10-to-15-point deficit hits a field goal. **H4** — trailing team in a 10-plus-point deficit hits a three. Both pre-registered, Holm-Bonferroni corrected, block-bootstrap by *game* — that distinction matters and I'll come back to it."
-
-### Slide 6 — Pipeline  (60 sec)
+### Slide 5 — Pipeline  (60 sec)
 > "Here's the whole system in one diagram. **Top row is the model side**: play-by-play, 2,460 games from nba_api, turned into per-minute game-state snapshots, fed to our model — XGBoost plus isotonic — outputs `p̂_t`, the calibrated probability the home team wins the 1st half."
 > "**Bottom row is the market side**: live odds from 9 sportsbooks and Kalshi, de-vigged into a market probability `p_market_t`."
 > "They meet at `edge_t = p̂_t − p_market_t`. That goes through the backtest — quarter-Kelly sized at the vigged odds, settled, block-bootstrapped by game."
 
-### Slide 7 — The calibrated win-probability model  (45 sec)
+### Slide 6 — The calibrated win-probability model  (45 sec)
 > "The model itself is intentionally small. XGBoost on four features: `minute_idx`, `score_diff_home`, `recent_run_diff`, `period`. Isotonic on a held-out fold so a 0.70 prediction actually corresponds to a 70% empirical frequency."
 > "We ran an ablation — engineered features like leverage and possession proxies — they didn't beat a 0.005-Brier improvement threshold, so we kept it simple. Every choice is defensible, no overfitting story."
 
-### Slide 8 — Calibration result  (60 sec) · **headline #1**
+### Slide 7 — Calibration result  (60 sec) · **headline #1**
 > *(point at the diagonal)*
 > "Out-of-sample on the 2024-25 season — 1,230 held-out games — the reliability diagram falls **on the diagonal across all deciles**, with binomial confidence intervals that cover the line."
 > "**Brier 0.149. ECE 0.008.** That ECE is essentially zero. The probabilities can be trusted. That's a real, defensible artifact — and it's competitive with published in-game WP models like Bashuk and Lopez-Matthews."
 
-### Slide 9 — The overreaction test  (75 sec) · **headline #2**
+### Slide 8 — The overreaction test  (75 sec) · **headline #2**
 > "Now the behavioral test. For each pre-registered event, we measure the **structural shift for the scorer over the next 60 seconds** — how much does the calibrated model move toward the scoring team after they make a basket while trailing?"
 > *(point at the bars)*
 > "**H1: +0.75 percentage points. p < 0.0001.** With block-bootstrap by *game* across 4,596 events. **H4: +1.4 points. p < 0.0001.**"
 > "Both pre-registered tests pass on the held-out season. The model says: *a trailing team's basket genuinely does move the structural fair value in their favor.*"
 > "Which sets up the behavioral question: **does the market shift by more than this?** That's the mispricing — when the crowd overshoots what the fundamentals say."
 
-### Slide 10 — Backtest engine  (60 sec)
+### Slide 9 — Backtest engine  (60 sec)
 > "Before we trust any P&L number, the engine has to be honest. Here are the three equations: `edge`, multiplicative two-way `de-vig`, and the Kelly fraction with `b` = decimal odds minus 1."
 > "**Five honesty gates** on synthetic data. A constant-0.5 model gets a Brier of exactly 0.25. Always-betting-the-favorite on an efficient vigged market loses approximately the vig. The market-as-itself gets zero edge and zero bets. And — critically — when we feed a perfect model into a *biased* market, the engine recovers a +14% ROI with a p-value of 0.000. So it *can* detect a real edge when one exists."
 > "We bootstrap **by game**, not by tick, because within-game ticks share one outcome — the effective sample size is games."
 
-### Slide 11 — Live pilot  (75 sec) · **headline #3**
+### Slide 10 — Live pilot  (75 sec) · **headline #3**
 > "We ran this live on the May 26 conference finals game — SAS at OKC, Game 5. The model captured 73 in-1st-half ticks against six live sportsbooks. Then we settled on the real final: **OKC 127, SAS 114**."
 > *(point at the bars)*
 > "**Our model lost 40%. 'Always favorite' made 34%.**"
 > "And — this is critical — *the lesson is the result*. The model faded San Antonio when the game was close early. OKC pulled away. The model lost. 'Always favorite' won — but only because the favorite happened to win this one game. **That's the n-equals-one problem made tangible**, and it's the methodological backbone of this whole talk."
 
-### Slide 12 — Liquidity × sample  (45 sec)
+### Slide 11 — Liquidity × sample  (45 sec)
 > "We also have a five-game Kalshi archive backtest. The *same model family*, against Kalshi's 1st-half-winner market, returns plus-95-percent."
 > "Don't trust that number. The Kalshi 1H market is thin — its prices are *stale*. A score-reactive model 'beats' a price that isn't updating. Plus n equals 5, plus mid quotes, plus no slippage. **It's an artifact, not an edge.**"
 > "Same model — opposite signs. That tells you: **liquidity quality and sample size are everything.** Tight liquid markets are hard. Thin stale ones look easy but aren't real."
 
-### Slide 13 — Connecting back to Halawi  (45 sec)
+### Slide 12 — Connecting back to Halawi  (45 sec)
 > "Tie back to the midterm. Halawi's aggregate works because LM errors and crowd errors are **independent**. The same structure applies here: our structural model reads game-state, the market absorbs sentiment and inside flow — partly independent error sources."
 > "The 'aggregate' variant from the earlier table — number three — is the literal Halawi analog: `p̂_aggregate = w·p_model + (1−w)·p_market_devig`, weight chosen by validation Brier. The aggregate's Brier is bounded by the minimum of the components."
 > "Reframing: the model's job isn't to *beat* the market everywhere. It's to **complement** the market in the specific situations — H1, H4 — where the crowd's bias is biggest."
 
-### Slide 14 — Limitations & future  (30 sec)
+### Slide 13 — Limitations & future  (30 sec)
 > "Limitations, briefly: sample size — we'd want roughly 1,000 liquid-market games for a powered backtest. Horizon — the model is 1st-half-only. Reactivity — sportsbooks limit winners; Kalshi as peer-to-peer sidesteps that. And the four blocked variants from earlier are architecturally ready but need multi-venue history."
 
-### Slide 15 — Verdict  (45 sec)
+### Slide 14 — Verdict  (45 sec)
 > "Two questions, answered directly."
 > *(point at left panel)*
 > "**Which mispricing method works best?** The **event-conditioned overreaction test**. It's the only one of our six planned methods with a statistically significant finding on the held-out test season: H1 plus 0.0075 at p less than 0.0001, H4 plus 0.0138 at p less than 0.0001. The bias is statistically real."

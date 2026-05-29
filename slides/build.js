@@ -78,30 +78,25 @@ builders.push(s => {
     { x:0.85, y:4.8, w:11.7, h:1.45, fontFace:F.title, fontSize:21, italic:true, color:C.NAVY });
 });
 
-// ─── 3. TRANSITION (2/2) — Why NBA, not crypto · 30s ──────────────────────
+// ─── 3. RESEARCH QUESTION ────────────────────────────────────────────────
 builders.push(s => {
-  header(s, "Why NBA, not crypto", "End of transition · the rest is NBA (30 sec)");
-  const rows = [
-    [{ text:"", options:{ fill:C.NAVY }},
-     { text:"NBA in-play", options:{ bold:true, color:C.CREAM, fill:C.NAVY, align:"center" }},
-     { text:"Crypto 5-min lead-lag", options:{ bold:true, color:C.CREAM, fill:C.NAVY, align:"center" }}],
-    [{ text:"Ground truth", options:{ bold:true, color:C.NAVY, fill:C.CREAM }},
-     { text:"every state → outcome\ncalibration problem", options:{ color:C.INK }},
-     { text:"proxy labels\nstat-arb on noisy data", options:{ color:C.INK }}],
-    [{ text:"Literature", options:{ bold:true, color:C.NAVY, fill:C.CREAM }},
-     { text:"Moskowitz 2021 (J. Finance) —\npositive result", options:{ color:C.NAVY, bold:true }},
-     { text:"Sifat et al. 2019 —\n'barely exploitable' (negative)", options:{ color:C.INK }}],
-    [{ text:"Legal venue (CA)", options:{ bold:true, color:C.NAVY, fill:C.CREAM }},
-     { text:"Kalshi NBA event contracts\n(CFTC-regulated)", options:{ color:C.NAVY, bold:true }},
-     { text:"—", options:{ color:C.INK, align:"center" }}],
-    [{ text:"Sample", options:{ bold:true, color:C.NAVY, fill:C.CREAM }},
-     { text:"~1,230 games × hundreds of ticks", options:{ color:C.INK }},
-     { text:"thinner per-event", options:{ color:C.INK }}],
-  ];
-  s.addTable(rows, { x:0.55, y:1.6, w:12.3, colW:[3.0, 4.65, 4.65],
-    fontFace:F.body, fontSize:14, border:{ type:"solid", color:C.SKY, pt:1 }, rowH:0.7 });
-  s.addText("Trade with the literature, not against it, on the venue we can actually use.",
-    { x:0.55, y:6.3, w:12.3, h:0.5, fontFace:F.title, fontSize:18, italic:true, color:C.DEEP, align:"center" });
+  header(s, "Research question", "Pre-registered before any test-set data was touched");
+  s.addShape("roundRect", { x:0.55, y:1.65, w:12.3, h:1.85,
+    fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.5}, rectRadius:0.1 });
+  s.addText("Can a calibrated in-game NBA win-probability model systematically identify live-market mispricings driven by crowd overreaction — specifically in trailing-team scoring events?",
+    { x:0.85, y:1.85, w:11.7, h:1.5, fontFace:F.title, fontSize:20, italic:true, color:C.NAVY });
+  s.addText("Two pre-registered tests:",
+    { x:0.55, y:3.85, w:12.3, h:0.4, fontFace:F.body, fontSize:16, bold:true, color:C.DEEP });
+  s.addText([
+    { text:"H1 (primary)", options:{ bold:true, color:C.ACCENT }},
+    { text:" — trailing team in 10–15 pt deficit hits a made FG → market over-shifts vs structural model." },
+  ], { x:0.85, y:4.35, w:12.0, h:0.7, fontFace:F.body, fontSize:16, color:C.INK });
+  s.addText([
+    { text:"H4 (secondary)", options:{ bold:true, color:C.ACCENT }},
+    { text:" — trailing team in ≥10 pt deficit hits a made 3-pointer → larger over-shift." },
+  ], { x:0.85, y:5.05, w:12.0, h:0.7, fontFace:F.body, fontSize:16, color:C.INK });
+  s.addText("Block-bootstrap by game (n = games, not ticks). Holm-Bonferroni across the pre-registered set.",
+    { x:0.55, y:6.2, w:12.3, h:0.5, fontFace:F.body, fontSize:13, italic:true, color:C.SKY });
 });
 
 // ─── 4. WHAT WE PLANNED — 6 variants table ───────────────────────────────
@@ -145,27 +140,6 @@ builders.push(s => {
   s.addText("The two we built are the only two that work from play-by-play alone. The other four are gated on multi-venue in-play odds history we don't have.",
     { x:0.85, y:5.95, w:11.7, h:0.85, fontFace:F.title, fontSize:15, italic:true,
       color:C.NAVY, align:"center", valign:"middle" });
-});
-
-// ─── 5. RESEARCH QUESTION ────────────────────────────────────────────────
-builders.push(s => {
-  header(s, "Research question", "Pre-registered before any test-set data was touched");
-  s.addShape("roundRect", { x:0.55, y:1.65, w:12.3, h:1.85,
-    fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.5}, rectRadius:0.1 });
-  s.addText("Can a calibrated in-game NBA win-probability model systematically identify live-market mispricings driven by crowd overreaction — specifically in trailing-team scoring events?",
-    { x:0.85, y:1.85, w:11.7, h:1.5, fontFace:F.title, fontSize:20, italic:true, color:C.NAVY });
-  s.addText("Two pre-registered tests:",
-    { x:0.55, y:3.85, w:12.3, h:0.4, fontFace:F.body, fontSize:16, bold:true, color:C.DEEP });
-  s.addText([
-    { text:"H1 (primary)", options:{ bold:true, color:C.ACCENT }},
-    { text:" — trailing team in 10–15 pt deficit hits a made FG → market over-shifts vs structural model." },
-  ], { x:0.85, y:4.35, w:12.0, h:0.7, fontFace:F.body, fontSize:16, color:C.INK });
-  s.addText([
-    { text:"H4 (secondary)", options:{ bold:true, color:C.ACCENT }},
-    { text:" — trailing team in ≥10 pt deficit hits a made 3-pointer → larger over-shift." },
-  ], { x:0.85, y:5.05, w:12.0, h:0.7, fontFace:F.body, fontSize:16, color:C.INK });
-  s.addText("Block-bootstrap by game (n = games, not ticks). Holm-Bonferroni across the pre-registered set.",
-    { x:0.55, y:6.2, w:12.3, h:0.5, fontFace:F.body, fontSize:13, italic:true, color:C.SKY });
 });
 
 // ─── 5. PIPELINE FLOWCHART + DATA ────────────────────────────────────────
