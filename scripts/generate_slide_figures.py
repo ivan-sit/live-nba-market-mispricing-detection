@@ -85,7 +85,7 @@ def make_reliability():
 # ─── 2. V5 structural shifts ─────────────────────────────────────────────
 def make_v5_shifts():
     print("[2] V5 H1/H4 shift bar chart", flush=True)
-    names = ["H1\ntrailing 10–15,\nmade FG", "H4\ntrailing ≥10,\nmade 3PT"]
+    names = ["Comeback FG\ntrailing 10–15", "Salience 3PT\ntrailing ≥10"]
     point = np.array([0.0075, 0.0138])
     lo, hi = np.array([0.005, 0.011]), np.array([0.010, 0.017])
     err = np.vstack([point - lo, hi - point])
@@ -218,6 +218,37 @@ def make_pipeline():
     plt.close(fig)
 
 
+def make_game6_pilot():
+    """Game 6 (OKC@SAS, 2026-05-28) per-game model ROI on Kalshi 1H, in context of
+    the 5-game archive pool. Game 6 highlighted; others as muted bars."""
+    print("[6] Game 6 pilot (per-game Kalshi ROI)", flush=True)
+    games = ["G1 · Apr 30\nDEN @ MIN", "G2 · May 3\nTOR @ CLE", "G3 · May 4\nMIN @ SAS",
+             "G4 · May 13\nCLE @ DET", "G6 · May 28\nOKC @ SAS"]
+    rois = np.array([1.098, 0.867, 2.342, 0.299, 0.117])
+    colors = [SKY, SKY, SKY, SKY, ACCENT]  # Game 6 highlighted
+    fig, ax = plt.subplots(figsize=(8.4, 5.0), dpi=170)
+    fig.patch.set_facecolor(CREAM); ax.set_facecolor(CREAM)
+    x = np.arange(len(games))
+    bars = ax.bar(x, rois, width=0.62, color=colors, edgecolor=NAVY, lw=1.3)
+    ax.axhline(0, color=INK, lw=0.9)
+    for b, v in zip(bars, rois):
+        ax.text(b.get_x() + b.get_width() / 2, v + 0.05,
+                f"{v:+.0%}", ha="center", fontsize=12, fontweight="bold", color=NAVY)
+    ax.set_xticks(x); ax.set_xticklabels(games, fontsize=10)
+    ax.set_ylabel("Per-game model ROI", fontsize=11)
+    ax.set_ylim(-0.1, 2.7)
+    yt = [0, 0.5, 1.0, 1.5, 2.0, 2.5]
+    ax.set_yticks(yt); ax.set_yticklabels([f"{int(v*100)}%" for v in yt])
+    ax.set_title("Game 6 vs the 4 archived Kalshi 1H games  ·  5-game pool ROI +95%",
+                 fontsize=12, color=NAVY, fontweight="bold", loc="left")
+    ax.text(0.99, 0.02, "model 'won' all 5 — but it's a stale-mid artifact (see next slide)",
+            transform=ax.transAxes, ha="right", fontsize=10, style="italic", color=DEEP)
+    ax.grid(alpha=0.25, color=SKY, axis="y")
+    fig.tight_layout()
+    fig.savefig(OUT / "game6_pilot.png", facecolor=CREAM, bbox_inches="tight")
+    plt.close(fig)
+
+
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     make_reliability()
@@ -225,6 +256,7 @@ def main() -> int:
     make_pilot_roi()
     make_liquidity()
     make_pipeline()
+    make_game6_pilot()
     print("\nWrote:")
     for p in sorted(OUT.glob("*.png")):
         print(f"  {p.relative_to(REPO_ROOT)}  ({p.stat().st_size//1024} KB)")

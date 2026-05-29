@@ -23,8 +23,9 @@ Pair this with `slides/final_deck.pptx` (14 slides, ~10 min). Sections:
 > "So we asked: *where can we cleanly test 'calibrated model beats crowd' with fast resolution, real money, and a documented bias?* **NBA in-play.**"
 
 ### Slide 3 — Research question  (30 sec)
-> "Our question, pre-registered before any test data was touched: can a calibrated NBA win-probability model identify mispricings driven by **trailing-team overreaction**."
-> "Two tests: **H1** — trailing team in a 10-to-15-point deficit hits a field goal. **H4** — trailing team in a 10-plus-point deficit hits a three. Both pre-registered, Holm-Bonferroni corrected, block-bootstrap by *game* — that distinction matters and I'll come back to it."
+> "Our research question is one line: **can we use a calibrated win-probability model to detect mispricing and profit from it in NBA in-play markets?**"
+> *(point at the two sub-question cards)*
+> "It decomposes into two sub-questions we can actually answer. **One: is the bias detectable?** Tested on the held-out 2024-25 season with pre-registered overreaction tests. **Two: can we extract it — actually make money?** Tested with a live backtest on real markets."
 
 ### Slide 4 — What we planned · 6 ways to detect mispricing  (30 sec)
 > "Within NBA, we mapped out six methodological approaches to detecting mispricing — from cross-venue consensus to time-series mean reversion to event-conditioned overreaction."
@@ -49,7 +50,7 @@ Pair this with `slides/final_deck.pptx` (14 slides, ~10 min). Sections:
 ### Slide 8 — The overreaction test  (75 sec) · **headline #2**
 > "Now the behavioral test. For each pre-registered event, we measure the **structural shift for the scorer over the next 60 seconds** — how much does the calibrated model move toward the scoring team after they make a basket while trailing?"
 > *(point at the bars)*
-> "**H1: +0.75 percentage points. p < 0.0001.** With block-bootstrap by *game* across 4,596 events. **H4: +1.4 points. p < 0.0001.**"
+> "**The comeback-FG test: +0.75 percentage points. p < 0.0001.** Block-bootstrap by *game* across 4,596 events. **The salience-3PT test: +1.4 points. p < 0.0001.**"
 > "Both pre-registered tests pass on the held-out season. The model says: *a trailing team's basket genuinely does move the structural fair value in their favor.*"
 > "Which sets up the behavioral question: **does the market shift by more than this?** That's the mispricing — when the crowd overshoots what the fundamentals say."
 
@@ -64,15 +65,17 @@ Pair this with `slides/final_deck.pptx` (14 slides, ~10 min). Sections:
 > "**Our model lost 40%. 'Always favorite' made 34%.**"
 > "And — this is critical — *the lesson is the result*. The model faded San Antonio when the game was close early. OKC pulled away. The model lost. 'Always favorite' won — but only because the favorite happened to win this one game. **That's the n-equals-one problem made tangible**, and it's the methodological backbone of this whole talk."
 
-### Slide 11 — Liquidity × sample  (45 sec)
-> "We also have a five-game Kalshi archive backtest. The *same model family*, against Kalshi's 1st-half-winner market, returns plus-95-percent."
-> "Don't trust that number. The Kalshi 1H market is thin — its prices are *stale*. A score-reactive model 'beats' a price that isn't updating. Plus n equals 5, plus mid quotes, plus no slippage. **It's an artifact, not an edge.**"
-> "Same model — opposite signs. That tells you: **liquidity quality and sample size are everything.** Tight liquid markets are hard. Thin stale ones look easy but aren't real."
+### Slide 11 — Game 6 pilot + liquidity lesson  (45 sec)
+> "Game 6 happened two nights after Game 5 — OKC at San Antonio. SAS won 118-91."
+> *(point at the highlighted Game 6 bar)*
+> "Our model returned **+12% on Game 6 alone** against Kalshi's 1H-winner market — the *smallest* of the five archived Kalshi games. **Pool of all five: +95%.**"
+> "Don't trust that pool number. The Kalshi 1H market was thin — prices stale, slow to update. A score-reactive model 'beats' a price that isn't moving. Plus n equals 5, plus mid quotes, plus no slippage. **It's an artifact, not an edge.**"
+> "Same model — opposite signs from Game 5. The lesson: **liquidity and sample size are everything.**"
 
 ### Slide 12 — Connecting back to Halawi  (45 sec)
 > "Tie back to the midterm. Halawi's aggregate works because LM errors and crowd errors are **independent**. The same structure applies here: our structural model reads game-state, the market absorbs sentiment and inside flow — partly independent error sources."
 > "The 'aggregate' variant from the earlier table — number three — is the literal Halawi analog: `p̂_aggregate = w·p_model + (1−w)·p_market_devig`, weight chosen by validation Brier. The aggregate's Brier is bounded by the minimum of the components."
-> "Reframing: the model's job isn't to *beat* the market everywhere. It's to **complement** the market in the specific situations — H1, H4 — where the crowd's bias is biggest."
+> "Reframing: the model's job isn't to *beat* the market everywhere. It's to **complement** the market in the specific situations — (comeback FGs, salience 3PTs) — where the crowd's bias is biggest."
 
 ### Slide 13 — Limitations & future  (30 sec)
 > "Limitations, briefly: sample size — we'd want roughly 1,000 liquid-market games for a powered backtest. Horizon — the model is 1st-half-only. Reactivity — sportsbooks limit winners; Kalshi as peer-to-peer sidesteps that. And the four blocked variants from earlier are architecturally ready but need multi-venue history."
@@ -80,7 +83,7 @@ Pair this with `slides/final_deck.pptx` (14 slides, ~10 min). Sections:
 ### Slide 14 — Verdict  (45 sec)
 > "Two questions, answered directly."
 > *(point at left panel)*
-> "**Which mispricing method works best?** The **event-conditioned overreaction test**. It's the only one of our six planned methods with a statistically significant finding on the held-out test season: H1 plus 0.0075 at p less than 0.0001, H4 plus 0.0138 at p less than 0.0001. The bias is statistically real."
+> "**Which mispricing method works best?** The **event-conditioned overreaction test**. It's the only one of our six planned methods with a statistically significant finding on the held-out test season: the comeback-FG test gave plus 0.0075, the salience-3PT test gave plus 0.0138 at p less than 0.0001. The bias is statistically real."
 > *(point at right panel)*
 > "**Can it make money?** Not today, but it's not 'no.' Today we can't claim profit — one liquid game is noise, the Kalshi plus-95% is a stale-mid artifact. But the bias is real, and the path forward is concrete: power the backtest with the paid historical season, then deploy an overreaction-targeted strategy on Kalshi, which is legal and has no account-limit risk."
 > "We are **gated on data scale, not on methodology.** Thank you. Questions."
@@ -104,7 +107,7 @@ Pair this with `slides/final_deck.pptx` (14 slides, ~10 min). Sections:
    │                 5/5 honesty gates pass on synthetic data     │
    ├─────────────────────────────────────────────────────────────┤
    │ 5. OVERREACTION pre-registered event test                    │
-   │     TEST        ✅ H1 +0.0075 p<0.0001 · H4 +0.0138 p<0.0001  │
+   │     TEST        ✅ comeback-FG +0.0075 · salience-3PT +0.0138 (p<0.0001)  │
    ├─────────────────────────────────────────────────────────────┤
    │ 6. LIVE FEEDS   the-odds-api (9 books) · Kalshi · ESPN       │
    │                 capture_tonight.py auto-detects + logs       │
@@ -138,8 +141,8 @@ time-series reversion, cross-book arbitrage (4 of the 6 planned variants).
 ### Behavioral test (the overreaction test) ✅ both pre-registered tests pass
 | Test | n events / games | Structural shift | 95% CI | p |
 |---|---|---|---|---|
-| **H1** trail 10–15, made FG | 4,596 / 947 | **+0.0075** | [+0.005, +0.010] | **< 0.0001** |
-| **H4** trail ≥10, made 3PT | 2,162 / 780 | **+0.0138** | [+0.011, +0.017] | **< 0.0001** |
+| **Comeback FG** (trail 10–15) | 4,596 / 947 | **+0.0075** | [+0.005, +0.010] | **< 0.0001** |
+| **Salience 3PT** (trail ≥10) | 2,162 / 780 | **+0.0138** | [+0.011, +0.017] | **< 0.0001** |
 
 ### Backtest engine honesty ✅ 5/5
 | const-0.5 → Brier 0.25 | always-favorite → loses ≈ vig | random → loses ≈ vig | perfect on biased mkt → +14% p=0.000 | market-as-variant → 0 bets |
@@ -172,7 +175,7 @@ The two opposite signs *are* the lesson — liquidity quality × sample size.
 ### The three things that *would* make this make money
 1. **Power the backtest.** $59 for the-odds-api historical 100K plan → pull the full 2024-25 in-play season → run all methods through the harness → see which (if any) clear vig with a CI excluding zero. **This is the single decision that turns "maybe" into "yes/no with numbers."**
 2. **Deploy on Kalshi where liquid.** When *real volume* is present (Finals games, marquee matchups), Kalshi is a peer-to-peer market with no account-limit risk, legal in California. Use the calibrated model + overreaction test + the full-game model, paper-trade first, then small stakes only after a powered backtest passes.
-3. **Focus on the overreaction event window specifically.** H1/H4 events are where the bias is documented and pre-registered. A targeted strategy — only bet within ~60s of trailing-team makes — narrows the exposure to where the literature predicts edge actually lives.
+3. **Focus on the overreaction event window specifically.** these event windows (comeback FG, salience 3PT) are where the bias is documented and pre-registered. A targeted strategy — only bet within ~60s of trailing-team makes — narrows the exposure to where the literature predicts edge actually lives.
 
 ### Honest verdict for the talk
 > "We've **proven the bias exists in the model**. We've **built the engine that would extract it.** What we have not yet shown is **a positive ROI on a liquid market with a sample large enough to distinguish skill from luck.** That's the Phase-2 deliverable: it's gated on data scale, not on any new methodology."

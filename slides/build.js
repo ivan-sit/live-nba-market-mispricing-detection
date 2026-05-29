@@ -80,23 +80,46 @@ builders.push(s => {
 
 // ─── 3. RESEARCH QUESTION ────────────────────────────────────────────────
 builders.push(s => {
-  header(s, "Research question", "Pre-registered before any test-set data was touched");
-  s.addShape("roundRect", { x:0.55, y:1.65, w:12.3, h:1.85,
-    fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.5}, rectRadius:0.1 });
-  s.addText("Can a calibrated in-game NBA win-probability model systematically identify live-market mispricings driven by crowd overreaction — specifically in trailing-team scoring events?",
-    { x:0.85, y:1.85, w:11.7, h:1.5, fontFace:F.title, fontSize:20, italic:true, color:C.NAVY });
-  s.addText("Two pre-registered tests:",
-    { x:0.55, y:3.85, w:12.3, h:0.4, fontFace:F.body, fontSize:16, bold:true, color:C.DEEP });
+  header(s, "Research question", "One question, two sub-questions");
+  // big main question box
+  s.addShape("roundRect", { x:0.55, y:1.6, w:12.3, h:1.85,
+    fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.8}, rectRadius:0.1 });
   s.addText([
-    { text:"H1 (primary)", options:{ bold:true, color:C.ACCENT }},
-    { text:" — trailing team in 10–15 pt deficit hits a made FG → market over-shifts vs structural model." },
-  ], { x:0.85, y:4.35, w:12.0, h:0.7, fontFace:F.body, fontSize:16, color:C.INK });
-  s.addText([
-    { text:"H4 (secondary)", options:{ bold:true, color:C.ACCENT }},
-    { text:" — trailing team in ≥10 pt deficit hits a made 3-pointer → larger over-shift." },
-  ], { x:0.85, y:5.05, w:12.0, h:0.7, fontFace:F.body, fontSize:16, color:C.INK });
-  s.addText("Block-bootstrap by game (n = games, not ticks). Holm-Bonferroni across the pre-registered set.",
-    { x:0.55, y:6.2, w:12.3, h:0.5, fontFace:F.body, fontSize:13, italic:true, color:C.SKY });
+    { text:"Can we use a calibrated win-probability model to ", options:{} },
+    { text:"detect mispricing", options:{ bold:true, color:C.NAVY }},
+    { text:" and ", options:{} },
+    { text:"profit from it", options:{ bold:true, color:C.ACCENT }},
+    { text:" in NBA in-play markets?", options:{} },
+  ], { x:0.85, y:1.85, w:11.7, h:1.4, fontFace:F.title, fontSize:22, italic:true,
+       color:C.NAVY, valign:"middle" });
+
+  s.addText("Decomposes into two sub-questions we can actually answer:",
+    { x:0.55, y:3.7, w:12.3, h:0.4, fontFace:F.body, fontSize:14, bold:true,
+      italic:true, color:C.DEEP, align:"center" });
+
+  // Sub-Q 1
+  s.addShape("roundRect", { x:0.55, y:4.2, w:6.0, h:2.6,
+    fill:{color:C.CODE_BG}, line:{color:C.NAVY, width:1.5}, rectRadius:0.1 });
+  s.addText("SUB-QUESTION 1", { x:0.75, y:4.3, w:5.6, h:0.35,
+    fontFace:F.body, fontSize:11, bold:true, color:C.DEEP });
+  s.addText("Is the bias DETECTABLE?",
+    { x:0.75, y:4.6, w:5.6, h:0.5, fontFace:F.title, fontSize:19, bold:true, color:C.NAVY });
+  s.addText("Tested on the held-out 2024-25 season via pre-registered overreaction tests on trailing-team scoring events.",
+    { x:0.75, y:5.15, w:5.6, h:1.05, fontFace:F.body, fontSize:13, color:C.INK });
+  s.addText("→ answered on the overreaction-test slide",
+    { x:0.75, y:6.3, w:5.6, h:0.35, fontFace:F.body, fontSize:11, italic:true, color:C.TEAL });
+
+  // Sub-Q 2
+  s.addShape("roundRect", { x:6.85, y:4.2, w:6.0, h:2.6,
+    fill:{color:C.CODE_BG}, line:{color:C.ACCENT, width:1.5}, rectRadius:0.1 });
+  s.addText("SUB-QUESTION 2", { x:7.05, y:4.3, w:5.6, h:0.35,
+    fontFace:F.body, fontSize:11, bold:true, color:C.DEEP });
+  s.addText("Can we EXTRACT it (make money)?",
+    { x:7.05, y:4.6, w:5.6, h:0.5, fontFace:F.title, fontSize:19, bold:true, color:C.NAVY });
+  s.addText("Tested via live backtest on real markets — does the edge survive the vig at a sample large enough to distinguish skill from luck?",
+    { x:7.05, y:5.15, w:5.6, h:1.05, fontFace:F.body, fontSize:13, color:C.INK });
+  s.addText("→ answered on the live-pilot + verdict slides",
+    { x:7.05, y:6.3, w:5.6, h:0.35, fontFace:F.body, fontSize:11, italic:true, color:C.TEAL });
 });
 
 // ─── 4. WHAT WE PLANNED — 6 variants table ───────────────────────────────
@@ -290,9 +313,9 @@ builders.push(s => {
   const rows = [
     [{ text:"Test", options:{ bold:true, color:C.CREAM, fill:C.NAVY }},
      { text:"n events / games", options:{ bold:true, color:C.CREAM, fill:C.NAVY, align:"center" }}],
-    [{ text:"H1 — trail 10–15, made FG", options:{ bold:true, color:C.NAVY }},
+    [{ text:"Comeback FG · trail 10–15", options:{ bold:true, color:C.NAVY }},
      { text:"4,596 / 947", options:{ align:"center", color:C.INK }}],
-    [{ text:"H4 — trail ≥10, made 3PT", options:{ bold:true, color:C.NAVY }},
+    [{ text:"Salience 3PT · trail ≥10", options:{ bold:true, color:C.NAVY }},
      { text:"2,162 / 780", options:{ align:"center", color:C.INK }}],
   ];
   s.addTable(rows, { x:7.95, y:1.7, w:4.85, colW:[3.0, 1.85],
@@ -362,17 +385,21 @@ builders.push(s => {
   ], { x:8.3, y:5.0, w:4.5, h:1.5, fontFace:F.body, fontSize:13, color:C.INK });
 });
 
-// ─── 11. LIQUIDITY × SAMPLE SIZE — FIGURE #4 ─────────────────────────────
+// ─── 11. GAME 6 PILOT + LIQUIDITY × SAMPLE — FIGURE #4 ───────────────────
 builders.push(s => {
-  header(s, "Liquidity × sample size are everything", "Same model family · two opposite results");
-  s.addImage({ path:"slides/figures/liquidity_sample.png", x:2.7, y:1.55, w:8.0, h:5.0 });
-  s.addShape("roundRect", { x:0.55, y:6.5, w:12.3, h:0.7,
+  header(s, "Game 6 pilot · OKC @ SAS, 2026-05-28  (FINAL SAS 118–91)",
+    "61 in-1H ticks on Kalshi · the 5-game pool tells the rest of the story");
+  s.addImage({ path:"slides/figures/game6_pilot.png", x:1.7, y:1.5, w:9.9, h:4.6 });
+  // commentary below
+  s.addShape("roundRect", { x:0.55, y:6.2, w:12.3, h:1.0,
     fill:{color:C.CREAM}, line:{color:C.ACCENT, width:1.3}, rectRadius:0.08 });
   s.addText([
-    { text:"The +100% against Kalshi is " },
-    { text:"stale mid-prices + n=4 + no slippage", options:{ bold:true, color:C.NAVY }},
-    { text:" — exactly the trap CLAUDE.md warns about. Real liquid markets are tight." },
-  ], { x:0.85, y:6.55, w:11.7, h:0.6, fontFace:F.body, fontSize:13, color:C.INK, align:"center", valign:"middle" });
+    { text:"Game 6 alone: ", options:{ bold:true, color:C.NAVY }},
+    { text:"model +12% on Kalshi 1H (smallest of the 5). " },
+    { text:"Pool of 5: +95%. ", options:{ bold:true, color:C.ACCENT }},
+    { text:"But Kalshi 1H prices were thin and stale, so the model 'beats' a price that isn't moving — " },
+    { text:"stale-mid + n=5 + mid quotes = artifact, not edge.", options:{ italic:true, color:C.DEEP }},
+  ], { x:0.85, y:6.3, w:11.7, h:0.85, fontFace:F.body, fontSize:13, color:C.INK, valign:"middle" });
 });
 
 // ─── 12. HALAWI TIE-BACK + V3 FORMULA ────────────────────────────────────
@@ -395,7 +422,7 @@ builders.push(s => {
     fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.5}, rectRadius:0.1 });
   s.addText("Reframing:",
     { x:0.85, y:5.45, w:11.7, h:0.4, fontFace:F.body, fontSize:14, italic:true, color:C.DEEP });
-  s.addText("The model's job isn't to BEAT the market everywhere — it's to COMPLEMENT it in the specific situations where the crowd's bias is strongest (H1 / H4).",
+  s.addText("The model's job isn't to BEAT the market everywhere — it's to COMPLEMENT it in the specific situations (comeback FG, salience 3PT) where the crowd's bias is strongest.",
     { x:0.85, y:5.85, w:11.7, h:1.0, fontFace:F.body, fontSize:15, color:C.INK });
 });
 
@@ -434,10 +461,10 @@ builders.push(s => {
     [{ text:"Test", options:{ bold:true, color:C.CREAM, fill:C.NAVY, fontSize:11 }},
      { text:"Shift", options:{ bold:true, color:C.CREAM, fill:C.NAVY, align:"center", fontSize:11 }},
      { text:"p-value", options:{ bold:true, color:C.CREAM, fill:C.NAVY, align:"center", fontSize:11 }}],
-    [{ text:"H1 trail 10–15, FG", options:{ bold:true, color:C.NAVY, fontSize:12 }},
+    [{ text:"Comeback FG (trail 10–15)", options:{ bold:true, color:C.NAVY, fontSize:12 }},
      { text:"+0.0075", options:{ align:"center", color:C.ACCENT, bold:true, fontSize:13 }},
      { text:"< 0.0001", options:{ align:"center", color:C.ACCENT, bold:true, fontSize:13 }}],
-    [{ text:"H4 trail ≥10, 3PT", options:{ bold:true, color:C.NAVY, fontSize:12 }},
+    [{ text:"Salience 3PT (trail ≥10)", options:{ bold:true, color:C.NAVY, fontSize:12 }},
      { text:"+0.0138", options:{ align:"center", color:C.ACCENT, bold:true, fontSize:13 }},
      { text:"< 0.0001", options:{ align:"center", color:C.ACCENT, bold:true, fontSize:13 }}],
   ];
@@ -470,7 +497,7 @@ builders.push(s => {
   row(2.85, "TODAY · NO", C.ACCENT,
     "Live game vs liquid books: n=1 → −40% (noise). Kalshi +95% = stale-mid artifact.");
   row(3.80, "BIAS · YES", C.NAVY,
-    "V5 H1/H4 pre-reg passed on the held-out season. The overreaction is real.");
+    "Both pre-registered tests passed on the held-out season. The overreaction is real.");
   row(4.75, "PATH · CLEAR", C.TEAL,
     "Power the backtest ($59 historical) → V5-targeted strategy on Kalshi (legal, no limits).");
 
