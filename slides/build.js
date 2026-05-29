@@ -166,9 +166,9 @@ builders.push(s => {
   ], { x:0.55, y:4.55, w:12.3, h:0.7, fontFace:F.body, fontSize:16, color:C.INK });
   s.addShape("roundRect", { x:0.55, y:5.4, w:12.3, h:1.5,
     fill:{color:C.CREAM}, line:{color:C.SKY, width:1}, rectRadius:0.1 });
-  s.addText("Why simple is right for a 3-page paper:",
+  s.addText("Why we kept it simple:",
     { x:0.85, y:5.5, w:12.0, h:0.4, fontFace:F.body, fontSize:14, italic:true, color:C.DEEP });
-  s.addText("Every choice defensible. No overfitting story. Brier-comparable to published NBA in-game WP models (Bashuk; Lopez & Matthews).",
+  s.addText("Every choice defensible. No overfitting. Brier-comparable to published NBA in-game WP models (Bashuk; Lopez & Matthews).",
     { x:0.85, y:5.95, w:12.0, h:0.9, fontFace:F.body, fontSize:15, color:C.INK });
 });
 
@@ -324,27 +324,73 @@ builders.push(s => {
   });
 });
 
-// ─── 14. TAKEAWAYS ───────────────────────────────────────────────────────
+// ─── 14. VERDICT — most effective method + can it make money? ───────────
 builders.push(s => {
-  header(s, "Takeaways", "What we shipped, and what it says");
-  const items = [
-    ["Calibrated WP model",                          "Brier 0.149 OOS · ECE 0.008 — simple, defensible artifact."],
-    ["Pre-registered behavioral test passed",        "Trailing-team overreaction is real on the held-out season (p < 0.0001)."],
-    ["Full pipeline runs end-to-end on real data",   "model → de-vig → edge → Kelly → settle → bootstrap. 5/5 honesty gates."],
-    ["The honest backtest answer",                   "Pipeline ready · scale gates the trustworthy P&L (n=1 lesson made tangible)."],
-    ["Halawi-tied story",                            "Model and crowd are complementary error sources — not competing oracles."],
+  header(s, "Verdict · what works + can it make money?", "The two questions, answered honestly");
+
+  // ── LEFT COLUMN: most effective method ─────────────────────────────────
+  s.addShape("roundRect", { x:0.55, y:1.55, w:6.0, h:5.3,
+    fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.5}, rectRadius:0.1 });
+  s.addText("MOST EFFECTIVE METHOD", { x:0.75, y:1.7, w:5.6, h:0.4,
+    fontFace:F.body, fontSize:12, bold:true, color:C.DEEP });
+  s.addText("V5 · Event-conditioned overreaction", { x:0.75, y:2.1, w:5.6, h:0.55,
+    fontFace:F.title, fontSize:20, bold:true, color:C.NAVY });
+  s.addText("the only variant with a statistically significant finding on the held-out test season",
+    { x:0.75, y:2.65, w:5.6, h:0.7, fontFace:F.body, fontSize:13, italic:true, color:C.DEEP });
+  // mini results table
+  const rows = [
+    [{ text:"Test", options:{ bold:true, color:C.CREAM, fill:C.NAVY, fontSize:11 }},
+     { text:"Shift", options:{ bold:true, color:C.CREAM, fill:C.NAVY, align:"center", fontSize:11 }},
+     { text:"p-value", options:{ bold:true, color:C.CREAM, fill:C.NAVY, align:"center", fontSize:11 }}],
+    [{ text:"H1 trail 10–15, FG", options:{ bold:true, color:C.NAVY, fontSize:12 }},
+     { text:"+0.0075", options:{ align:"center", color:C.ACCENT, bold:true, fontSize:13 }},
+     { text:"< 0.0001", options:{ align:"center", color:C.ACCENT, bold:true, fontSize:13 }}],
+    [{ text:"H4 trail ≥10, 3PT", options:{ bold:true, color:C.NAVY, fontSize:12 }},
+     { text:"+0.0138", options:{ align:"center", color:C.ACCENT, bold:true, fontSize:13 }},
+     { text:"< 0.0001", options:{ align:"center", color:C.ACCENT, bold:true, fontSize:13 }}],
   ];
-  let y = 1.65;
-  items.forEach(([h, body], i) => {
-    s.addShape("ellipse", { x:0.55, y:y+0.05, w:0.5, h:0.5, fill:{color:C.ACCENT}, line:{color:C.ACCENT,width:0} });
-    s.addText(String(i+1), { x:0.55, y:y+0.07, w:0.5, h:0.5,
-      fontFace:F.title, fontSize:16, bold:true, color:C.NAVY, align:"center", valign:"middle" });
-    s.addText(h, { x:1.25, y, w:12.0, h:0.45, fontFace:F.title, fontSize:17, bold:true, color:C.NAVY });
-    s.addText(body, { x:1.25, y:y+0.45, w:12.0, h:0.6, fontFace:F.body, fontSize:14, color:C.INK });
-    y += 1.05;
-  });
+  s.addTable(rows, { x:0.75, y:3.45, w:5.6, colW:[2.7, 1.45, 1.45],
+    border:{ type:"solid", color:C.SKY, pt:1 }, rowH:0.5 });
+  s.addText("Both pre-registered tests pass on 2024-25 held-out.",
+    { x:0.75, y:5.05, w:5.6, h:0.35, fontFace:F.body, fontSize:12, italic:true, color:C.DEEP });
+  s.addText("V2 calibration backs it (Brier 0.149); V1 / V3 / V4 / V6 not powered yet.",
+    { x:0.75, y:5.4, w:5.6, h:0.45, fontFace:F.body, fontSize:12, italic:true, color:C.DEEP });
+  s.addShape("rect", { x:0.75, y:6.0, w:5.6, h:0.7,
+    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0} });
+  s.addText("The bias is statistically real.",
+    { x:0.75, y:6.0, w:5.6, h:0.7, fontFace:F.title, fontSize:15, bold:true, italic:true,
+      color:C.CREAM, align:"center", valign:"middle" });
+
+  // ── RIGHT COLUMN: money verdict ────────────────────────────────────────
+  s.addShape("roundRect", { x:6.85, y:1.55, w:6.0, h:5.3,
+    fill:{color:C.CREAM}, line:{color:C.ACCENT, width:1.5}, rectRadius:0.1 });
+  s.addText("CAN IT MAKE MONEY?", { x:7.05, y:1.7, w:5.6, h:0.4,
+    fontFace:F.body, fontSize:12, bold:true, color:C.DEEP });
+  s.addText("Not yet — but it's not 'no.'", { x:7.05, y:2.1, w:5.6, h:0.55,
+    fontFace:F.title, fontSize:20, bold:true, color:C.NAVY });
+
+  // three verdict rows
+  function row(y, tag, tagColor, body) {
+    s.addShape("rect", { x:7.05, y:y, w:0.18, h:0.85, fill:{color:tagColor}, line:{color:tagColor,width:0} });
+    s.addText(tag, { x:7.3, y:y, w:5.3, h:0.3, fontFace:F.body, fontSize:11, bold:true, color:tagColor });
+    s.addText(body, { x:7.3, y:y+0.3, w:5.3, h:0.6, fontFace:F.body, fontSize:12, color:C.INK });
+  }
+  row(2.85, "TODAY · NO", C.ACCENT,
+    "Live game vs liquid books: n=1 → −40% (noise). Kalshi +95% = stale-mid artifact.");
+  row(3.80, "BIAS · YES", C.NAVY,
+    "V5 H1/H4 pre-reg passed on the held-out season. The overreaction is real.");
+  row(4.75, "PATH · CLEAR", C.TEAL,
+    "Power the backtest ($59 historical) → V5-targeted strategy on Kalshi (legal, no limits).");
+
+  s.addShape("rect", { x:7.05, y:6.0, w:5.6, h:0.7,
+    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0} });
+  s.addText("Gated on data scale, not on methodology.",
+    { x:7.05, y:6.0, w:5.6, h:0.7, fontFace:F.title, fontSize:15, bold:true, italic:true,
+      color:C.CREAM, align:"center", valign:"middle" });
+
   s.addText("Thank you. Questions?",
-    { x:0.55, y:6.9, w:12.3, h:0.45, fontFace:F.title, fontSize:20, italic:true, bold:true, color:C.TEAL, align:"center" });
+    { x:0.55, y:6.95, w:12.3, h:0.4, fontFace:F.title, fontSize:18, italic:true, bold:true,
+      color:C.TEAL, align:"center" });
 });
 
 // ─── BUILD ───────────────────────────────────────────────────────────────
