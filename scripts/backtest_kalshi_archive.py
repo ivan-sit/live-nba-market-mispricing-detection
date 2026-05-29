@@ -270,9 +270,10 @@ def main() -> int:
     bundle = joblib.load(MODEL_PATH)
     client = KalshiClient()
 
-    # the 4 games whose archived parquet had candle data (re-pull in-play window)
+    # archived candle data + Game 6 (just settled today)
     events = ["KXNBA1HWINNER-26APR30DENMIN", "KXNBA1HWINNER-26MAY03TORCLE",
-              "KXNBA1HWINNER-26MAY04MINSAS", "KXNBA1HWINNER-26MAY13CLEDET"]
+              "KXNBA1HWINNER-26MAY04MINSAS", "KXNBA1HWINNER-26MAY13CLEDET",
+              "KXNBA1HWINNER-26MAY28OKCSAS"]  # Game 6 OKC@SAS
     print(f"Processing {len(events)} known events with archived candles")
 
     frames = []
