@@ -104,7 +104,50 @@ builders.push(s => {
     { x:0.55, y:6.3, w:12.3, h:0.5, fontFace:F.title, fontSize:18, italic:true, color:C.DEEP, align:"center" });
 });
 
-// ─── 4. RESEARCH QUESTION ────────────────────────────────────────────────
+// ─── 4. WHAT WE PLANNED — 6 variants table ───────────────────────────────
+builders.push(s => {
+  header(s, "What we planned · 6 ways to detect mispricing",
+    "Data constraints forced us down to 2 (highlighted)");
+  const rows = [
+    [{ text:"#", options:{ bold:true, color:C.CREAM, fill:C.NAVY, align:"center" }},
+     { text:"Method", options:{ bold:true, color:C.CREAM, fill:C.NAVY }},
+     { text:"Needs to run", options:{ bold:true, color:C.CREAM, fill:C.NAVY }},
+     { text:"Status", options:{ bold:true, color:C.CREAM, fill:C.NAVY, align:"center" }}],
+    [{ text:"1", options:{ align:"center", color:C.INK }},
+     { text:"Cross-venue consensus deviation", options:{ color:C.INK }},
+     { text:"multi-venue in-play odds", options:{ color:C.INK, italic:true }},
+     { text:"⏸  blocked", options:{ align:"center", color:C.DEEP }}],
+    [{ text:"2", options:{ align:"center", color:C.NAVY, bold:true, fill:C.CODE_BG }},
+     { text:"Calibrated win-probability vs market", options:{ color:C.NAVY, bold:true, fill:C.CODE_BG }},
+     { text:"PBP only", options:{ color:C.NAVY, fill:C.CODE_BG, italic:true }},
+     { text:"✅  BUILT", options:{ align:"center", color:C.ACCENT, bold:true, fill:C.CODE_BG }}],
+    [{ text:"3", options:{ align:"center", color:C.INK }},
+     { text:"Halawi-style weighted aggregate", options:{ color:C.INK }},
+     { text:"#1 + in-play odds history", options:{ color:C.INK, italic:true }},
+     { text:"⏸  blocked", options:{ align:"center", color:C.DEEP }}],
+    [{ text:"4", options:{ align:"center", color:C.INK }},
+     { text:"Time-series mean-reversion", options:{ color:C.INK }},
+     { text:"in-play odds history", options:{ color:C.INK, italic:true }},
+     { text:"⏸  blocked", options:{ align:"center", color:C.DEEP }}],
+    [{ text:"5", options:{ align:"center", color:C.NAVY, bold:true, fill:C.CODE_BG }},
+     { text:"Event-conditioned overreaction test", options:{ color:C.NAVY, bold:true, fill:C.CODE_BG }},
+     { text:"PBP only", options:{ color:C.NAVY, fill:C.CODE_BG, italic:true }},
+     { text:"✅  BUILT", options:{ align:"center", color:C.ACCENT, bold:true, fill:C.CODE_BG }}],
+    [{ text:"6", options:{ align:"center", color:C.INK }},
+     { text:"Cross-book hard arbitrage", options:{ color:C.INK }},
+     { text:"multi-venue history", options:{ color:C.INK, italic:true }},
+     { text:"⏸  descriptive", options:{ align:"center", color:C.DEEP }}],
+  ];
+  s.addTable(rows, { x:0.55, y:1.55, w:12.3, colW:[0.6, 5.4, 3.7, 2.6],
+    fontFace:F.body, fontSize:13, border:{ type:"solid", color:C.SKY, pt:1 }, rowH:0.55 });
+  s.addShape("roundRect", { x:0.55, y:5.85, w:12.3, h:1.05,
+    fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.3}, rectRadius:0.08 });
+  s.addText("The two we built are the only two that work from play-by-play alone. The other four are gated on multi-venue in-play odds history we don't have.",
+    { x:0.85, y:5.95, w:11.7, h:0.85, fontFace:F.title, fontSize:15, italic:true,
+      color:C.NAVY, align:"center", valign:"middle" });
+});
+
+// ─── 5. RESEARCH QUESTION ────────────────────────────────────────────────
 builders.push(s => {
   header(s, "Research question", "Pre-registered before any test-set data was touched");
   s.addShape("roundRect", { x:0.55, y:1.65, w:12.3, h:1.85,
@@ -144,32 +187,107 @@ builders.push(s => {
     fontFace:F.body, fontSize:12, border:{ type:"solid", color:C.SKY, pt:0.75 }, rowH:0.4 });
 });
 
-// ─── 6. MODEL V2 + FORMULA ───────────────────────────────────────────────
+// ─── 7. CALIBRATED WP MODEL — INPUTS → MODEL → OUTPUT ────────────────────
 builders.push(s => {
-  header(s, "The model (V2)", "Simple, interpretable, defensible");
-  formula(s, 0.55, 1.6, 12.3, 1.4,
-    "p̂_t  =  isotonic( XGBoost(x_t ; θ) )",
-    "x_t = [minute_idx, score_diff_home, recent_run_diff, period]");
+  header(s, "Our calibrated win-probability model", "What goes in · how it works · what comes out");
+
+  // ── three boxes side by side ─────────────────────────────────────────
+  // INPUTS box
+  s.addShape("roundRect", { x:0.55, y:1.6, w:3.8, h:3.9,
+    fill:{color:C.CREAM}, line:{color:C.NAVY, width:1.6}, rectRadius:0.1 });
+  s.addText("INPUTS  ·  at tick t", { x:0.55, y:1.7, w:3.8, h:0.4,
+    fontFace:F.body, fontSize:13, bold:true, color:C.DEEP, align:"center" });
+  s.addText("4 game-state features", { x:0.55, y:2.05, w:3.8, h:0.35,
+    fontFace:F.body, fontSize:12, italic:true, color:C.SKY, align:"center" });
   s.addText([
-    { text:"4 features.  ", options:{ bold:true, color:C.NAVY }},
-    { text:"XGBoost handles non-linear interactions (e.g. score-diff × time-remaining) that logistic regression can't." },
-  ], { x:0.55, y:3.15, w:12.3, h:0.7, fontFace:F.body, fontSize:16, color:C.INK });
+    { text:"minute_idx", options:{ fontFace:F.code, bold:true, color:C.NAVY }},
+    { text:"\n  minutes elapsed in 1H (1–24)\n", options:{ color:C.INK, fontSize:11 }},
+    { text:"score_diff_home", options:{ fontFace:F.code, bold:true, color:C.NAVY }},
+    { text:"\n  home – away (signed)\n", options:{ color:C.INK, fontSize:11 }},
+    { text:"recent_run_diff", options:{ fontFace:F.code, bold:true, color:C.NAVY }},
+    { text:"\n  pts diff over last 120s\n", options:{ color:C.INK, fontSize:11 }},
+    { text:"period", options:{ fontFace:F.code, bold:true, color:C.NAVY }},
+    { text:"\n  quarter (1 or 2)", options:{ color:C.INK, fontSize:11 }},
+  ], { x:0.75, y:2.5, w:3.5, h:2.6, fontFace:F.body, fontSize:13 });
+  s.addText("→ 1 vector of 4 numbers",
+    { x:0.55, y:5.1, w:3.8, h:0.35, fontFace:F.body, fontSize:11, italic:true,
+      color:C.TEAL, align:"center" });
+
+  // arrow 1
+  s.addShape("rightArrow", { x:4.5, y:3.25, w:0.55, h:0.6,
+    fill:{color:C.TEAL}, line:{color:C.TEAL, width:0} });
+
+  // MODEL box
+  s.addShape("roundRect", { x:5.2, y:1.6, w:3.8, h:3.9,
+    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0}, rectRadius:0.1 });
+  s.addText("MODEL", { x:5.2, y:1.7, w:3.8, h:0.4,
+    fontFace:F.body, fontSize:13, bold:true, color:C.SKY, align:"center" });
+  s.addText("trained on 2023-24 · 1,199 games", { x:5.2, y:2.05, w:3.8, h:0.35,
+    fontFace:F.body, fontSize:12, italic:true, color:C.SKY, align:"center" });
+  s.addText("XGBoost", { x:5.2, y:2.5, w:3.8, h:0.4,
+    fontFace:F.title, fontSize:20, bold:true, color:C.ACCENT, align:"center" });
+  s.addText("300 trees · depth 4 · lr 0.05",
+    { x:5.2, y:2.9, w:3.8, h:0.35, fontFace:F.code, fontSize:12,
+      color:C.CREAM, align:"center" });
+  s.addText("↓", { x:5.2, y:3.3, w:3.8, h:0.4,
+    fontFace:F.title, fontSize:20, color:C.CREAM, align:"center" });
+  s.addText("Isotonic calibration", { x:5.2, y:3.75, w:3.8, h:0.4,
+    fontFace:F.title, fontSize:18, bold:true, color:C.ACCENT, align:"center" });
+  s.addText("on a held-out validation fold\nso 0.70 truly = 70% empirically",
+    { x:5.2, y:4.2, w:3.8, h:0.7, fontFace:F.body, fontSize:11,
+      italic:true, color:C.CREAM, align:"center" });
+  s.addText("→ a calibrated number",
+    { x:5.2, y:5.1, w:3.8, h:0.35, fontFace:F.body, fontSize:11, italic:true,
+      color:C.SKY, align:"center" });
+
+  // arrow 2
+  s.addShape("rightArrow", { x:9.15, y:3.25, w:0.55, h:0.6,
+    fill:{color:C.TEAL}, line:{color:C.TEAL, width:0} });
+
+  // OUTPUT box
+  s.addShape("roundRect", { x:9.85, y:1.6, w:3.05, h:3.9,
+    fill:{color:C.CREAM}, line:{color:C.ACCENT, width:1.6}, rectRadius:0.1 });
+  s.addText("OUTPUT", { x:9.85, y:1.7, w:3.05, h:0.4,
+    fontFace:F.body, fontSize:13, bold:true, color:C.DEEP, align:"center" });
+  s.addText("calibrated probability", { x:9.85, y:2.05, w:3.05, h:0.35,
+    fontFace:F.body, fontSize:12, italic:true, color:C.SKY, align:"center" });
+  s.addText("p̂_t", { x:9.85, y:2.5, w:3.05, h:0.5,
+    fontFace:F.code, fontSize:30, bold:true, color:C.NAVY, align:"center" });
+  s.addText("P(home wins 1H)",
+    { x:9.85, y:3.05, w:3.05, h:0.35, fontFace:F.body, fontSize:13,
+      color:C.INK, align:"center" });
+  s.addText("a number in [0, 1]",
+    { x:9.85, y:3.4, w:3.05, h:0.3, fontFace:F.body, fontSize:11,
+      italic:true, color:C.DEEP, align:"center" });
+  s.addText("e.g.  0.87  =  87%",
+    { x:9.85, y:3.8, w:3.05, h:0.4, fontFace:F.title, fontSize:18,
+      bold:true, color:C.ACCENT, align:"center" });
+  s.addText("Brier 0.149  ·  ECE 0.008",
+    { x:9.85, y:4.3, w:3.05, h:0.35, fontFace:F.body, fontSize:11,
+      italic:true, color:C.DEEP, align:"center" });
+  s.addText("on the 2024-25 held-out season",
+    { x:9.85, y:4.6, w:3.05, h:0.35, fontFace:F.body, fontSize:10,
+      italic:true, color:C.SKY, align:"center" });
+  s.addText("→ trustworthy",
+    { x:9.85, y:5.1, w:3.05, h:0.35, fontFace:F.body, fontSize:11, italic:true,
+      color:C.TEAL, align:"center" });
+
+  // ── concrete example row at bottom ────────────────────────────────────
+  s.addShape("roundRect", { x:0.55, y:5.75, w:12.3, h:1.15,
+    fill:{color:C.CODE_BG}, line:{color:C.TEAL, width:1.2}, rectRadius:0.08 });
+  s.addText("Example:", { x:0.85, y:5.85, w:1.7, h:0.4,
+    fontFace:F.body, fontSize:13, italic:true, bold:true, color:C.DEEP });
   s.addText([
-    { text:"Isotonic calibration  ", options:{ bold:true, color:C.NAVY }},
-    { text:"on a held-out fold — wraps raw probabilities so 0.70 means 70% empirically." },
-  ], { x:0.55, y:3.85, w:12.3, h:0.7, fontFace:F.body, fontSize:16, color:C.INK });
-  s.addText([
-    { text:"Ablation:  ", options:{ bold:true, color:C.NAVY }},
-    { text:"engineered features (leverage, possession proxy) did " },
-    { text:"not", options:{ bold:true, color:C.ACCENT, italic:true }},
-    { text:" beat the 0.005-Brier threshold → kept simple." },
-  ], { x:0.55, y:4.55, w:12.3, h:0.7, fontFace:F.body, fontSize:16, color:C.INK });
-  s.addShape("roundRect", { x:0.55, y:5.4, w:12.3, h:1.5,
-    fill:{color:C.CREAM}, line:{color:C.SKY, width:1}, rectRadius:0.1 });
-  s.addText("Why we kept it simple:",
-    { x:0.85, y:5.5, w:12.0, h:0.4, fontFace:F.body, fontSize:14, italic:true, color:C.DEEP });
-  s.addText("Every choice defensible. No overfitting. Brier-comparable to published NBA in-game WP models (Bashuk; Lopez & Matthews).",
-    { x:0.85, y:5.95, w:12.0, h:0.9, fontFace:F.body, fontSize:15, color:C.INK });
+    { text:"minute_idx=18", options:{ fontFace:F.code, bold:true, color:C.NAVY }},
+    { text:" (5 min left in half),  " },
+    { text:"score_diff_home=+6", options:{ fontFace:F.code, bold:true, color:C.NAVY }},
+    { text:",  " },
+    { text:"recent_run_diff=+4", options:{ fontFace:F.code, bold:true, color:C.NAVY }},
+    { text:",  " },
+    { text:"period=2", options:{ fontFace:F.code, bold:true, color:C.NAVY }},
+    { text:"   →   " },
+    { text:"p̂ = 0.87", options:{ fontFace:F.code, bold:true, color:C.ACCENT, fontSize:16 }},
+  ], { x:0.85, y:6.2, w:12.0, h:0.65, fontFace:F.body, fontSize:13, color:C.INK });
 });
 
 // ─── 7. CALIBRATION RESULT — FIGURE #1 (reliability diagram) ─────────────
@@ -190,9 +308,9 @@ builders.push(s => {
     { x:0.55, y:6.95, w:12.3, h:0.3, fontFace:F.body, fontSize:11, italic:true, color:C.DEEP, align:"center" });
 });
 
-// ─── 8. V5 MISPRICING — FIGURE #2 (bar chart + table) ────────────────────
+// ─── 9. THE OVERREACTION TEST — FIGURE #2 (bar chart + table) ────────────
 builders.push(s => {
-  header(s, "Mispricing thesis (V5) · pre-registered tests", "Headline figure #2 · held-out 2024-25");
+  header(s, "The overreaction test · pre-registered", "Headline figure #2 · held-out 2024-25");
   s.addImage({ path:"slides/figures/v5_shifts.png", x:0.4, y:1.55, w:7.4, h:5.0 });
   // compact results table on the right
   const rows = [
@@ -298,7 +416,7 @@ builders.push(s => {
   ], { x:0.55, y:2.4, w:12.3, h:1.0, fontFace:F.body, fontSize:18, color:C.INK });
   formula(s, 0.55, 3.6, 12.3, 1.5,
     "p̂_aggregate  =  w · p_model  +  ( 1 − w ) · p_market_devig",
-    "V3 — weight chosen by validation Brier; aggregate's Brier ≤ min(component Briers)");
+    "the 'aggregate' variant (#3 in the planned table) — weight from validation Brier · aggregate's Brier ≤ min(components)");
   s.addShape("roundRect", { x:0.55, y:5.3, w:12.3, h:1.65,
     fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.5}, rectRadius:0.1 });
   s.addText("Reframing:",
@@ -333,7 +451,7 @@ builders.push(s => {
     fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.5}, rectRadius:0.1 });
   s.addText("MOST EFFECTIVE METHOD", { x:0.75, y:1.7, w:5.6, h:0.4,
     fontFace:F.body, fontSize:12, bold:true, color:C.DEEP });
-  s.addText("V5 · Event-conditioned overreaction", { x:0.75, y:2.1, w:5.6, h:0.55,
+  s.addText("Event-conditioned overreaction test", { x:0.75, y:2.1, w:5.6, h:0.55,
     fontFace:F.title, fontSize:20, bold:true, color:C.NAVY });
   s.addText("the only variant with a statistically significant finding on the held-out test season",
     { x:0.75, y:2.65, w:5.6, h:0.7, fontFace:F.body, fontSize:13, italic:true, color:C.DEEP });
@@ -353,7 +471,7 @@ builders.push(s => {
     border:{ type:"solid", color:C.SKY, pt:1 }, rowH:0.5 });
   s.addText("Both pre-registered tests pass on 2024-25 held-out.",
     { x:0.75, y:5.05, w:5.6, h:0.35, fontFace:F.body, fontSize:12, italic:true, color:C.DEEP });
-  s.addText("V2 calibration backs it (Brier 0.149); V1 / V3 / V4 / V6 not powered yet.",
+  s.addText("Backed by the calibrated model (Brier 0.149). The other 4 planned methods are blocked on data.",
     { x:0.75, y:5.4, w:5.6, h:0.45, fontFace:F.body, fontSize:12, italic:true, color:C.DEEP });
   s.addShape("rect", { x:0.75, y:6.0, w:5.6, h:0.7,
     fill:{color:C.NAVY}, line:{color:C.NAVY, width:0} });

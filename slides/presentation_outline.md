@@ -68,7 +68,7 @@ Splits: train on 2023-24, **held-out test on 2024-25** (touched once).
 - **Isotonic calibration** on validation fold.
 - Engineered features (leverage, possession proxies) **did not** improve Brier by 0.005 → kept simple.
 
-*Why simple is right for a 3-page paper: every choice defensible, no overfitting story.*
+*Why simple is right: every choice defensible, no overfitting story.*
 
 ---
 
