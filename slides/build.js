@@ -212,7 +212,7 @@ builders.push(s => {
 
 // ─── 7. CALIBRATED WP MODEL — INPUTS → MODEL → OUTPUT ────────────────────
 builders.push(s => {
-  header(s, "Our calibrated win-probability model", "What goes in · how it works · what comes out");
+  header(s, "Method 1 · how it works", "The calibrated WP model  ·  what goes in, what comes out");
 
   // ── three boxes side by side ─────────────────────────────────────────
   // INPUTS box
@@ -331,7 +331,99 @@ builders.push(s => {
     { x:0.55, y:6.95, w:12.3, h:0.3, fontFace:F.body, fontSize:11, italic:true, color:C.DEEP, align:"center" });
 });
 
-// ─── 9. THE OVERREACTION TEST — FIGURE #2 (bar chart + table) ────────────
+// ─── 8b. METHOD 2 · how it works ─────────────────────────────────────────
+builders.push(s => {
+  header(s, "Method 2 · how it works", "The overreaction test  ·  runs ON TOP OF Method 1");
+
+  // INPUTS box
+  s.addShape("roundRect", { x:0.55, y:1.6, w:3.8, h:3.9,
+    fill:{color:C.CREAM}, line:{color:C.NAVY, width:1.6}, rectRadius:0.1 });
+  s.addText("INPUTS", { x:0.55, y:1.7, w:3.8, h:0.4,
+    fontFace:F.body, fontSize:13, bold:true, color:C.DEEP, align:"center" });
+  s.addText("2 streams joined per event", { x:0.55, y:2.05, w:3.8, h:0.35,
+    fontFace:F.body, fontSize:12, italic:true, color:C.SKY, align:"center" });
+  s.addText([
+    { text:"From Method 1:", options:{ bold:true, color:C.NAVY }},
+    { text:"\n   p̂_t  (every minute, full game)", options:{ fontFace:F.code, fontSize:11 }},
+    { text:"\n", options:{ fontSize:8 }},
+    { text:"From PBP:", options:{ bold:true, color:C.NAVY }},
+    { text:"\n   trailing-team scoring events,", options:{ fontSize:11 }},
+    { text:"\n   filtered by pre-registered rule:", options:{ fontSize:11 }},
+    { text:"\n   • comeback FG (trail 10–15)", options:{ color:C.ACCENT, fontSize:11 }},
+    { text:"\n   • salience 3PT (trail ≥10)", options:{ color:C.ACCENT, fontSize:11 }},
+  ], { x:0.75, y:2.5, w:3.5, h:2.5, fontFace:F.body, fontSize:12, color:C.INK });
+  s.addText("→ ~6,800 events / 1,300 games",
+    { x:0.55, y:5.1, w:3.8, h:0.35, fontFace:F.body, fontSize:11, italic:true,
+      color:C.TEAL, align:"center" });
+
+  // arrow 1
+  s.addShape("rightArrow", { x:4.5, y:3.25, w:0.55, h:0.6,
+    fill:{color:C.TEAL}, line:{color:C.TEAL, width:0} });
+
+  // METHOD box
+  s.addShape("roundRect", { x:5.2, y:1.6, w:3.8, h:3.9,
+    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0}, rectRadius:0.1 });
+  s.addText("METHOD", { x:5.2, y:1.7, w:3.8, h:0.4,
+    fontFace:F.body, fontSize:13, bold:true, color:C.SKY, align:"center" });
+  s.addText("per event at time t :", { x:5.2, y:2.05, w:3.8, h:0.35,
+    fontFace:F.body, fontSize:12, italic:true, color:C.SKY, align:"center" });
+  s.addText([
+    { text:"1.  look up p̂(t)", options:{ color:C.CREAM, bold:true }},
+    { text:"\n    and p̂(t+60s)", options:{ color:C.CREAM, fontSize:11 }},
+    { text:"\n", options:{ fontSize:6 }},
+    { text:"2.  Δp̂  =  p̂(t+60) − p̂(t)", options:{ color:C.ACCENT, bold:true, fontFace:F.code }},
+    { text:"\n", options:{ fontSize:6 }},
+    { text:"3.  average within game", options:{ color:C.CREAM, bold:true }},
+    { text:"\n    (block-bootstrap by GAME)", options:{ color:C.CREAM, fontSize:11 }},
+    { text:"\n", options:{ fontSize:6 }},
+    { text:"4.  10,000 resamples →", options:{ color:C.CREAM, bold:true }},
+    { text:"\n    95% CI  +  p-value", options:{ color:C.CREAM, fontSize:11 }},
+  ], { x:5.4, y:2.5, w:3.6, h:2.6, fontFace:F.body, fontSize:13 });
+  s.addText("→ honest CI (effective n = games)",
+    { x:5.2, y:5.1, w:3.8, h:0.35, fontFace:F.body, fontSize:11, italic:true,
+      color:C.SKY, align:"center" });
+
+  // arrow 2
+  s.addShape("rightArrow", { x:9.15, y:3.25, w:0.55, h:0.6,
+    fill:{color:C.TEAL}, line:{color:C.TEAL, width:0} });
+
+  // OUTPUT box
+  s.addShape("roundRect", { x:9.85, y:1.6, w:3.05, h:3.9,
+    fill:{color:C.CREAM}, line:{color:C.ACCENT, width:1.6}, rectRadius:0.1 });
+  s.addText("OUTPUT", { x:9.85, y:1.7, w:3.05, h:0.4,
+    fontFace:F.body, fontSize:13, bold:true, color:C.DEEP, align:"center" });
+  s.addText("per event-class:", { x:9.85, y:2.05, w:3.05, h:0.35,
+    fontFace:F.body, fontSize:12, italic:true, color:C.SKY, align:"center" });
+  s.addText("Δp̂_scorer", { x:9.85, y:2.5, w:3.05, h:0.5,
+    fontFace:F.code, fontSize:24, bold:true, color:C.NAVY, align:"center" });
+  s.addText("structural shift\nfor the scoring team",
+    { x:9.85, y:3.05, w:3.05, h:0.6, fontFace:F.body, fontSize:11,
+      italic:true, color:C.INK, align:"center" });
+  s.addText("+ 95% CI", { x:9.85, y:3.7, w:3.05, h:0.35,
+    fontFace:F.body, fontSize:13, bold:true, color:C.NAVY, align:"center" });
+  s.addText("+ p-value", { x:9.85, y:4.05, w:3.05, h:0.35,
+    fontFace:F.body, fontSize:13, bold:true, color:C.NAVY, align:"center" });
+  s.addText("→ does the bias exist?",
+    { x:9.85, y:5.1, w:3.05, h:0.35, fontFace:F.body, fontSize:11, italic:true,
+      color:C.TEAL, align:"center" });
+
+  // concrete example
+  s.addShape("roundRect", { x:0.55, y:5.75, w:12.3, h:1.15,
+    fill:{color:C.CODE_BG}, line:{color:C.TEAL, width:1.2}, rectRadius:0.08 });
+  s.addText("Example event:",
+    { x:0.85, y:5.85, w:2.2, h:0.4, fontFace:F.body, fontSize:13, italic:true, bold:true, color:C.DEEP });
+  s.addText([
+    { text:"trailing 12, made 3PT at game-min 18", options:{} },
+    { text:"   →   ", options:{} },
+    { text:"p̂(t) = 0.18", options:{ fontFace:F.code, bold:true, color:C.NAVY }},
+    { text:",  ", options:{} },
+    { text:"p̂(t+60s) = 0.22", options:{ fontFace:F.code, bold:true, color:C.NAVY }},
+    { text:"   →   ", options:{} },
+    { text:"Δp̂ = +0.04", options:{ fontFace:F.code, bold:true, color:C.ACCENT, fontSize:15 }},
+  ], { x:0.85, y:6.2, w:12.0, h:0.65, fontFace:F.body, fontSize:13, color:C.INK });
+});
+
+// ─── 9. FINDING 2 — overreaction test result (bar chart + table) ─────────
 builders.push(s => {
   header(s, "Finding 2 · The market overshoots on trailing-team scoring", "Both pre-registered tests pass at p < 0.0001 (held-out 2024-25)");
   s.addImage({ path:"slides/figures/v5_shifts.png", x:0.4, y:1.55, w:7.4, h:5.0 });
