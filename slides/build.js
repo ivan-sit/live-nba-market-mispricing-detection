@@ -289,7 +289,7 @@ builders.push(s => {
 
 // ─── 7. CALIBRATION RESULT — FIGURE #1 (reliability diagram) ─────────────
 builders.push(s => {
-  header(s, "Calibration result · out-of-sample 2024-25", "Headline figure #1 · the probabilities can be trusted");
+  header(s, "Finding 1 · Our model is well-calibrated", "Brier 0.149 · ECE 0.008 · reliability on the diagonal (2024-25 held-out)");
   s.addImage({ path:"slides/figures/reliability_v2.png", x:0.55, y:1.55, w:7.7, h:5.4 });
   // metric tiles on right
   function tile(y, label, value, sub) {
@@ -307,7 +307,7 @@ builders.push(s => {
 
 // ─── 9. THE OVERREACTION TEST — FIGURE #2 (bar chart + table) ────────────
 builders.push(s => {
-  header(s, "The overreaction test · pre-registered", "Headline figure #2 · held-out 2024-25");
+  header(s, "Finding 2 · The market overshoots on trailing-team scoring", "Both pre-registered tests pass at p < 0.0001 (held-out 2024-25)");
   s.addImage({ path:"slides/figures/v5_shifts.png", x:0.4, y:1.55, w:7.4, h:5.0 });
   // compact results table on the right
   const rows = [
@@ -331,7 +331,87 @@ builders.push(s => {
     { x:8.15, y:5.65, w:4.5, h:1.2, fontFace:F.title, fontSize:16, italic:true, bold:true, color:C.NAVY });
 });
 
-// ─── 9. BACKTEST ENGINE + FORMULAS ───────────────────────────────────────
+// ─── 9. SYNTHESIS — how the two methods stack ────────────────────────────
+builders.push(s => {
+  header(s, "How we use both methods",
+    "They don't compete · Method 2 STACKS on top of Method 1");
+
+  // ── Method 1 box (LEFT) ──────────────────────────────────────────────
+  s.addShape("roundRect", { x:0.55, y:1.55, w:5.85, h:4.5,
+    fill:{color:C.CREAM}, line:{color:C.NAVY, width:1.6}, rectRadius:0.1 });
+  s.addShape("rect", { x:0.55, y:1.55, w:5.85, h:0.55,
+    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0} });
+  s.addText("METHOD 1 · the calibrated WP model",
+    { x:0.55, y:1.55, w:5.85, h:0.55, fontFace:F.body, fontSize:13,
+      bold:true, color:C.CREAM, align:"center", valign:"middle" });
+  s.addText([
+    { text:"INPUTS:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"4 game-state features (min, score-diff, run, period)" },
+  ], { x:0.75, y:2.25, w:5.5, h:0.55, fontFace:F.body, fontSize:13, color:C.INK });
+  s.addText([
+    { text:"OUTPUTS:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"p̂_t  =  P(home wins 1H), calibrated 0–1", options:{ fontFace:F.code }},
+  ], { x:0.75, y:2.85, w:5.5, h:0.55, fontFace:F.body, fontSize:13, color:C.INK });
+  s.addText([
+    { text:"ANSWERS:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"\"Is the model accurate?\"" },
+  ], { x:0.75, y:3.45, w:5.5, h:0.5, fontFace:F.body, fontSize:13, color:C.INK });
+  s.addShape("rect", { x:0.75, y:4.1, w:5.5, h:0.04, fill:{color:C.SKY}, line:{color:C.SKY,width:0} });
+  s.addText([
+    { text:"FINDING:  ", options:{ bold:true, color:C.NAVY }},
+    { text:"✅  ", options:{ color:C.ACCENT, bold:true, fontSize:16 }},
+    { text:"Brier 0.149 OOS, ECE 0.008", options:{ bold:true, color:C.NAVY }},
+  ], { x:0.75, y:4.3, w:5.5, h:0.5, fontFace:F.body, fontSize:14 });
+  s.addText("the probabilities can be trusted",
+    { x:0.75, y:4.75, w:5.5, h:0.4, fontFace:F.body, fontSize:11, italic:true, color:C.DEEP });
+
+  // arrow connecting Method 1 → Method 2
+  s.addShape("rightArrow", { x:6.5, y:3.45, w:0.7, h:0.6,
+    fill:{color:C.ACCENT}, line:{color:C.ACCENT, width:0} });
+  s.addText("feeds p̂_t into", { x:6.3, y:4.1, w:1.1, h:0.3,
+    fontFace:F.body, fontSize:9, italic:true, color:C.DEEP, align:"center" });
+
+  // ── Method 2 box (RIGHT) ─────────────────────────────────────────────
+  s.addShape("roundRect", { x:7.3, y:1.55, w:5.55, h:4.5,
+    fill:{color:C.CREAM}, line:{color:C.ACCENT, width:1.6}, rectRadius:0.1 });
+  s.addShape("rect", { x:7.3, y:1.55, w:5.55, h:0.55,
+    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0} });
+  s.addText("METHOD 2 · the overreaction test",
+    { x:7.3, y:1.55, w:5.55, h:0.55, fontFace:F.body, fontSize:13,
+      bold:true, color:C.CREAM, align:"center", valign:"middle" });
+  s.addText([
+    { text:"INPUTS:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"p̂_t from Method 1, at trailing-team scoring events", options:{ fontFace:F.body }},
+  ], { x:7.5, y:2.25, w:5.2, h:0.55, fontFace:F.body, fontSize:13, color:C.INK });
+  s.addText([
+    { text:"OUTPUTS:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"Δp̂_scorer(t)  =  p̂(t+60) − p̂(t)", options:{ fontFace:F.code }},
+  ], { x:7.5, y:2.85, w:5.2, h:0.55, fontFace:F.body, fontSize:13, color:C.INK });
+  s.addText([
+    { text:"ANSWERS:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"\"Does the market overshoot p̂_t in event windows?\"" },
+  ], { x:7.5, y:3.45, w:5.2, h:0.65, fontFace:F.body, fontSize:13, color:C.INK });
+  s.addShape("rect", { x:7.5, y:4.1, w:5.2, h:0.04, fill:{color:C.SKY}, line:{color:C.SKY,width:0} });
+  s.addText([
+    { text:"FINDING:  ", options:{ bold:true, color:C.NAVY }},
+    { text:"✅  ", options:{ color:C.ACCENT, bold:true, fontSize:16 }},
+    { text:"both tests p < 0.0001", options:{ bold:true, color:C.NAVY }},
+  ], { x:7.5, y:4.3, w:5.2, h:0.5, fontFace:F.body, fontSize:14 });
+  s.addText("the bias on the model side is real",
+    { x:7.5, y:4.75, w:5.2, h:0.4, fontFace:F.body, fontSize:11, italic:true, color:C.DEEP });
+
+  // ── synthesis line ───────────────────────────────────────────────────
+  s.addShape("roundRect", { x:0.55, y:6.2, w:12.3, h:0.95,
+    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0}, rectRadius:0.08 });
+  s.addText([
+    { text:"Both findings pass.  ", options:{ bold:true, color:C.ACCENT }},
+    { text:"Next: does this exploitable bias actually survive the vig on real markets?  →  ", options:{ color:C.CREAM }},
+    { text:"backtest", options:{ italic:true, bold:true, color:C.ACCENT }},
+  ], { x:0.85, y:6.2, w:11.7, h:0.95, fontFace:F.title, fontSize:17,
+       color:C.CREAM, align:"center", valign:"middle" });
+});
+
+// ─── 10. BACKTEST ENGINE + FORMULAS ──────────────────────────────────────
 builders.push(s => {
   header(s, "Backtest engine · the equations", "5/5 honesty gates pass on synthetic data");
   formula(s, 0.55, 1.55, 12.3, 1.05,
@@ -364,7 +444,7 @@ builders.push(s => {
 
 // ─── 10. LIVE PILOT — FIGURE #3 (ROI bars) ───────────────────────────────
 builders.push(s => {
-  header(s, "Live pilot · SAS @ OKC, 2026-05-26  (FINAL OKC 127–114)", "Headline figure #3 · 73 in-1H ticks · 6 books");
+  header(s, "Finding 3 · Against liquid books, n=1 is pure noise", "Live pilot: SAS @ OKC, 2026-05-26 (FINAL OKC 127–114) · 73 ticks · 6 books");
   s.addImage({ path:"slides/figures/pilot_roi.png", x:0.4, y:1.55, w:7.5, h:5.0 });
   s.addShape("roundRect", { x:8.05, y:1.55, w:4.85, h:5.05,
     fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.5}, rectRadius:0.1 });
@@ -387,8 +467,8 @@ builders.push(s => {
 
 // ─── 11. GAME 6 PILOT + LIQUIDITY × SAMPLE — FIGURE #4 ───────────────────
 builders.push(s => {
-  header(s, "Game 6 pilot · OKC @ SAS, 2026-05-28  (FINAL SAS 118–91)",
-    "61 in-1H ticks on Kalshi · the 5-game pool tells the rest of the story");
+  header(s, "Finding 4 · The Kalshi +95% is a stale-mid artifact",
+    "Game 6 (OKC@SAS, 2026-05-28, FINAL SAS 118–91) + 4 archived games · 311 ticks");
   s.addImage({ path:"slides/figures/game6_pilot.png", x:1.7, y:1.5, w:9.9, h:4.6 });
   // commentary below
   s.addShape("roundRect", { x:0.55, y:6.2, w:12.3, h:1.0,

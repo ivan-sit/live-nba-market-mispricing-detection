@@ -1,6 +1,6 @@
 # Presentation Companion · Speaker Script, Workflow, Results, "Can I Make Money?"
 
-Pair this with `slides/final_deck.pptx` (14 slides, ~10 min). Sections:
+Pair this with `slides/final_deck.pptx` (15 slides, ~10 min). Sections:
 
 1. [Speaker script — slide by slide](#1-speaker-script)
 2. [Workflow at a glance](#2-workflow-at-a-glance)
@@ -42,45 +42,53 @@ Pair this with `slides/final_deck.pptx` (14 slides, ~10 min). Sections:
 > "The model itself is intentionally small. XGBoost on four features: `minute_idx`, `score_diff_home`, `recent_run_diff`, `period`. Isotonic on a held-out fold so a 0.70 prediction actually corresponds to a 70% empirical frequency."
 > "We ran an ablation — engineered features like leverage and possession proxies — they didn't beat a 0.005-Brier improvement threshold, so we kept it simple. Every choice is defensible, no overfitting story."
 
-### Slide 7 — Calibration result  (60 sec) · **headline #1**
+### Slide 7 — Finding 1 · Our model is well-calibrated  (60 sec)
 > *(point at the diagonal)*
 > "Out-of-sample on the 2024-25 season — 1,230 held-out games — the reliability diagram falls **on the diagonal across all deciles**, with binomial confidence intervals that cover the line."
 > "**Brier 0.149. ECE 0.008.** That ECE is essentially zero. The probabilities can be trusted. That's a real, defensible artifact — and it's competitive with published in-game WP models like Bashuk and Lopez-Matthews."
 
-### Slide 8 — The overreaction test  (75 sec) · **headline #2**
+### Slide 8 — Finding 2 · The market overshoots on trailing-team scoring  (75 sec)
 > "Now the behavioral test. For each pre-registered event, we measure the **structural shift for the scorer over the next 60 seconds** — how much does the calibrated model move toward the scoring team after they make a basket while trailing?"
 > *(point at the bars)*
 > "**The comeback-FG test: +0.75 percentage points. p < 0.0001.** Block-bootstrap by *game* across 4,596 events. **The salience-3PT test: +1.4 points. p < 0.0001.**"
 > "Both pre-registered tests pass on the held-out season. The model says: *a trailing team's basket genuinely does move the structural fair value in their favor.*"
 > "Which sets up the behavioral question: **does the market shift by more than this?** That's the mispricing — when the crowd overshoots what the fundamentals say."
 
-### Slide 9 — Backtest engine  (60 sec)
+### Slide 9 — How we use both methods  (45 sec)
+> "Before the backtest, the synthesis. Method 1 and Method 2 don't compete — Method 2 literally **runs on top of** Method 1."
+> *(point at the left box)*
+> "Method 1 takes game state in, outputs the calibrated probability `p̂_t`, answers *'is the model accurate?'* — verdict, **yes, Brier 0.149**."
+> *(point at the right box)*
+> "Method 2 takes `p̂_t` *as input*, outputs the structural shift over a 60-second window, answers *'does the market overshoot p̂_t in event windows?'* — verdict, **yes, p less than 0.0001 on both tests**."
+> "Both detection findings pass. That sets up the next question: **does this exploitable bias actually survive the vig on real markets?** Which is the backtest."
+
+### Slide 10 — Backtest engine  (60 sec)
 > "Before we trust any P&L number, the engine has to be honest. Here are the three equations: `edge`, multiplicative two-way `de-vig`, and the Kelly fraction with `b` = decimal odds minus 1."
 > "**Five honesty gates** on synthetic data. A constant-0.5 model gets a Brier of exactly 0.25. Always-betting-the-favorite on an efficient vigged market loses approximately the vig. The market-as-itself gets zero edge and zero bets. And — critically — when we feed a perfect model into a *biased* market, the engine recovers a +14% ROI with a p-value of 0.000. So it *can* detect a real edge when one exists."
 > "We bootstrap **by game**, not by tick, because within-game ticks share one outcome — the effective sample size is games."
 
-### Slide 10 — Live pilot  (75 sec) · **headline #3**
+### Slide 11 — Finding 3 · Against liquid books, n=1 is pure noise  (75 sec)
 > "We ran this live on the May 26 conference finals game — SAS at OKC, Game 5. The model captured 73 in-1st-half ticks against six live sportsbooks. Then we settled on the real final: **OKC 127, SAS 114**."
 > *(point at the bars)*
 > "**Our model lost 40%. 'Always favorite' made 34%.**"
 > "And — this is critical — *the lesson is the result*. The model faded San Antonio when the game was close early. OKC pulled away. The model lost. 'Always favorite' won — but only because the favorite happened to win this one game. **That's the n-equals-one problem made tangible**, and it's the methodological backbone of this whole talk."
 
-### Slide 11 — Game 6 pilot + liquidity lesson  (45 sec)
+### Slide 12 — Finding 4 · Kalshi pool +95% is a stale-mid artifact  (45 sec)
 > "Game 6 happened two nights after Game 5 — OKC at San Antonio. SAS won 118-91."
 > *(point at the highlighted Game 6 bar)*
 > "Our model returned **+12% on Game 6 alone** against Kalshi's 1H-winner market — the *smallest* of the five archived Kalshi games. **Pool of all five: +95%.**"
 > "Don't trust that pool number. The Kalshi 1H market was thin — prices stale, slow to update. A score-reactive model 'beats' a price that isn't moving. Plus n equals 5, plus mid quotes, plus no slippage. **It's an artifact, not an edge.**"
 > "Same model — opposite signs from Game 5. The lesson: **liquidity and sample size are everything.**"
 
-### Slide 12 — Connecting back to Halawi  (45 sec)
+### Slide 13 — Connecting back to Halawi  (45 sec)
 > "Tie back to the midterm. Halawi's aggregate works because LM errors and crowd errors are **independent**. The same structure applies here: our structural model reads game-state, the market absorbs sentiment and inside flow — partly independent error sources."
 > "The 'aggregate' variant from the earlier table — number three — is the literal Halawi analog: `p̂_aggregate = w·p_model + (1−w)·p_market_devig`, weight chosen by validation Brier. The aggregate's Brier is bounded by the minimum of the components."
 > "Reframing: the model's job isn't to *beat* the market everywhere. It's to **complement** the market in the specific situations — (comeback FGs, salience 3PTs) — where the crowd's bias is biggest."
 
-### Slide 13 — Limitations & future  (30 sec)
+### Slide 14 — Limitations & future  (30 sec)
 > "Limitations, briefly: sample size — we'd want roughly 1,000 liquid-market games for a powered backtest. Horizon — the model is 1st-half-only. Reactivity — sportsbooks limit winners; Kalshi as peer-to-peer sidesteps that. And the four blocked variants from earlier are architecturally ready but need multi-venue history."
 
-### Slide 14 — Verdict  (45 sec)
+### Slide 15 — Verdict  (45 sec)
 > "Two questions, answered directly."
 > *(point at left panel)*
 > "**Which mispricing method works best?** The **event-conditioned overreaction test**. It's the only one of our six planned methods with a statistically significant finding on the held-out test season: the comeback-FG test gave plus 0.0075, the salience-3PT test gave plus 0.0138 at p less than 0.0001. The bias is statistically real."
