@@ -29,9 +29,9 @@ Pair this with `slides/final_deck.pptx` (15 slides, ~10 min). Sections:
 
 ### Slide 4 — What we planned · 6 ways to detect mispricing  (30 sec)
 > "Within NBA, we mapped out six methodological approaches to detecting mispricing — from cross-venue consensus to time-series mean reversion to event-conditioned overreaction."
-> *(point at the two highlighted rows)*
-> "**Data constraints forced us down to two.** The two highlighted are the only ones that work from play-by-play alone — a calibrated win-probability model, and an event-conditioned overreaction test. The other four are blocked on multi-venue in-play odds history we don't have."
-> "So the rest of the talk is those two."
+> *(point at the two highlighted rows + the Method 1 / Method 2 callouts)*
+> "**Data constraints forced us down to two.** Row 2 — the calibrated win-probability model — that's **Method 1** for the rest of the talk. Row 5 — the event-conditioned overreaction test — that's **Method 2**. The other four are blocked on multi-venue in-play odds history we don't have."
+> "So the rest of the talk is Method 1 and Method 2."
 
 ### Slide 5 — Pipeline  (60 sec)
 > "Here's the whole system in one diagram. **Top row is the model side**: play-by-play, 2,460 games from nba_api, turned into per-minute game-state snapshots, fed to our model — XGBoost plus isotonic — outputs `p̂_t`, the calibrated probability the home team wins the 1st half."

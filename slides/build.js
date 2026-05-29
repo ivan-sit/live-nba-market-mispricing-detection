@@ -156,13 +156,39 @@ builders.push(s => {
      { text:"multi-venue history", options:{ color:C.INK, italic:true }},
      { text:"⏸  descriptive", options:{ align:"center", color:C.DEEP }}],
   ];
-  s.addTable(rows, { x:0.55, y:1.55, w:12.3, colW:[0.6, 5.4, 3.7, 2.6],
+  // shrunk table to make room for "Method 1 / Method 2" arrow callouts on the right
+  s.addTable(rows, { x:0.55, y:1.55, w:10.35, colW:[0.5, 4.55, 3.1, 2.2],
     fontFace:F.body, fontSize:13, border:{ type:"solid", color:C.SKY, pt:1 }, rowH:0.55 });
+
+  // ── arrow callouts pointing at the two BUILT rows ────────────────────
+  // Row 2 (Calibrated WP model) → Method 1   · row center y ≈ 2.925
+  s.addShape("leftArrow", { x:10.95, y:2.78, w:0.55, h:0.30,
+    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0} });
+  s.addShape("roundRect", { x:11.6, y:2.73, w:1.25, h:0.4,
+    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0}, rectRadius:0.05 });
+  s.addText("Method 1", { x:11.6, y:2.73, w:1.25, h:0.4,
+    fontFace:F.title, fontSize:13, bold:true, color:C.CREAM,
+    align:"center", valign:"middle" });
+
+  // Row 5 (Overreaction test) → Method 2     · row center y ≈ 4.575
+  s.addShape("leftArrow", { x:10.95, y:4.43, w:0.55, h:0.30,
+    fill:{color:C.ACCENT}, line:{color:C.ACCENT, width:0} });
+  s.addShape("roundRect", { x:11.6, y:4.38, w:1.25, h:0.4,
+    fill:{color:C.ACCENT}, line:{color:C.ACCENT, width:0}, rectRadius:0.05 });
+  s.addText("Method 2", { x:11.6, y:4.38, w:1.25, h:0.4,
+    fontFace:F.title, fontSize:13, bold:true, color:C.NAVY,
+    align:"center", valign:"middle" });
+
   s.addShape("roundRect", { x:0.55, y:5.85, w:12.3, h:1.05,
     fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.3}, rectRadius:0.08 });
-  s.addText("The two we built are the only two that work from play-by-play alone. The other four are gated on multi-venue in-play odds history we don't have.",
-    { x:0.85, y:5.95, w:11.7, h:0.85, fontFace:F.title, fontSize:15, italic:true,
-      color:C.NAVY, align:"center", valign:"middle" });
+  s.addText([
+    { text:"The two we built — ", options:{} },
+    { text:"Method 1 ", options:{ bold:true, color:C.NAVY }},
+    { text:"and ", options:{} },
+    { text:"Method 2 ", options:{ bold:true, color:C.ACCENT }},
+    { text:"— are the only ones that work from play-by-play alone. The other four are gated on multi-venue in-play odds history we don't have.", options:{} },
+  ], { x:0.85, y:5.95, w:11.7, h:0.85, fontFace:F.title, fontSize:15, italic:true,
+       color:C.NAVY, align:"center", valign:"middle" });
 });
 
 // ─── 5. PIPELINE FLOWCHART + DATA ────────────────────────────────────────
