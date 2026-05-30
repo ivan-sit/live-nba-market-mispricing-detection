@@ -34,9 +34,11 @@ Pair this with `slides/final_deck.pptx` (16 slides, ~10 min). Sections:
 > "So the rest of the talk is Method 1 and Method 2."
 
 ### Slide 5 — Pipeline  (60 sec)
-> "Here's the whole system in one diagram. **Top row is the model side**: play-by-play, 2,460 games from nba_api, turned into per-minute game-state snapshots, fed to our model — XGBoost plus isotonic — outputs `p̂_t`, the calibrated probability the home team wins the 1st half."
-> "**Bottom row is the market side**: live odds from 9 sportsbooks and Kalshi, de-vigged into a market probability `p_market_t`."
-> "They meet at `edge_t = p̂_t − p_market_t`. That goes through the backtest — quarter-Kelly sized at the vigged odds, settled, block-bootstrapped by game."
+> "Here's the whole system in one diagram, with the two methods labeled. **The NAVY banner across the top — that whole row is Method 1**: play-by-play, 2,460 games from nba_api, turned into per-minute game-state snapshots, fed to XGBoost plus isotonic, outputs `p̂_t`, the calibrated probability the home team wins the 1st half."
+> *(point at the ACCENT callout)*
+> "**The orange callout in the middle is Method 2** — it branches off `p̂_t` and tests for overreaction at trailing-team scoring events. It doesn't change the main flow; it's a parallel diagnostic."
+> "**Bottom row is the market side**: live odds from 9 sportsbooks and Kalshi, de-vigged into `p_market_t`."
+> "Method 1's `p̂_t` meets the market at `edge_t`. That goes through the backtest at the bottom — quarter-Kelly sized at the vigged odds, settled, block-bootstrapped by game."
 
 ### Slide 6 — Method 1 · how it works  (45 sec)
 > "Method 1 — the calibrated WP model. Intentionally small. XGBoost on four features: `minute_idx`, `score_diff_home`, `recent_run_diff`, `period`. Isotonic on a held-out fold so a 0.70 prediction actually corresponds to a 70% empirical frequency."

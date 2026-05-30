@@ -170,10 +170,10 @@ def make_liquidity():
 
 # ─── 5. Pipeline flowchart ──────────────────────────────────────────────
 def make_pipeline():
-    print("[5] Pipeline flowchart", flush=True)
-    fig, ax = plt.subplots(figsize=(11.6, 5.0), dpi=170)
+    print("[5] Pipeline flowchart (with Method 1 / Method 2 labels)", flush=True)
+    fig, ax = plt.subplots(figsize=(11.6, 5.8), dpi=170)
     fig.patch.set_facecolor(CREAM); ax.set_facecolor(CREAM)
-    ax.set_xlim(0, 12); ax.set_ylim(0, 5.5); ax.axis("off")
+    ax.set_xlim(0, 12); ax.set_ylim(0, 6.2); ax.axis("off")
 
     def box(x, y, w, h, label, fc=CREAM, ec=NAVY, fontc=NAVY, sub=None, big=False):
         p = FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.05,rounding_size=0.12",
@@ -185,16 +185,34 @@ def make_pipeline():
             ax.text(x + w/2, y + h/2 - 0.25, sub, ha="center", va="center",
                     fontsize=8.5, color=DEEP, style="italic")
 
-    def arrow(x1, y1, x2, y2, color=TEAL):
+    def arrow(x1, y1, x2, y2, color=TEAL, lw=2):
         ax.annotate("", xy=(x2, y2), xytext=(x1, y1),
-                    arrowprops=dict(arrowstyle="->", color=color, lw=2))
+                    arrowprops=dict(arrowstyle="->", color=color, lw=lw))
 
-    # Row 1 — model side
+    # ── METHOD 1 banner over the model row ───────────────────────────────
+    m1 = FancyBboxPatch((0, 5.55), 12, 0.5,
+                        boxstyle="round,pad=0.02,rounding_size=0.05",
+                        fc=NAVY, ec=NAVY); ax.add_patch(m1)
+    ax.text(6, 5.8, "METHOD 1  ·  the calibrated WP model  ·  produces  p̂_t",
+            ha="center", va="center", fontsize=12, fontweight="bold", color=CREAM)
+
+    # Row 1 — model side (this whole row IS Method 1)
     box(0.2, 3.6, 2.2, 1.1, "PBP data", sub="2,460 games · free", fc=CREAM)
     box(3.0, 3.6, 2.4, 1.1, "Per-minute snapshots", sub="game state · 4 features")
-    box(6.2, 3.6, 2.4, 1.1, "V2 (XGB + isotonic)", sub="Brier 0.149 OOS", fc="#E6EEF6")
+    box(6.2, 3.6, 2.4, 1.1, "XGB + isotonic", sub="Brier 0.149 OOS", fc="#E6EEF6")
     box(9.4, 3.6, 2.4, 1.1, "p̂_t", sub="P(home wins 1H)", fc=NAVY, fontc=CREAM, big=True)
     arrow(2.4, 4.15, 3.0, 4.15); arrow(5.4, 4.15, 6.2, 4.15); arrow(8.6, 4.15, 9.4, 4.15)
+
+    # ── METHOD 2 callout — branches off p̂_t ──────────────────────────────
+    m2 = FancyBboxPatch((4.4, 2.78), 3.0, 0.72,
+                        boxstyle="round,pad=0.05,rounding_size=0.1",
+                        fc=ACCENT, ec=ACCENT); ax.add_patch(m2)
+    ax.text(5.9, 3.27, "METHOD 2  ·  overreaction test",
+            ha="center", va="center", fontsize=11, fontweight="bold", color=NAVY)
+    ax.text(5.9, 2.97, "reads  p̂_t  at trailing-team events", ha="center", va="center",
+            fontsize=9, color=NAVY, style="italic")
+    # arrow from p̂_t down-left to Method 2 box
+    arrow(9.5, 3.6, 7.5, 3.27, color=ACCENT, lw=2.2)
 
     # Row 2 — market side
     box(0.2, 1.5, 2.2, 1.1, "Live odds", sub="9 books · Kalshi", fc=CREAM)
@@ -203,16 +221,16 @@ def make_pipeline():
     box(9.4, 1.5, 2.4, 1.1, "edge_t", sub="p̂_t − p_market_t", fc=ACCENT, fontc=NAVY, big=True)
     arrow(2.4, 2.05, 3.0, 2.05); arrow(5.4, 2.05, 6.2, 2.05); arrow(8.6, 2.05, 9.4, 2.05)
 
-    # Diagonal merge: p̂ + market → edge
+    # Diagonal merge: p̂_t → edge_t
     arrow(10.6, 3.6, 10.6, 2.6, color=NAVY)
 
-    # Bottom — backtest
+    # Bottom — backtest (Method 1 + Method 2 both flow here)
     box(4.6, 0.05, 5.0, 1.0, "¼-Kelly · settle · block-bootstrap by game",
         sub="ROI · Sharpe · 95% CI", fc=DEEP, fontc=CREAM, ec=DEEP)
     arrow(10.6, 1.5, 7.1, 1.05, color=NAVY)
 
-    ax.set_title("Pipeline · model side + market side meet at the edge",
-                 fontsize=13, color=NAVY, fontweight="bold", loc="left", pad=14)
+    ax.set_title("Pipeline · Method 1 produces p̂_t · Method 2 tests it · both feed the backtest",
+                 fontsize=12, color=NAVY, fontweight="bold", loc="left", pad=12)
     fig.tight_layout()
     fig.savefig(OUT / "pipeline_flow.png", facecolor=CREAM, bbox_inches="tight")
     plt.close(fig)
