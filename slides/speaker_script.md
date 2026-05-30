@@ -67,13 +67,15 @@ Pair this with `slides/final_deck.pptx` (16 slides, ~10 min). Sections:
 > "Both pre-registered tests pass on the held-out season. The model says: *a trailing team's basket genuinely does move the structural fair value in their favor.*"
 > "Which sets up the behavioral question: **does the market shift by more than this?** That's the mispricing — when the crowd overshoots what the fundamentals say."
 
-### Slide 10 — How we use both methods  (45 sec)
-> "Before the backtest, the synthesis. Method 1 and Method 2 don't compete — Method 2 literally **runs on top of** Method 1."
-> *(point at the left box)*
-> "Method 1 takes game state in, outputs the calibrated probability `p̂_t`, answers *'is the model accurate?'* — **Finding 1 confirmed it's calibrated**."
-> *(point at the right box)*
-> "Method 2 takes `p̂_t` *as input*, outputs the structural shift, answers *'does the market overshoot p̂_t in event windows?'* — **Finding 2 confirmed the bias is real**."
-> "Both detection findings pass. That sets up the next question: **does this exploitable bias actually survive the vig on real markets?** Which is the backtest."
+### Slide 10 — Method 1 vs Method 2 · the asymmetry  (50 sec)
+> "Before the backtest, an honest framing. **Method 1 and Method 2 are not co-equal.**"
+> *(point at the left, NAVY box)*
+> "**Method 1 is the trading signal.** It computes `edge_t`, gates every bet on the threshold, picks the side, sizes by Kelly. **One hundred percent of bets and P&L come from Method 1.**"
+> *(point at the right, ACCENT box)*
+> "**Method 2 is the finding — not a trader.** It outputs a number and a p-value, confirms the bias exists. **Zero bets, zero P&L** in our backtest."
+> *(point at the bottom orange bar)*
+> "And that itself is a finding: Method 2 was a diagnostic, not a trader. Wiring it into the trade decision — the targeted strategy — is the natural next step."
+> "Now to the backtest, which is entirely Method 1."
 
 ### Slide 11 — Backtest engine  (60 sec)
 > "Before we trust any P&L number, the engine has to be honest. Here are the three equations: `edge`, multiplicative two-way `de-vig`, and the Kelly fraction with `b` = decimal odds minus 1."
@@ -98,8 +100,9 @@ Pair this with `slides/final_deck.pptx` (16 slides, ~10 min). Sections:
 > "The 'aggregate' variant from the earlier table — number three — is the literal Halawi analog: `p̂_aggregate = w·p_model + (1−w)·p_market_devig`, weight chosen by validation Brier. The aggregate's Brier is bounded by the minimum of the components."
 > "Reframing: the model's job isn't to *beat* the market everywhere. It's to **complement** the market in the specific situations — (comeback FGs, salience 3PTs) — where the crowd's bias is biggest."
 
-### Slide 15 — Limitations & future  (30 sec)
-> "Limitations, briefly: sample size — we'd want roughly 1,000 liquid-market games for a powered backtest. Horizon — the model is 1st-half-only. Reactivity — sportsbooks limit winners; Kalshi as peer-to-peer sidesteps that. And the four blocked variants from earlier are architecturally ready but need multi-venue history."
+### Slide 15 — Limitations & future  (40 sec)
+> "Limitations, briefly. **Top of the list — Method 2 didn't trade.** It proved the bias exists but never gated a bet. Wiring it into the strategy is the natural next step."
+> "Sample size — we'd want roughly a thousand liquid-market games. Horizon — the model is 1st-half-only. Reactivity — sportsbooks limit winners; Kalshi as peer-to-peer sidesteps that. And the four blocked methods from earlier are architecturally ready but need multi-venue history."
 
 ### Slide 16 — Verdict  (45 sec)
 > "Two questions, answered directly."

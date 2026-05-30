@@ -207,10 +207,10 @@ def make_pipeline():
     m2 = FancyBboxPatch((4.4, 2.78), 3.0, 0.72,
                         boxstyle="round,pad=0.05,rounding_size=0.1",
                         fc=ACCENT, ec=ACCENT); ax.add_patch(m2)
-    ax.text(5.9, 3.27, "METHOD 2  ·  overreaction test",
+    ax.text(5.9, 3.32, "METHOD 2  ·  diagnostic only",
             ha="center", va="center", fontsize=11, fontweight="bold", color=NAVY)
-    ax.text(5.9, 2.97, "reads  p̂_t  at trailing-team events", ha="center", va="center",
-            fontsize=9, color=NAVY, style="italic")
+    ax.text(5.9, 3.04, "reads  p̂_t  at trailing-team events  ·  does NOT trade",
+            ha="center", va="center", fontsize=8.5, color=NAVY, style="italic")
     # arrow from p̂_t down-left to Method 2 box
     arrow(9.5, 3.6, 7.5, 3.27, color=ACCENT, lw=2.2)
 
