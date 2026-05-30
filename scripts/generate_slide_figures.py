@@ -199,7 +199,7 @@ def make_pipeline():
     # Row 1 — model side (this whole row IS Method 1)
     box(0.2, 3.6, 2.2, 1.1, "PBP data", sub="2,460 games · free", fc=CREAM)
     box(3.0, 3.6, 2.4, 1.1, "Per-minute snapshots", sub="game state · 4 features")
-    box(6.2, 3.6, 2.4, 1.1, "XGB + isotonic", sub="Brier 0.149 OOS", fc="#E6EEF6")
+    box(6.2, 3.6, 2.4, 1.1, "XGB + isotonic", sub="calibrated WP model", fc="#E6EEF6")
     box(9.4, 3.6, 2.4, 1.1, "p̂_t", sub="P(home wins 1H)", fc=NAVY, fontc=CREAM, big=True)
     arrow(2.4, 4.15, 3.0, 4.15); arrow(5.4, 4.15, 6.2, 4.15); arrow(8.6, 4.15, 9.4, 4.15)
 

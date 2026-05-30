@@ -285,13 +285,10 @@ builders.push(s => {
   s.addText("e.g.  0.87  =  87%",
     { x:9.85, y:3.8, w:3.05, h:0.4, fontFace:F.title, fontSize:18,
       bold:true, color:C.ACCENT, align:"center" });
-  s.addText("Brier 0.149  ·  ECE 0.008",
-    { x:9.85, y:4.3, w:3.05, h:0.35, fontFace:F.body, fontSize:11,
+  s.addText("one calibrated probability\nper minute of game time",
+    { x:9.85, y:4.3, w:3.05, h:0.6, fontFace:F.body, fontSize:11,
       italic:true, color:C.DEEP, align:"center" });
-  s.addText("on the 2024-25 held-out season",
-    { x:9.85, y:4.6, w:3.05, h:0.35, fontFace:F.body, fontSize:10,
-      italic:true, color:C.SKY, align:"center" });
-  s.addText("→ trustworthy",
+  s.addText("→ used by Method 2 + the backtest",
     { x:9.85, y:5.1, w:3.05, h:0.35, fontFace:F.body, fontSize:11, italic:true,
       color:C.TEAL, align:"center" });
 
@@ -476,11 +473,11 @@ builders.push(s => {
   ], { x:0.75, y:3.45, w:5.5, h:0.5, fontFace:F.body, fontSize:13, color:C.INK });
   s.addShape("rect", { x:0.75, y:4.1, w:5.5, h:0.04, fill:{color:C.SKY}, line:{color:C.SKY,width:0} });
   s.addText([
-    { text:"FINDING:  ", options:{ bold:true, color:C.NAVY }},
+    { text:"FINDING 1:  ", options:{ bold:true, color:C.NAVY }},
     { text:"✅  ", options:{ color:C.ACCENT, bold:true, fontSize:16 }},
-    { text:"Brier 0.149 OOS, ECE 0.008", options:{ bold:true, color:C.NAVY }},
+    { text:"the model is calibrated", options:{ bold:true, color:C.NAVY }},
   ], { x:0.75, y:4.3, w:5.5, h:0.5, fontFace:F.body, fontSize:14 });
-  s.addText("the probabilities can be trusted",
+  s.addText("(numbers on the Finding 1 slide)",
     { x:0.75, y:4.75, w:5.5, h:0.4, fontFace:F.body, fontSize:11, italic:true, color:C.DEEP });
 
   // arrow connecting Method 1 → Method 2
@@ -511,11 +508,11 @@ builders.push(s => {
   ], { x:7.5, y:3.45, w:5.2, h:0.65, fontFace:F.body, fontSize:13, color:C.INK });
   s.addShape("rect", { x:7.5, y:4.1, w:5.2, h:0.04, fill:{color:C.SKY}, line:{color:C.SKY,width:0} });
   s.addText([
-    { text:"FINDING:  ", options:{ bold:true, color:C.NAVY }},
+    { text:"FINDING 2:  ", options:{ bold:true, color:C.NAVY }},
     { text:"✅  ", options:{ color:C.ACCENT, bold:true, fontSize:16 }},
-    { text:"both tests p < 0.0001", options:{ bold:true, color:C.NAVY }},
+    { text:"the market overshoots p̂_t", options:{ bold:true, color:C.NAVY }},
   ], { x:7.5, y:4.3, w:5.2, h:0.5, fontFace:F.body, fontSize:14 });
-  s.addText("the bias on the model side is real",
+  s.addText("(numbers on the Finding 2 slide)",
     { x:7.5, y:4.75, w:5.2, h:0.4, fontFace:F.body, fontSize:11, italic:true, color:C.DEEP });
 
   // ── synthesis line ───────────────────────────────────────────────────

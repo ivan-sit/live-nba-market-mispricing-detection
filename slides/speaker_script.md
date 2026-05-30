@@ -70,9 +70,9 @@ Pair this with `slides/final_deck.pptx` (16 slides, ~10 min). Sections:
 ### Slide 10 — How we use both methods  (45 sec)
 > "Before the backtest, the synthesis. Method 1 and Method 2 don't compete — Method 2 literally **runs on top of** Method 1."
 > *(point at the left box)*
-> "Method 1 takes game state in, outputs the calibrated probability `p̂_t`, answers *'is the model accurate?'* — verdict, **yes, Brier 0.149**."
+> "Method 1 takes game state in, outputs the calibrated probability `p̂_t`, answers *'is the model accurate?'* — **Finding 1 confirmed it's calibrated**."
 > *(point at the right box)*
-> "Method 2 takes `p̂_t` *as input*, outputs the structural shift over a 60-second window, answers *'does the market overshoot p̂_t in event windows?'* — verdict, **yes, p less than 0.0001 on both tests**."
+> "Method 2 takes `p̂_t` *as input*, outputs the structural shift, answers *'does the market overshoot p̂_t in event windows?'* — **Finding 2 confirmed the bias is real**."
 > "Both detection findings pass. That sets up the next question: **does this exploitable bias actually survive the vig on real markets?** Which is the backtest."
 
 ### Slide 11 — Backtest engine  (60 sec)
