@@ -28,10 +28,12 @@ Pair this with `slides/final_deck.pptx` (16 slides, ~10 min). Sections:
 > "It decomposes into two sub-questions we can actually answer. **One: is the bias detectable?** Tested on the held-out 2024-25 season with pre-registered overreaction tests. **Two: can we extract it — actually make money?** Tested with a live backtest on real markets."
 
 ### Slide 4 — What we planned · 6 ways to detect mispricing  (30 sec)
-> "Within NBA, we mapped out six methodological approaches to detecting mispricing — from cross-venue consensus to time-series mean reversion to event-conditioned overreaction."
-> *(point at the two highlighted rows + the Method 1 / Method 2 callouts)*
-> "**Data constraints forced us down to two.** Row 2 — the calibrated win-probability model — that's **Method 1** for the rest of the talk. Row 5 — the event-conditioned overreaction test — that's **Method 2**. The other four are blocked on multi-venue in-play odds history we don't have."
-> "So the rest of the talk is Method 1 and Method 2."
+> "Within NBA, we mapped out six methodological approaches to detecting mispricing. **Data constraints forced us down to two — with very different roles.**"
+> *(point at Method 1 badge)*
+> "Row 2, the calibrated WP model — that's **Method 1, the TRADER**. It drives every bet in the backtest."
+> *(point at Method 2 badge)*
+> "Row 5, the overreaction test — that's **Method 2, the DIAGNOSTIC**. It's a statistical finding, not a trading signal. The other four are blocked on multi-venue odds we don't have."
+> "So the rest of the talk: **Method 1 trades, Method 2 finds.**"
 
 ### Slide 5 — Pipeline  (60 sec)
 > "Here's the whole system in one diagram, with the two methods labeled. **The NAVY banner across the top — that whole row is Method 1**: play-by-play, 2,460 games from nba_api, turned into per-minute game-state snapshots, fed to XGBoost plus isotonic, outputs `p̂_t`, the calibrated probability the home team wins the 1st half."
@@ -107,10 +109,10 @@ Pair this with `slides/final_deck.pptx` (16 slides, ~10 min). Sections:
 ### Slide 16 — Verdict  (45 sec)
 > "Two questions, answered directly."
 > *(point at left panel)*
-> "**Which mispricing method works best?** The **event-conditioned overreaction test**. It's the only one of our six planned methods with a statistically significant finding on the held-out test season: the comeback-FG test gave plus 0.0075, the salience-3PT test gave plus 0.0138 at p less than 0.0001. The bias is statistically real."
+> "**What's our strongest finding?** Method 2 — the overreaction test — confirmed the bias is statistically real on the held-out season: comeback-FG plus 0.0075, salience-3PT plus 0.0138, p less than 0.0001. **But — the honest footnote — Method 2 didn't drive any trades. It was a diagnostic.**"
 > *(point at right panel)*
-> "**Can it make money?** Not today, but it's not 'no.' Today we can't claim profit — one liquid game is noise, the Kalshi plus-95% is a stale-mid artifact. But the bias is real, and the path forward is concrete: power the backtest with the paid historical season, then deploy an overreaction-targeted strategy on Kalshi, which is legal and has no account-limit risk."
-> "We are **gated on data scale, not on methodology.** Thank you. Questions."
+> "**Can it make money?** Not today. One liquid game is noise; the Kalshi plus-95% is a stale-mid artifact. But the bias is real, and the path is concrete: power the backtest with the paid historical season, then deploy an overreaction-targeted strategy — **Method 1 trading, gated by Method 2's event windows** — on Kalshi, which is legal and has no account-limit risk."
+> "We are **gated on data scale and on wiring Method 2 in, not on methodology.** Thank you. Questions."
 
 ---
 

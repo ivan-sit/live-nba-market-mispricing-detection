@@ -161,34 +161,36 @@ builders.push(s => {
     fontFace:F.body, fontSize:13, border:{ type:"solid", color:C.SKY, pt:1 }, rowH:0.55 });
 
   // ── arrow callouts pointing at the two BUILT rows ────────────────────
-  // Row 2 (Calibrated WP model) → Method 1   · row center y ≈ 2.925
+  // Row 2 (Calibrated WP model) → Method 1 · THE TRADER · row center y ≈ 2.925
   s.addShape("leftArrow", { x:10.95, y:2.78, w:0.55, h:0.30,
     fill:{color:C.NAVY}, line:{color:C.NAVY, width:0} });
-  s.addShape("roundRect", { x:11.6, y:2.73, w:1.25, h:0.4,
-    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0}, rectRadius:0.05 });
-  s.addText("Method 1", { x:11.6, y:2.73, w:1.25, h:0.4,
-    fontFace:F.title, fontSize:13, bold:true, color:C.CREAM,
-    align:"center", valign:"middle" });
+  s.addShape("roundRect", { x:11.6, y:2.6, w:1.25, h:0.7,
+    fill:{color:C.NAVY}, line:{color:C.NAVY, width:0}, rectRadius:0.06 });
+  s.addText("Method 1", { x:11.6, y:2.62, w:1.25, h:0.35,
+    fontFace:F.title, fontSize:13, bold:true, color:C.CREAM, align:"center" });
+  s.addText("THE TRADER", { x:11.6, y:2.95, w:1.25, h:0.3,
+    fontFace:F.body, fontSize:9, bold:true, color:C.ACCENT, align:"center" });
 
-  // Row 5 (Overreaction test) → Method 2     · row center y ≈ 4.575
+  // Row 5 (Overreaction test) → Method 2 · THE DIAGNOSTIC · row center y ≈ 4.575
   s.addShape("leftArrow", { x:10.95, y:4.43, w:0.55, h:0.30,
     fill:{color:C.ACCENT}, line:{color:C.ACCENT, width:0} });
-  s.addShape("roundRect", { x:11.6, y:4.38, w:1.25, h:0.4,
-    fill:{color:C.ACCENT}, line:{color:C.ACCENT, width:0}, rectRadius:0.05 });
-  s.addText("Method 2", { x:11.6, y:4.38, w:1.25, h:0.4,
-    fontFace:F.title, fontSize:13, bold:true, color:C.NAVY,
-    align:"center", valign:"middle" });
+  s.addShape("roundRect", { x:11.6, y:4.25, w:1.25, h:0.7,
+    fill:{color:C.ACCENT}, line:{color:C.ACCENT, width:0}, rectRadius:0.06 });
+  s.addText("Method 2", { x:11.6, y:4.27, w:1.25, h:0.35,
+    fontFace:F.title, fontSize:13, bold:true, color:C.NAVY, align:"center" });
+  s.addText("DIAGNOSTIC", { x:11.6, y:4.6, w:1.25, h:0.3,
+    fontFace:F.body, fontSize:9, bold:true, color:C.NAVY, align:"center" });
 
   s.addShape("roundRect", { x:0.55, y:5.85, w:12.3, h:1.05,
     fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.3}, rectRadius:0.08 });
   s.addText([
-    { text:"The two we built — ", options:{} },
-    { text:"Method 1 ", options:{ bold:true, color:C.NAVY }},
-    { text:"and ", options:{} },
-    { text:"Method 2 ", options:{ bold:true, color:C.ACCENT }},
-    { text:"— are the only ones that work from play-by-play alone. The other four are gated on multi-venue in-play odds history we don't have.", options:{} },
-  ], { x:0.85, y:5.95, w:11.7, h:0.85, fontFace:F.title, fontSize:15, italic:true,
-       color:C.NAVY, align:"center", valign:"middle" });
+    { text:"Two different roles:  ", options:{ bold:true, color:C.DEEP }},
+    { text:"Method 1 is the TRADER ", options:{ bold:true, color:C.NAVY }},
+    { text:"(drives every bet)  ·  ", options:{} },
+    { text:"Method 2 is the DIAGNOSTIC ", options:{ bold:true, color:C.ACCENT }},
+    { text:"(statistical finding, no trades). The other four are gated on multi-venue odds history we don't have.", options:{} },
+  ], { x:0.85, y:5.95, w:11.7, h:0.85, fontFace:F.body, fontSize:14, italic:true,
+       color:C.INK, align:"center", valign:"middle" });
 });
 
 // ─── 5. PIPELINE FLOWCHART + DATA ────────────────────────────────────────
@@ -656,12 +658,12 @@ builders.push(s => {
   // ── LEFT COLUMN: most effective method ─────────────────────────────────
   s.addShape("roundRect", { x:0.55, y:1.55, w:6.0, h:5.3,
     fill:{color:C.CREAM}, line:{color:C.TEAL, width:1.5}, rectRadius:0.1 });
-  s.addText("MOST EFFECTIVE METHOD", { x:0.75, y:1.7, w:5.6, h:0.4,
+  s.addText("STRONGEST FINDING", { x:0.75, y:1.7, w:5.6, h:0.4,
     fontFace:F.body, fontSize:12, bold:true, color:C.DEEP });
-  s.addText("Event-conditioned overreaction test", { x:0.75, y:2.1, w:5.6, h:0.55,
+  s.addText("Method 2 · overreaction test", { x:0.75, y:2.1, w:5.6, h:0.55,
     fontFace:F.title, fontSize:20, bold:true, color:C.NAVY });
-  s.addText("the only variant with a statistically significant finding on the held-out test season",
-    { x:0.75, y:2.65, w:5.6, h:0.7, fontFace:F.body, fontSize:13, italic:true, color:C.DEEP });
+  s.addText("the diagnostic that confirmed the bias is statistically real on the held-out season  ·  did not drive trades (footnote)",
+    { x:0.75, y:2.65, w:5.6, h:0.85, fontFace:F.body, fontSize:13, italic:true, color:C.DEEP });
   // mini results table
   const rows = [
     [{ text:"Test", options:{ bold:true, color:C.CREAM, fill:C.NAVY, fontSize:11 }},
