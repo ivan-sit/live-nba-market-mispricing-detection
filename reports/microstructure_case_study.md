@@ -125,6 +125,54 @@ roughly the 3-second horizon.  That is consistent with the broader case-study
 read: the current REST recorder can support event-overreaction diagnostics, but
 not definitive 250-500ms execution conclusions.
 
+## Full Prediction Pipeline Replay
+
+The recorder data can also be run through the project's actual structural
+prediction pipeline rather than only event buckets.  For this replay I trained
+an all-game full-game win-probability model on the 2023-24 NBA play-by-play
+season:
+
+- Training set: 1,230 games, 59,040 regulation-minute snapshots.
+- Target: final home-team game winner.
+- Features: `minute_idx`, `score_diff_home`, `recent_run_diff`, `period`.
+- In-sample Brier: raw 0.1607, calibrated 0.1603.
+
+Then I replayed all 33,316 Kalshi book snapshots from this game through that
+model.  The replay converts `P(home wins)` to `P(YES)` for each Kalshi ticker,
+compares it to the executable YES ask, and opens a buy episode when:
+
+`p_model_yes - yes_ask >= threshold`
+
+Consecutive signal snapshots are de-duplicated into episodes.  The budget rows
+below assume spending at most the listed budget into visible depth within 1
+cent of the best ask, then holding to final settlement.  Knicks won, so NYK YES
+pays 1.00 and SAS YES pays 0.00.
+
+| Edge threshold | Budget / episode | Episodes | NYK / SAS episodes | Entry cost | Actual P&L | Model EV |
+|---:|---:|---:|---:|---:|---:|---:|
+| 3c | $100 | 65 | 45 / 20 | $6.2k | $5.6k | $10.7k |
+| 3c | $1k | 65 | 45 / 20 | $57.4k | $58.0k | $106.6k |
+| 3c | $10k | 65 | 45 / 20 | $474.9k | $536.7k | $1.04M |
+| 5c | $100 | 60 | 49 / 11 | $5.9k | $6.6k | $10.9k |
+| 5c | $1k | 60 | 49 / 11 | $56.8k | $66.9k | $108.9k |
+| 5c | $10k | 60 | 49 / 11 | $471.8k | $606.1k | $1.06M |
+| 8c | $100 | 56 | 47 / 9 | $5.6k | $7.1k | $11.2k |
+| 8c | $1k | 56 | 47 / 9 | $54.6k | $72.0k | $111.9k |
+| 8c | $10k | 56 | 47 / 9 | $457.3k | $665.4k | $1.09M |
+
+This is the closest analysis in the repo to the commercial question: did the
+model identify executable Kalshi asks below structural fair value on the live
+book?  In this game, yes.  The 5c threshold with $1k per signal episode spent
+about $56.8k and replayed to about $66.9k actual settlement P&L, while the
+model expected about $108.9k.
+
+However, this is still not a deployment P&L claim.  It assumes perfect fills at
+recorded visible depth, no queue loss, no fees, no order-entry latency, no
+adverse selection from our own activity, and final-settlement holding.  It also
+uses official play-by-play scoring anchors to reconstruct live features, not
+physical ground-truth event timestamps.  Read it as a high-signal one-game
+replay that justifies scaling the live recorder across many games.
+
 ## Executability Read
 
 The roundtrip columns are diagnostic upper bounds:

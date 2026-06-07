@@ -183,3 +183,42 @@ Do not read this as P&L proof.  Event timestamps are public play-by-play
 `wall_clock` anchors, not physical in-arena ground truth; long horizons are
 confounded by later plays and clock decay; n = 1 game.  Read it as evidence
 that the project can now test V5 at executable orderbook granularity.
+
+---
+
+## 2026-06-06 — Full prediction replay on Kalshi microstructure capture
+
+Ran the actual structural prediction pipeline against every compact Kalshi book
+snapshot from Knicks @ Spurs Game 2, not just event buckets.
+
+New model: all-game full-game WP model trained on 2023-24 PBP.
+- Training set: 1,230 games / 59,040 regulation-minute snapshots.
+- Features: minute_idx, score_diff_home, recent_run_diff, period.
+- In-sample Brier: raw 0.1607, calibrated 0.1603.
+
+Replay method:
+- 33,316 live Kalshi book snapshots.
+- Convert model P(home wins) into P(YES) for NYK/SAS tickers.
+- Buy YES when `p_model_yes - yes_ask` exceeds the threshold.
+- De-duplicate consecutive signal snapshots into one episode.
+- Spend up to a fixed budget per episode into visible depth within 1c.
+- Hold to final settlement. Knicks won 105-104.
+
+Headline capped replay rows:
+
+| Edge threshold | Budget / episode | Episodes | NYK / SAS episodes | Entry cost | Actual P&L | Model EV |
+|---:|---:|---:|---:|---:|---:|---:|
+| 3c | $1k | 65 | 45 / 20 | $57.4k | $58.0k | $106.6k |
+| 5c | $1k | 60 | 49 / 11 | $56.8k | $66.9k | $108.9k |
+| 8c | $1k | 56 | 47 / 9 | $54.6k | $72.0k | $111.9k |
+| 5c | $10k | 60 | 49 / 11 | $471.8k | $606.1k | $1.06M |
+
+Interpretation: this one-game replay says the model found live Kalshi asks
+materially below structural fair value, especially on Knicks YES.  This is the
+crucial bridge between the repo's model thesis and the live recorder data.
+
+Caveat: this is still idealized. It assumes recorded visible depth is fillable,
+ignores queue position and order-entry latency, ignores fees, and uses official
+play-by-play scoring anchors rather than physical event timestamps.  The right
+next result is the same replay across many games with fill simulation and
+latency-aware entry rules.
