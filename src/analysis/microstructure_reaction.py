@@ -266,6 +266,7 @@ def event_reactions(
     home_ticker: str,
     away_ticker: str,
     horizons_ms: list[int],
+    max_lag_over_horizon_ms: int = 5_000,
 ) -> pd.DataFrame:
     by_ticker = {ticker: g.reset_index(drop=True) for ticker, g in books.groupby("ticker")}
     rows: list[dict[str, Any]] = []
@@ -314,12 +315,15 @@ def event_reactions(
             post = first_after(g, float(event["event_wall_ms"]) + horizon)
             if post is None:
                 continue
+            post_lag = float(post["capture_wall_ms"]) - float(event["event_wall_ms"])
+            if post_lag > horizon + max_lag_over_horizon_ms:
+                continue
             rt = roundtrip_profit(pre["buy_levels"], post["sell_levels"])
             row = dict(base)
             row.update(
                 {
                     "horizon_ms": horizon,
-                    "post_capture_lag_ms": float(post["capture_wall_ms"]) - float(event["event_wall_ms"]),
+                    "post_capture_lag_ms": post_lag,
                     "post_yes_bid": post["yes_bid"],
                     "post_yes_ask": post["yes_ask"],
                     "post_mid": post["mid"],

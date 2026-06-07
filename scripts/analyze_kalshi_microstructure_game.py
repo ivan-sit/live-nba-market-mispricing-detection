@@ -178,6 +178,7 @@ def main() -> int:
     parser.add_argument("--away-team-id", required=True)
     parser.add_argument("--out-dir", type=Path, required=True)
     parser.add_argument("--horizon-ms", action="append", default=[])
+    parser.add_argument("--max-lag-over-horizon-ms", type=int, default=5_000)
     args = parser.parse_args()
 
     horizons = [int(item) for raw in (args.horizon_ms or []) for item in str(raw).split(",") if item]
@@ -202,6 +203,7 @@ def main() -> int:
         home_ticker=args.home_ticker,
         away_ticker=args.away_ticker,
         horizons_ms=horizons,
+        max_lag_over_horizon_ms=args.max_lag_over_horizon_ms,
     )
     cadence = cadence_summary(books)
 
@@ -267,6 +269,7 @@ def main() -> int:
         "scoring_events": int(len(events)),
         "reaction_rows": int(len(reactions)),
         "horizons_ms": horizons,
+        "max_lag_over_horizon_ms": args.max_lag_over_horizon_ms,
         "cadence": cadence.to_dict(orient="records"),
         "horizon_summary": horizon_summary,
         "top_roundtrip_events": top_events,

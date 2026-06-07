@@ -8,7 +8,7 @@
   "away_label": "NYK",
   "snapshots": 33316,
   "scoring_events": 109,
-  "reaction_rows": 654,
+  "reaction_rows": 633,
   "horizons_ms": [
     250,
     500,
@@ -17,6 +17,7 @@
     10000,
     60000
   ],
+  "max_lag_over_horizon_ms": 5000,
   "cadence": [
     {
       "ticker": "KXNBAGAME-26JUN05NYKSAS-NYK",
@@ -42,10 +43,10 @@
   "horizon_summary": [
     {
       "horizon_ms": 250,
-      "events": 109,
-      "mean_mid_move": 0.004220183486238537,
+      "events": 106,
+      "mean_mid_move": 0.004339622641509439,
       "median_mid_move": 0.0,
-      "positive_mid_move_share": 0.28440366972477066,
+      "positive_mid_move_share": 0.29245283018867924,
       "profitable_roundtrip_events": 12,
       "total_visible_roundtrip_pnl": 1218.2409000000064,
       "max_visible_roundtrip_pnl": 573.1021000000037,
@@ -55,10 +56,10 @@
     },
     {
       "horizon_ms": 500,
-      "events": 109,
-      "mean_mid_move": 0.007385321100917436,
+      "events": 106,
+      "mean_mid_move": 0.007594339622641514,
       "median_mid_move": 0.0,
-      "positive_mid_move_share": 0.3119266055045872,
+      "positive_mid_move_share": 0.32075471698113206,
       "profitable_roundtrip_events": 16,
       "total_visible_roundtrip_pnl": 6037.919399999997,
       "max_visible_roundtrip_pnl": 4546.038999999993,
@@ -68,10 +69,10 @@
     },
     {
       "horizon_ms": 1000,
-      "events": 109,
-      "mean_mid_move": 0.008944954128440373,
+      "events": 106,
+      "mean_mid_move": 0.009198113207547175,
       "median_mid_move": 0.0,
-      "positive_mid_move_share": 0.3853211009174312,
+      "positive_mid_move_share": 0.39622641509433965,
       "profitable_roundtrip_events": 22,
       "total_visible_roundtrip_pnl": 7490.831599999997,
       "max_visible_roundtrip_pnl": 4546.038999999993,
@@ -81,10 +82,10 @@
     },
     {
       "horizon_ms": 3000,
-      "events": 109,
-      "mean_mid_move": 0.017018348623853218,
+      "events": 106,
+      "mean_mid_move": 0.01750000000000001,
       "median_mid_move": 0.010000000000000009,
-      "positive_mid_move_share": 0.6055045871559633,
+      "positive_mid_move_share": 0.6226415094339622,
       "profitable_roundtrip_events": 45,
       "total_visible_roundtrip_pnl": 19112.48820000003,
       "max_visible_roundtrip_pnl": 2621.892700000004,
@@ -94,29 +95,29 @@
     },
     {
       "horizon_ms": 10000,
-      "events": 109,
-      "mean_mid_move": 0.022064220183486246,
+      "events": 105,
+      "mean_mid_move": 0.02233333333333334,
       "median_mid_move": 0.015000000000000013,
-      "positive_mid_move_share": 0.6880733944954128,
-      "profitable_roundtrip_events": 55,
-      "total_visible_roundtrip_pnl": 57997.41760000004,
+      "positive_mid_move_share": 0.7047619047619048,
+      "profitable_roundtrip_events": 54,
+      "total_visible_roundtrip_pnl": 53189.11200000003,
       "max_visible_roundtrip_pnl": 11301.249599999981,
-      "median_visible_roundtrip_pnl": 321.7479999999996,
-      "total_profitable_entry_cost": 1165810.2888000002,
-      "total_profitable_contracts": 2611521.3
+      "median_visible_roundtrip_pnl": 280.2352499999997,
+      "total_profitable_entry_cost": 1122302.4469,
+      "total_profitable_contracts": 2418256.71
     },
     {
       "horizon_ms": 60000,
-      "events": 109,
-      "mean_mid_move": 0.01821100917431193,
+      "events": 104,
+      "mean_mid_move": 0.01841346153846154,
       "median_mid_move": 0.010000000000000009,
-      "positive_mid_move_share": 0.6422018348623854,
-      "profitable_roundtrip_events": 53,
-      "total_visible_roundtrip_pnl": 186573.47090000001,
+      "positive_mid_move_share": 0.6538461538461539,
+      "profitable_roundtrip_events": 52,
+      "total_visible_roundtrip_pnl": 181765.1653,
       "max_visible_roundtrip_pnl": 25629.632999999973,
-      "median_visible_roundtrip_pnl": 893.2290000000066,
-      "total_profitable_entry_cost": 2336218.2931,
-      "total_profitable_contracts": 6090081.329999998
+      "median_visible_roundtrip_pnl": 849.0914500000035,
+      "total_profitable_entry_cost": 2292710.4511999995,
+      "total_profitable_contracts": 5896816.739999999
     }
   ],
   "top_roundtrip_events": [
@@ -190,7 +191,7 @@
     },
     {
       "event_idx": 62,
-      "horizon_ms": 10000,
+      "horizon_ms": 60000,
       "event_wall_ts": "2026-06-06 02:16:59+00:00",
       "clock": "9:21",
       "scorer_label": "NYK",
@@ -207,7 +208,7 @@
     },
     {
       "event_idx": 62,
-      "horizon_ms": 60000,
+      "horizon_ms": 10000,
       "event_wall_ts": "2026-06-06 02:16:59+00:00",
       "clock": "9:21",
       "scorer_label": "NYK",
