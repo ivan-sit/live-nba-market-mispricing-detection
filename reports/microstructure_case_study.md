@@ -84,6 +84,47 @@ Late Q4 scoring events were also highly reactive:
 That is useful commercially, but it is mostly leverage/clock sensitivity rather
 than the specific trailing-team-overreaction hypothesis.
 
+## Direct V5 Bucket Runner
+
+After the broader event-reaction pass, I also ran
+`scripts/run_microstructure_v5_case.py`, which applies the exact H1/H4 bucket
+definitions from `variant_v5_event.py` to this game's live orderbook data and
+compares the observed market shift to the structural-side benchmarks already
+logged for the project.
+
+Structural benchmarks from the held-out 2024-25 V5 results:
+
+- H1 trailing 10-15 made FG: +0.0075.
+- H4 trailing 10+ made three: +0.0138.
+
+H1 market-side result in this game:
+
+| Horizon | Events | Mean market shift | Market minus structural |
+|---:|---:|---:|---:|
+| 250 ms | 9 | -0.0006 | -0.0081 |
+| 500 ms | 9 | +0.0006 | -0.0069 |
+| 1 s | 9 | +0.0044 | -0.0031 |
+| 3 s | 9 | +0.0172 | +0.0097 |
+| 10 s | 8 | +0.0194 | +0.0119 |
+| 60 s | 8 | +0.0319 | +0.0244 |
+
+H4 market-side result in this game:
+
+| Horizon | Events | Mean market shift | Market minus structural |
+|---:|---:|---:|---:|
+| 250 ms | 3 | -0.0050 | -0.0188 |
+| 500 ms | 3 | -0.0017 | -0.0155 |
+| 1 s | 3 | +0.0083 | -0.0055 |
+| 3 s | 3 | +0.0300 | +0.0162 |
+| 10 s | 2 | +0.0300 | +0.0162 |
+| 60 s | 2 | +0.0250 | +0.0112 |
+
+Interpretation: in this one game, the V5 market-side overreaction signal does
+not show up in the first sampled sub-second states, but it does show up by
+roughly the 3-second horizon.  That is consistent with the broader case-study
+read: the current REST recorder can support event-overreaction diagnostics, but
+not definitive 250-500ms execution conclusions.
+
 ## Executability Read
 
 The roundtrip columns are diagnostic upper bounds:

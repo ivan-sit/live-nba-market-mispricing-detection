@@ -1,0 +1,171 @@
+{
+  "source": "/Users/vishnu/Documents/tensailabs/vendor/Live-NBA-Market-Mispricing-Detection/reports/microstructure/spurs_knicks_game2/event_reactions.csv",
+  "structural_benchmarks": {
+    "H1_trailing_10_15_made_fg": 0.0075,
+    "H4_trailing_10_plus_made_3": 0.0138
+  },
+  "method_notes": [
+    "H1 and H4 bucket definitions mirror variant_v5_event.py.",
+    "Market shift is scorer-side Kalshi YES mid movement from the live orderbook case study.",
+    "Structural benchmarks are held-out 2024-25 mean structural shifts from reports/results_log.md.",
+    "This is n=1 game and should be read as a case-study market-side diagnostic, not powered inference."
+  ],
+  "rows": [
+    {
+      "bucket": "H1_trailing_10_15_made_fg",
+      "horizon_ms": 250,
+      "events": 9,
+      "mean_market_shift": -0.0005555555555555444,
+      "median_market_shift": 0.0,
+      "positive_market_shift_share": 0.1111111111111111,
+      "structural_shift_benchmark": 0.0075,
+      "mean_market_minus_structural": -0.008055555555555545,
+      "profitable_roundtrip_events": 1,
+      "positive_roundtrip_pnl_sum": 1.25,
+      "positive_roundtrip_entry_cost_sum": 33.75
+    },
+    {
+      "bucket": "H1_trailing_10_15_made_fg",
+      "horizon_ms": 500,
+      "events": 9,
+      "mean_market_shift": 0.0005555555555555668,
+      "median_market_shift": 0.0,
+      "positive_market_shift_share": 0.1111111111111111,
+      "structural_shift_benchmark": 0.0075,
+      "mean_market_minus_structural": -0.006944444444444433,
+      "profitable_roundtrip_events": 1,
+      "positive_roundtrip_pnl_sum": 1.25,
+      "positive_roundtrip_entry_cost_sum": 33.75
+    },
+    {
+      "bucket": "H1_trailing_10_15_made_fg",
+      "horizon_ms": 1000,
+      "events": 9,
+      "mean_market_shift": 0.0044444444444444444,
+      "median_market_shift": 0.0,
+      "positive_market_shift_share": 0.3333333333333333,
+      "structural_shift_benchmark": 0.0075,
+      "mean_market_minus_structural": -0.0030555555555555553,
+      "profitable_roundtrip_events": 2,
+      "positive_roundtrip_pnl_sum": 13.789800000000383,
+      "positive_roundtrip_entry_cost_sum": 5010.4059
+    },
+    {
+      "bucket": "H1_trailing_10_15_made_fg",
+      "horizon_ms": 3000,
+      "events": 9,
+      "mean_market_shift": 0.017222222222222222,
+      "median_market_shift": 0.01,
+      "positive_market_shift_share": 0.6666666666666666,
+      "structural_shift_benchmark": 0.0075,
+      "mean_market_minus_structural": 0.009722222222222222,
+      "profitable_roundtrip_events": 4,
+      "positive_roundtrip_pnl_sum": 2588.2992000000067,
+      "positive_roundtrip_entry_cost_sum": 43911.810699999995
+    },
+    {
+      "bucket": "H1_trailing_10_15_made_fg",
+      "horizon_ms": 10000,
+      "events": 8,
+      "mean_market_shift": 0.01937499999999999,
+      "median_market_shift": 0.0175,
+      "positive_market_shift_share": 0.75,
+      "structural_shift_benchmark": 0.0075,
+      "mean_market_minus_structural": 0.01187499999999999,
+      "profitable_roundtrip_events": 5,
+      "positive_roundtrip_pnl_sum": 8967.692100000022,
+      "positive_roundtrip_entry_cost_sum": 111284.84699999998
+    },
+    {
+      "bucket": "H1_trailing_10_15_made_fg",
+      "horizon_ms": 60000,
+      "events": 8,
+      "mean_market_shift": 0.031875,
+      "median_market_shift": 0.025,
+      "positive_market_shift_share": 0.75,
+      "structural_shift_benchmark": 0.0075,
+      "mean_market_minus_structural": 0.024375,
+      "profitable_roundtrip_events": 5,
+      "positive_roundtrip_pnl_sum": 18059.965000000022,
+      "positive_roundtrip_entry_cost_sum": 160990.4459
+    },
+    {
+      "bucket": "H4_trailing_10_plus_made_3",
+      "horizon_ms": 250,
+      "events": 3,
+      "mean_market_shift": -0.004999999999999967,
+      "median_market_shift": -0.0049999999999999,
+      "positive_market_shift_share": 0.0,
+      "structural_shift_benchmark": 0.0138,
+      "mean_market_minus_structural": -0.018799999999999966,
+      "profitable_roundtrip_events": 0,
+      "positive_roundtrip_pnl_sum": 0.0,
+      "positive_roundtrip_entry_cost_sum": 0.0
+    },
+    {
+      "bucket": "H4_trailing_10_plus_made_3",
+      "horizon_ms": 500,
+      "events": 3,
+      "mean_market_shift": -0.0016666666666666334,
+      "median_market_shift": 0.0,
+      "positive_market_shift_share": 0.0,
+      "structural_shift_benchmark": 0.0138,
+      "mean_market_minus_structural": -0.015466666666666634,
+      "profitable_roundtrip_events": 0,
+      "positive_roundtrip_pnl_sum": 0.0,
+      "positive_roundtrip_entry_cost_sum": 0.0
+    },
+    {
+      "bucket": "H4_trailing_10_plus_made_3",
+      "horizon_ms": 1000,
+      "events": 3,
+      "mean_market_shift": 0.008333333333333333,
+      "median_market_shift": 0.0,
+      "positive_market_shift_share": 0.3333333333333333,
+      "structural_shift_benchmark": 0.0138,
+      "mean_market_minus_structural": -0.0054666666666666665,
+      "profitable_roundtrip_events": 1,
+      "positive_roundtrip_pnl_sum": 4.434100000000399,
+      "positive_roundtrip_entry_cost_sum": 4757.802
+    },
+    {
+      "bucket": "H4_trailing_10_plus_made_3",
+      "horizon_ms": 3000,
+      "events": 3,
+      "mean_market_shift": 0.03,
+      "median_market_shift": 0.04,
+      "positive_market_shift_share": 0.6666666666666666,
+      "structural_shift_benchmark": 0.0138,
+      "mean_market_minus_structural": 0.0162,
+      "profitable_roundtrip_events": 2,
+      "positive_roundtrip_pnl_sum": 2011.6529000000064,
+      "positive_roundtrip_entry_cost_sum": 22102.163999999997
+    },
+    {
+      "bucket": "H4_trailing_10_plus_made_3",
+      "horizon_ms": 10000,
+      "events": 2,
+      "mean_market_shift": 0.02999999999999995,
+      "median_market_shift": 0.02999999999999995,
+      "positive_market_shift_share": 1.0,
+      "structural_shift_benchmark": 0.0138,
+      "mean_market_minus_structural": 0.01619999999999995,
+      "profitable_roundtrip_events": 2,
+      "positive_roundtrip_pnl_sum": 5047.778800000008,
+      "positive_roundtrip_entry_cost_sum": 30706.58759999999
+    },
+    {
+      "bucket": "H4_trailing_10_plus_made_3",
+      "horizon_ms": 60000,
+      "events": 2,
+      "mean_market_shift": 0.025,
+      "median_market_shift": 0.025,
+      "positive_market_shift_share": 1.0,
+      "structural_shift_benchmark": 0.0138,
+      "mean_market_minus_structural": 0.011200000000000002,
+      "profitable_roundtrip_events": 2,
+      "positive_roundtrip_pnl_sum": 2983.407400000011,
+      "positive_roundtrip_entry_cost_sum": 45840.31409999999
+    }
+  ]
+}
