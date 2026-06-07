@@ -139,3 +139,47 @@ sportsbook the same family of model LOST. Liquidity + n are everything.
 Takeaway: the pipeline works end-to-end on real data. Neither number is a
 result. The real answer needs many liquid-market games (paid historical season
 or accumulated live captures).
+
+---
+
+## 2026-06-06 — Kalshi microstructure case study, Knicks @ Spurs Game 2
+
+Added a one-game high-frequency supplement using a live Kalshi game-winner
+recorder.  This extends the V5 event-overreaction question from minute-level
+odds/candles to sampled executable orderbook states.
+
+Game: Knicks 105, Spurs 104.  Markets: `KXNBAGAME-26JUN05NYKSAS-NYK` and
+`KXNBAGAME-26JUN05NYKSAS-SAS`.
+
+Derived data:
+- 33,316 compact orderbook snapshots.
+- 109 final play-by-play scoring events.
+- 633 event × horizon reaction rows.
+
+Important measurement caveat: the REST recorder requested 250ms cadence, but
+the observed per-ticker orderbook cadence was about 956ms p50 / 1.28s p95.
+So this is sub-second-ish sampled market analysis, not proof of a 250ms book
+edge.
+
+Headline scorer-side moves:
+- 250ms requested horizon (median actual sample lag 792ms): mean move +0.0042,
+  positive-move share 29%.
+- 1s horizon (median actual lag 1.51s): mean move +0.0092, positive share 40%.
+- 3s horizon (median actual lag 3.61s): mean move +0.0175, positive share 62%.
+
+V5-style trailing-team made threes were stronger:
+- n = 13 events.
+- 3s horizon: mean scorer-side move +0.0308, positive share 85%.
+- 10s horizon: mean scorer-side move +0.0454, positive share 100% over 12 usable
+  events.
+
+Executable-book diagnostic at 3s:
+- 45 / 106 usable scoring events had positive visible buy-before / sell-after
+  roundtrip capacity.
+- Sum of positive diagnostic P&L was about $19.1k on about $669k visible entry
+  cost.
+
+Do not read this as P&L proof.  Event timestamps are public play-by-play
+`wall_clock` anchors, not physical in-arena ground truth; long horizons are
+confounded by later plays and clock decay; n = 1 game.  Read it as evidence
+that the project can now test V5 at executable orderbook granularity.

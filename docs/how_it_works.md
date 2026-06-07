@@ -107,6 +107,7 @@ src/
 └── analysis/
     ├── variant_v2_structural.py  V2 (model vs market)        [built]
     ├── variant_v5_event.py       V5 (event overreaction)     [built]
+    ├── microstructure_reaction.py  executable Kalshi orderbook case studies
     └── variant_v1/v3/v4/v6_*.py  the other four              [stubs]
 
 scripts/
@@ -114,6 +115,9 @@ scripts/
 ├── test_backtest_engine.py  5 honesty gates on synthetic data   ← run this
 ├── live_signal_monitor.py   LIVE paper-trading signals (tonight)
 ├── capture_odds_live.py     live 9-book odds capture
+├── live_kalshi_rest_snapshot_recorder.py  full-book Kalshi REST recorder
+├── kalshi_ws_orderbook_recorder.py        Kalshi WS book reconstructor
+├── analyze_kalshi_microstructure_game.py  event-aligned depth study
 └── smoke_test_odds_api.py   validate the-odds-api key
 ```
 
@@ -338,3 +342,32 @@ powered historical backtest before the season ends — but as shown in
 [§7](#7-the-six-variants), it's an *upgrade for the backtest*, not a requirement
 to have a working, trained, calibrated pipeline. Our headline model-side results
 (V2 calibration, V5 overreaction) need none of it.
+
+---
+
+## 10. Microstructure extension
+
+The project now has a high-frequency Kalshi case-study path in
+`src/analysis/microstructure_reaction.py` and
+`scripts/analyze_kalshi_microstructure_game.py`.
+
+This does not replace the main V2/V5 framework.  It adds an execution layer for
+live-captured games:
+
+```
+  official game_stats scoring event
+          │
+          ▼
+  scorer-side Kalshi YES book before/after the event
+          │
+          ▼
+  mid move · depth move · visible buy-before/sell-after roundtrip
+```
+
+The first committed case study is Knicks @ Spurs Game 2 under
+`reports/microstructure/spurs_knicks_game2/`.  The raw recorder directory is not
+committed because it is multi-GB; only compact derived outputs are committed.
+
+The right interpretation is "can V5 be studied at executable orderbook
+granularity?" not "did we prove a profitable strategy?"  Powered results still
+need many live captures and game-level bootstrap.
