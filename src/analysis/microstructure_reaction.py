@@ -185,7 +185,10 @@ def load_final_game_events(
 
     periods = ((last_stats.get("payload") or {}).get("pbp") or {}).get("periods") or []
     ordered: list[dict[str, Any]] = []
-    for period_idx, period in enumerate(periods, start=1):
+    # Kalshi returns periods newest-first in the final payload. Reverse to get
+    # chronological Q1..Q4 ordering, then reverse each period's newest-first
+    # event list.
+    for period_idx, period in enumerate(reversed(periods), start=1):
         events = list(period.get("events") or [])
         for within_idx, event in enumerate(reversed(events)):
             event = dict(event)
