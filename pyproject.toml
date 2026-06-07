@@ -35,6 +35,10 @@ dev = [
     "ipykernel>=6.29",
     "jupyterlab>=4.1",
 ]
+live = [
+    "cryptography>=42.0",
+    "websockets>=12.0",
+]
 
 [build-system]
 requires = ["hatchling"]
