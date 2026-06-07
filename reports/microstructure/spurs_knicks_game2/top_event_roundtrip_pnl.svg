@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="610" viewBox="0 0 1200 610">
+<rect width="100%" height="100%" fill="white" />
+<text x="24" y="30" font-family="Arial" font-size="18" font-weight="700">Top visible buy-before / sell-after roundtrips</text>
+<text x="24" y="50" font-family="Arial" font-size="12" fill="#555">Uses actual visible entry asks and exit bids at sampled book states.</text>
+<text x="24" y="93" font-family="Arial" font-size="12">Q2 7:38 NYK +1</text>
+<rect x="310" y="78" width="850.0" height="18" fill="#4c78a8" />
+<text x="1166.0" y="92" font-family="Arial" font-size="12">$25,630</text>
+<text x="24" y="119" font-family="Arial" font-size="12">Q3 10:28 NYK +3</text>
+<rect x="310" y="104" width="826.9" height="18" fill="#4c78a8" />
+<text x="1142.9" y="118" font-family="Arial" font-size="12">$24,932</text>
+<text x="24" y="145" font-family="Arial" font-size="12">Q4 2:59 SAS +2</text>
+<rect x="310" y="130" width="444.3" height="18" fill="#4c78a8" />
+<text x="760.3" y="144" font-family="Arial" font-size="12">$13,395</text>
+<text x="24" y="171" font-family="Arial" font-size="12">Q2 00:38.30 NYK +2</text>
+<rect x="310" y="156" width="381.2" height="18" fill="#4c78a8" />
+<text x="697.2" y="170" font-family="Arial" font-size="12">$11,493</text>
+<text x="24" y="197" font-family="Arial" font-size="12">Q3 9:21 NYK +3</text>
+<rect x="310" y="182" width="374.8" height="18" fill="#4c78a8" />
+<text x="690.8" y="196" font-family="Arial" font-size="12">$11,301</text>
+<text x="24" y="223" font-family="Arial" font-size="12">Q3 5:45 SAS +2</text>
+<rect x="310" y="208" width="364.7" height="18" fill="#4c78a8" />
+<text x="680.7" y="222" font-family="Arial" font-size="12">$10,995</text>
+<text x="24" y="249" font-family="Arial" font-size="12">Q4 5:59 SAS +1</text>
+<rect x="310" y="234" width="260.0" height="18" fill="#4c78a8" />
+<text x="576.0" y="248" font-family="Arial" font-size="12">$7,839</text>
+<text x="24" y="275" font-family="Arial" font-size="12">Q3 3:45 SAS +3</text>
+<rect x="310" y="260" width="234.2" height="18" fill="#4c78a8" />
+<text x="550.2" y="274" font-family="Arial" font-size="12">$7,061</text>
+<text x="24" y="301" font-family="Arial" font-size="12">Q2 00:10.40 NYK +3</text>
+<rect x="310" y="286" width="205.1" height="18" fill="#4c78a8" />
+<text x="521.1" y="300" font-family="Arial" font-size="12">$6,185</text>
+<text x="24" y="327" font-family="Arial" font-size="12">Q4 3:55 SAS +3</text>
+<rect x="310" y="312" width="203.1" height="18" fill="#4c78a8" />
+<text x="519.1" y="326" font-family="Arial" font-size="12">$6,124</text>
+<text x="24" y="353" font-family="Arial" font-size="12">Q3 8:33 NYK +3</text>
+<rect x="310" y="338" width="188.1" height="18" fill="#4c78a8" />
+<text x="504.1" y="352" font-family="Arial" font-size="12">$5,672</text>
+<text x="24" y="379" font-family="Arial" font-size="12">Q4 4:48 SAS +2</text>
+<rect x="310" y="364" width="168.8" height="18" fill="#4c78a8" />
+<text x="484.8" y="378" font-family="Arial" font-size="12">$5,091</text>
+<text x="24" y="405" font-family="Arial" font-size="12">Q3 2:26 NYK +2</text>
+<rect x="310" y="390" width="162.5" height="18" fill="#4c78a8" />
+<text x="478.5" y="404" font-family="Arial" font-size="12">$4,898</text>
+<text x="24" y="431" font-family="Arial" font-size="12">Q2 7:03 NYK +3</text>
+<rect x="310" y="416" width="144.5" height="18" fill="#4c78a8" />
+<text x="460.5" y="430" font-family="Arial" font-size="12">$4,358</text>
+<text x="24" y="457" font-family="Arial" font-size="12">Q1 5:11 NYK +3</text>
+<rect x="310" y="442" width="123.3" height="18" fill="#4c78a8" />
+<text x="439.3" y="456" font-family="Arial" font-size="12">$3,717</text>
+<text x="24" y="483" font-family="Arial" font-size="12">Q3 8:56 SAS +2</text>
+<rect x="310" y="468" width="112.7" height="18" fill="#4c78a8" />
+<text x="428.7" y="482" font-family="Arial" font-size="12">$3,397</text>
+<text x="24" y="509" font-family="Arial" font-size="12">Q4 8:04 SAS +1</text>
+<rect x="310" y="494" width="111.0" height="18" fill="#4c78a8" />
+<text x="427.0" y="508" font-family="Arial" font-size="12">$3,348</text>
+<text x="24" y="535" font-family="Arial" font-size="12">Q1 9:59 SAS +3</text>
+<rect x="310" y="520" width="108.8" height="18" fill="#4c78a8" />
+<text x="424.8" y="534" font-family="Arial" font-size="12">$3,279</text>
+<text x="24" y="561" font-family="Arial" font-size="12">Q2 3:15 SAS +3</text>
+<rect x="310" y="546" width="82.8" height="18" fill="#4c78a8" />
+<text x="398.8" y="560" font-family="Arial" font-size="12">$2,496</text>
+<text x="24" y="587" font-family="Arial" font-size="12">Q4 5:27 SAS +3</text>
+<rect x="310" y="572" width="79.9" height="18" fill="#4c78a8" />
+<text x="395.9" y="586" font-family="Arial" font-size="12">$2,408</text>
+</svg>
