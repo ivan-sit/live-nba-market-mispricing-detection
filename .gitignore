@@ -32,6 +32,7 @@ env/
 data/raw/*
 data/interim/*
 data/processed/*
+recordings/
 !data/raw/.gitkeep
 !data/interim/.gitkeep
 !data/processed/.gitkeep
@@ -62,4 +63,3 @@ Thumbs.db
 
 # node
 node_modules/
-

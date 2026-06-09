@@ -135,6 +135,7 @@ def main() -> int:
     parser.add_argument("--model", type=Path, default=REPO_ROOT / "models" / "v2_fullgame_allgame.joblib")
     parser.add_argument("--home-ticker", default="KXNBAGAME-26JUN05NYKSAS-SAS")
     parser.add_argument("--away-ticker", default="KXNBAGAME-26JUN05NYKSAS-NYK")
+    parser.add_argument("--winner-side", choices=["home", "away"], default="away")
     parser.add_argument("--threshold", action="append", default=["0.02", "0.03", "0.05", "0.08"])
     parser.add_argument("--budget", action="append", default=["100", "1000", "10000", "100000", "500000"])
     args = parser.parse_args()
@@ -151,7 +152,7 @@ def main() -> int:
     df["p_model_yes"] = np.where(df["ticker_side"] == "home", df["p_model_home"], 1.0 - df["p_model_home"])
     df["edge_to_ask"] = df["p_model_yes"] - df["yes_ask"]
     df["edge_to_bid"] = df["p_model_yes"] - df["yes_bid"]
-    df["actual_yes_payout"] = np.where(df["ticker_side"] == "away", 1.0, 0.0)  # Knicks won this game.
+    df["actual_yes_payout"] = np.where(df["ticker_side"] == args.winner_side, 1.0, 0.0)
     df["avg_entry_1c"] = np.where(df["buy_contracts_1c"] > 0, df["buy_premium_1c"] / df["buy_contracts_1c"], np.nan)
     df["model_ev_1c"] = df["buy_contracts_1c"] * (df["p_model_yes"] - df["avg_entry_1c"])
     df["actual_pnl_1c"] = df["buy_contracts_1c"] * (df["actual_yes_payout"] - df["avg_entry_1c"])
@@ -198,6 +199,7 @@ def main() -> int:
             "Uncapped 1c depth fields are retained as capacity diagnostics, not realistic capital deployment.",
             "This is still a one-game case study and uses official PBP timestamps, not physical ground-truth timestamps.",
         ],
+        "winner_side": args.winner_side,
         "threshold_summary": summary_rows,
     }
     (args.case_dir / "prediction_summary.json").write_text(json.dumps(summary, indent=2, default=str) + "\n", encoding="utf-8")

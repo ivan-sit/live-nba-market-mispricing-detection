@@ -37,6 +37,7 @@ from src.analysis.microstructure_reaction import (  # noqa: E402
     cadence_summary,
     event_reactions,
     load_final_game_events,
+    load_nba_playbyplay_scoring_events,
     load_orderbook_snapshots,
 )
 
@@ -170,6 +171,7 @@ def main() -> int:
     parser.add_argument("--run-dir", type=Path, required=True)
     parser.add_argument("--rest-file", default="kalshi_rest_orderbook_market_snapshots.jsonl")
     parser.add_argument("--sports-file", default="kalshi_sports_state_live_data_game_stats.jsonl")
+    parser.add_argument("--nba-pbp-file", type=Path)
     parser.add_argument("--home-ticker", required=True)
     parser.add_argument("--away-ticker", required=True)
     parser.add_argument("--home-label", required=True)
@@ -188,15 +190,25 @@ def main() -> int:
     args.out_dir.mkdir(parents=True, exist_ok=True)
     rest_path = args.run_dir / args.rest_file
     sports_path = args.run_dir / args.sports_file
+    nba_pbp_path = args.nba_pbp_file
+    if nba_pbp_path is not None and not nba_pbp_path.is_absolute():
+        nba_pbp_path = args.run_dir / nba_pbp_path
 
     books = load_orderbook_snapshots(rest_path)
-    events = load_final_game_events(
-        sports_path,
-        home_team_id=args.home_team_id,
-        away_team_id=args.away_team_id,
-        home_label=args.home_label,
-        away_label=args.away_label,
-    )
+    if nba_pbp_path is not None:
+        events = load_nba_playbyplay_scoring_events(
+            nba_pbp_path,
+            home_label=args.home_label,
+            away_label=args.away_label,
+        )
+    else:
+        events = load_final_game_events(
+            sports_path,
+            home_team_id=args.home_team_id,
+            away_team_id=args.away_team_id,
+            home_label=args.home_label,
+            away_label=args.away_label,
+        )
     reactions = event_reactions(
         books,
         events,
@@ -261,6 +273,7 @@ def main() -> int:
         "run_dir": str(args.run_dir),
         "rest_path": str(rest_path),
         "sports_path": str(sports_path),
+        "nba_pbp_path": str(nba_pbp_path) if nba_pbp_path is not None else None,
         "home_ticker": args.home_ticker,
         "away_ticker": args.away_ticker,
         "home_label": args.home_label,

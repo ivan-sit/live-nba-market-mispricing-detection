@@ -14,6 +14,7 @@ from typing import Any
 
 import json
 import math
+import re
 
 import numpy as np
 import pandas as pd
@@ -240,6 +241,92 @@ def load_final_game_events(
                 "post_home_points": home_points,
                 "post_away_points": away_points,
                 "pre_diff_for_scorer": pre_diff_for_scorer,
+            }
+        )
+    return pd.DataFrame(rows).sort_values("event_wall_ms").reset_index(drop=True)
+
+
+_NBA_CLOCK_RE = re.compile(r"PT(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?")
+
+
+def _nba_clock_to_mmss(value: Any) -> str:
+    match = _NBA_CLOCK_RE.fullmatch(str(value or ""))
+    if not match:
+        return str(value or "")
+    minutes = int(match.group(1) or 0)
+    seconds = float(match.group(2) or 0)
+    return f"{minutes}:{int(seconds):02d}"
+
+
+def _nba_event_type(action: dict[str, Any], points: int) -> str:
+    action_type = str(action.get("actionType") or "").lower()
+    if action_type == "3pt" and points > 0:
+        return "threepointmade"
+    if action_type == "2pt" and points > 0:
+        return "twopointmade"
+    if action_type == "freethrow" and points > 0:
+        return "freethrowmade"
+    return action_type or "score"
+
+
+def load_nba_playbyplay_scoring_events(
+    pbp_path: Path,
+    *,
+    home_label: str,
+    away_label: str,
+) -> pd.DataFrame:
+    """Extract score-changing events from NBA liveData play-by-play JSON."""
+    payload = json.loads(pbp_path.read_text(encoding="utf-8"))
+    actions = ((payload.get("game") or {}).get("actions") or [])
+    rows: list[dict[str, Any]] = []
+    prev_home = 0
+    prev_away = 0
+    for action in actions:
+        home_points = int(action.get("scoreHome") or prev_home)
+        away_points = int(action.get("scoreAway") or prev_away)
+        d_home = home_points - prev_home
+        d_away = away_points - prev_away
+        pre_home = prev_home
+        pre_away = prev_away
+        prev_home = home_points
+        prev_away = away_points
+        if d_home <= 0 and d_away <= 0:
+            continue
+        if d_home > 0 and d_away > 0:
+            continue
+        time_actual = action.get("timeActual")
+        if not time_actual:
+            continue
+        event_ts = pd.to_datetime(time_actual, utc=True)
+        scorer = "home" if d_home > 0 else "away"
+        points = int(d_home if scorer == "home" else d_away)
+        if scorer == "home":
+            label = home_label
+            pre_diff_for_scorer = pre_away - pre_home
+        else:
+            label = away_label
+            pre_diff_for_scorer = pre_home - pre_away
+        rows.append(
+            {
+                "event_wall_ms": float(event_ts.timestamp() * 1000.0),
+                "event_wall_ts": event_ts,
+                "period": int(action.get("period") or 0),
+                "clock": _nba_clock_to_mmss(action.get("clock")),
+                "description": action.get("description"),
+                "event_type": _nba_event_type(action, points),
+                "scorer_side": scorer,
+                "scorer_label": label,
+                "scorer_team_id": str(action.get("teamId") or ""),
+                "expected_team_id": str(action.get("teamId") or ""),
+                "team_id_matches_side": True,
+                "points": points,
+                "pre_home_points": pre_home,
+                "pre_away_points": pre_away,
+                "post_home_points": home_points,
+                "post_away_points": away_points,
+                "pre_diff_for_scorer": pre_diff_for_scorer,
+                "action_number": action.get("actionNumber"),
+                "order_number": action.get("orderNumber"),
             }
         )
     return pd.DataFrame(rows).sort_values("event_wall_ms").reset_index(drop=True)
