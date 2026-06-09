@@ -222,3 +222,51 @@ ignores queue position and order-entry latency, ignores fees, and uses official
 play-by-play scoring anchors rather than physical event timestamps.  The right
 next result is the same replay across many games with fill simulation and
 latency-aware entry rules.
+
+---
+
+## 2026-06-08 — Kalshi WebSocket microstructure replay, Spurs @ Knicks Game 3
+
+Second live game-winner microstructure case study.  Game: Spurs 115, Knicks
+111.  Event: `KXNBAGAME-26JUN08SASNYK`.  Recording started after Q1, so 95 of
+122 final NBA scoring events had usable pre-event Kalshi book state.
+
+Data:
+- 36,751 REST orderbook snapshots with full visible ladders.
+- 803,452 reconstructed WebSocket book states.
+- 122 NBA final play-by-play scoring events.
+
+WebSocket cadence:
+- NYK YES: 446,956 states, p50 cadence 5.8ms, p95 78.1ms, sequence gaps 0.
+- SAS YES: 356,496 states, p50 cadence 5.9ms, p95 104.3ms, sequence gaps 0.
+
+First observed scorer-side +1c move after NBA play-by-play anchor:
+- n = 66 events.
+- Mean 1,487ms, median 929ms, p25 480ms, p75 1,907ms.
+
+WS scorer-side mean mid move:
+- 250ms: +0.0007, positive share 12%.
+- 500ms: +0.0027, positive share 22%.
+- 1s: +0.0078, positive share 44%.
+- 3s: +0.0147, positive share 68%.
+- 10s: +0.0184, positive share 75%.
+
+REST executable-depth diagnostic:
+- 3s horizon: 42 / 95 positive roundtrip events, +$16.3k diagnostic P&L on
+  $438.5k visible entry cost.
+- 10s horizon: 49 / 95 positive, +$29.9k on $615.8k entry cost.
+- 60s horizon: 50 / 95 positive, +$144.9k on $2.53M entry cost.
+
+Prediction replay was mixed, unlike the very clean Game 2 replay:
+- 3c edge, $1k/episode: +$3.3k P&L on $54.4k entry cost.
+- 3c edge, $10k/episode: +$59.4k P&L on $463.9k entry cost.
+- 5c edge, $1k/episode: +$1.1k P&L on $63.5k entry cost.
+- 5c edge, $10k/episode: +$76.9k P&L on $537.4k entry cost.
+- 8c edge, $10k/episode: -$7.4k P&L on $334.4k entry cost.
+
+Interpretation: Game 3 strongly validates the recording stack and sub-second
+reaction measurement, but it weakens the claim that the current structural
+model alone is sufficient.  Higher model edge did not monotonically improve
+realized outcome because the 8c bucket overselected losing NYK-side signals.
+The next serious result must aggregate many games and add latency/fill-aware
+entry rules.

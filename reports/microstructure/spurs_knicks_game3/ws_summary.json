@@ -1,0 +1,113 @@
+{
+  "ws_reconstructed": "recordings/kalshi-game3-sas-nyk-20260609T011130Z/ws/kalshi_ws_reconstructed_books.jsonl",
+  "nba_pbp_file": "recordings/kalshi-game3-sas-nyk-20260609T011130Z/final/nba_playbyplay_0042500403.json",
+  "snapshots": 803452,
+  "scoring_events": 122,
+  "reaction_rows": 665,
+  "horizons_ms": [
+    100,
+    250,
+    500,
+    1000,
+    3000,
+    10000,
+    60000
+  ],
+  "first_plus_1c": {
+    "events": 66,
+    "mean_ms": 1487.2852228338068,
+    "median_ms": 928.5975341796875,
+    "p25_ms": 479.6121826171875,
+    "p75_ms": 1906.8663330078125
+  },
+  "cadence": [
+    {
+      "ticker": "KXNBAGAME-26JUN08SASNYK-NYK",
+      "snapshots": 446956,
+      "start": "2026-06-09 01:11:52.280697998+00:00",
+      "end": "2026-06-09 03:29:16.720996094+00:00",
+      "cadence_p50_ms": 5.8291015625,
+      "cadence_p95_ms": 78.11137695312499,
+      "sequence_gap_events": 0
+    },
+    {
+      "ticker": "KXNBAGAME-26JUN08SASNYK-SAS",
+      "snapshots": 356496,
+      "start": "2026-06-09 01:11:52.281687012+00:00",
+      "end": "2026-06-09 03:29:16.634739990+00:00",
+      "cadence_p50_ms": 5.912841796875,
+      "cadence_p95_ms": 104.30024414062495,
+      "sequence_gap_events": 0
+    }
+  ],
+  "horizon_summary": [
+    {
+      "horizon_ms": 100,
+      "events": 95,
+      "mean_mid_move": 0.00021052631578947383,
+      "median_mid_move": 0.0,
+      "positive_mid_move_share": 0.05263157894736842,
+      "mean_post_capture_lag_ms": 131.94411492598684,
+      "median_post_capture_lag_ms": 113.20703125
+    },
+    {
+      "horizon_ms": 250,
+      "events": 95,
+      "mean_mid_move": 0.0007368421052631568,
+      "median_mid_move": 0.0,
+      "positive_mid_move_share": 0.11578947368421053,
+      "mean_post_capture_lag_ms": 287.892333984375,
+      "median_post_capture_lag_ms": 267.736083984375
+    },
+    {
+      "horizon_ms": 500,
+      "events": 95,
+      "mean_mid_move": 0.0026842105263157876,
+      "median_mid_move": 0.0,
+      "positive_mid_move_share": 0.22105263157894736,
+      "mean_post_capture_lag_ms": 526.2794407894737,
+      "median_post_capture_lag_ms": 512.16796875
+    },
+    {
+      "horizon_ms": 1000,
+      "events": 95,
+      "mean_mid_move": 0.00784210526315789,
+      "median_mid_move": 0.0,
+      "positive_mid_move_share": 0.4421052631578947,
+      "mean_post_capture_lag_ms": 1032.4685392680922,
+      "median_post_capture_lag_ms": 1017.214111328125
+    },
+    {
+      "horizon_ms": 3000,
+      "events": 95,
+      "mean_mid_move": 0.014736842105263152,
+      "median_mid_move": 0.010000000000000009,
+      "positive_mid_move_share": 0.6842105263157895,
+      "mean_post_capture_lag_ms": 3044.828921669408,
+      "median_post_capture_lag_ms": 3022.493896484375
+    },
+    {
+      "horizon_ms": 10000,
+      "events": 95,
+      "mean_mid_move": 0.018368421052631572,
+      "median_mid_move": 0.010000000000000009,
+      "positive_mid_move_share": 0.7473684210526316,
+      "mean_post_capture_lag_ms": 10044.176313219572,
+      "median_post_capture_lag_ms": 10019.616943359375
+    },
+    {
+      "horizon_ms": 60000,
+      "events": 95,
+      "mean_mid_move": 0.020315789473684204,
+      "median_mid_move": 0.010000000000000009,
+      "positive_mid_move_share": 0.631578947368421,
+      "mean_post_capture_lag_ms": 60048.56549907484,
+      "median_post_capture_lag_ms": 60025.39892578125
+    }
+  ],
+  "method_notes": [
+    "Uses reconstructed WebSocket orderbook best bid/ask and depth summaries.",
+    "Reaction timing is scorer-side YES mid movement after NBA play-by-play timeActual anchors.",
+    "No filled-order claim: WS reconstructed files do not retain full level ladders for roundtrip simulation."
+  ]
+}
